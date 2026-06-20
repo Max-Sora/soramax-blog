@@ -1,4 +1,4 @@
----
+﻿---
 import { commentConfig } from "@/config";
 
 if (!commentConfig?.giscus) {
@@ -8,14 +8,18 @@ if (!commentConfig?.giscus) {
 const giscus = commentConfig.giscus;
 const lightTheme = "light";
 const darkTheme = "dark";
+const giscusTheme = giscus.theme ?? "light";
+
+const resolveTheme = (isDark: boolean) => {
+	if (giscusTheme === "preferred_color_scheme") {
+		return "preferred_color_scheme";
+	}
+	return isDark ? darkTheme : lightTheme;
+};
 ---
 
 <script is:inline type="module" src="https://esm.sh/giscus"></script>
 
-<!-- 
-  Giscus 官方Web Component用法，兼容Astro静态输出，无需import包，无需NPM依赖！
-  参考：https://giscus.app/ 详情配置说明
--->
 <giscus-widget
   id="comments"
   repo={giscus.repo}
@@ -27,15 +31,15 @@ const darkTheme = "dark";
   reactionsEnabled={giscus.reactionsEnabled}
   emitMetadata={giscus.emitMetadata}
   inputPosition={giscus.inputPosition}
-  theme={lightTheme}
+  theme={giscusTheme}
   lang={giscus.lang}
   loading={giscus.loading}
 />
 
-<script is:inline define:vars={{ lightTheme, darkTheme }}>
+<script is:inline define:vars={{ giscusTheme, lightTheme, darkTheme }}>
   function updateGiscusTheme() {
     const isDark = document.documentElement.classList.contains('dark');
-    const theme = isDark ? darkTheme : lightTheme;
+    const theme = giscusTheme === 'preferred_color_scheme' ? 'preferred_color_scheme' : (isDark ? darkTheme : lightTheme);
     const widget = document.querySelector('giscus-widget');
     if (widget) {
       widget.setAttribute('theme', theme);
@@ -45,12 +49,10 @@ const darkTheme = "dark";
   // Initial update
   updateGiscusTheme();
 
-  // Clean up previous observer if exists
   if (window.giscusThemeObserver) {
     window.giscusThemeObserver.disconnect();
   }
 
-  // Create new observer
   window.giscusThemeObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.type === 'attributes' && mutation.attributeName === 'class') {

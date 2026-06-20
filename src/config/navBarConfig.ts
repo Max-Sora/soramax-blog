@@ -1,181 +1,140 @@
-import {
+﻿import {
 	type NavBarConfig,
 	type NavBarLink,
 	type NavBarSearchConfig,
 	NavBarSearchMethod,
 } from "../types/navBarConfig";
 
-// ============================================================================
-// 导航栏配置 - 根据顺序动态生成导航栏链接
-// NavBar Configuration - Dynamically generate navigation bar links based on order
-// ============================================================================
 const getDynamicNavBarConfig = (): NavBarConfig => {
-	// 基础导航栏链接
 	const links: NavBarLink[] = [
-		// 主页
 		LinkPresets.Home,
+		LinkPresets.Posts,
+		LinkPresets.Projects,
+		LinkPresets.HardwareNotes,
+		LinkPresets.Services,
+		LinkPresets.About,
+		LinkPresets.Links,
+		LinkPresets.Search,
 	];
-
-	// 文章及其子菜单
-	links.push({
-		name: "文章",
-		url: "#",
-		icon: "material-symbols:article",
-		children: [
-			// 归档
-			LinkPresets.Archive,
-
-			// 分类
-			LinkPresets.Categories,
-
-			// 标签
-			LinkPresets.Tags,
-		],
-	});
-
-	// 友链
-	links.push(LinkPresets.Friends);
-
-	// 留言板
-	links.push(LinkPresets.Guestbook);
-
-	// 我的及其子菜单
-	links.push({
-		name: "我的",
-		url: "#",
-		icon: "material-symbols:person",
-		children: [
-			// 相册
-			LinkPresets.Gallery,
-
-			// 番组计划
-			LinkPresets.Bangumi,
-		],
-	});
-
-	// 关于及其子菜单
-	links.push({
-		name: "关于",
-		url: "#",
-		icon: "material-symbols:info",
-		children: [
-			// 打赏
-			LinkPresets.Sponsor,
-
-			// 关于页面
-			LinkPresets.About,
-		],
-	});
-
-	// 自定义导航栏链接
-	links.push({
-		name: "链接",
-		url: "#",
-		icon: "material-symbols:link",
-		// 子菜单
-		children: [
-			{
-				name: "GitHub",
-				url: "https://github.com/CuteLeaf/Firefly",
-				external: true,
-				icon: "fa7-brands:github",
-			},
-			{
-				name: "Gitee",
-				url: "https://gitee.com/CuteLeaf/Firefly",
-				external: true,
-				icon: "fa7-brands:gitee",
-			},
-			{
-				name: "QQ交流群",
-				url: "https://qm.qq.com/q/ZGsFa8qX2G",
-				external: true,
-				icon: "fa7-brands:qq",
-			},
-			{
-				name: "Firefly文档",
-				url: "https://docs-firefly.cuteleaf.cn",
-				external: true,
-				icon: "material-symbols:docs",
-			},
-		],
-	});
-
-	// 文档链接
-	// links.push({
-	// 	name: "文档",
-	// 	url: "https://docs-firefly.cuteleaf.cn",
-	// 	external: true,
-	// 	icon: "material-symbols:docs",
-	// });
 
 	return { links } as NavBarConfig;
 };
 
-// 导航搜索配置
 export const navBarSearchConfig: NavBarSearchConfig = {
 	method: NavBarSearchMethod.PageFind,
 };
 
-// ============================================================================
-// 链接预设 - 可自由自定义导航栏链接的名称、图标和URL
-// Link Presets - Allows free customization of the name, icon, and URL of navigation bar links
-// ============================================================================
 export const LinkPresets: Record<string, NavBarLink> = {
 	Home: {
-		name: "主页",
+		name: "Home",
 		url: "/",
 		icon: "material-symbols:home",
 	},
+	Posts: {
+		name: "Posts",
+		url: "/posts/",
+		icon: "material-symbols:article",
+	},
 	Archive: {
-		name: "归档",
+		name: "Archive",
 		url: "/archive/",
 		icon: "material-symbols:archive",
 	},
-	Categories: {
-		name: "分类",
-		url: "/categories/",
-		icon: "material-symbols:folder-open-rounded",
-	},
 	Tags: {
-		name: "标签",
+		name: "Tags",
 		url: "/tags/",
 		icon: "material-symbols:tag-rounded",
 	},
+	Categories: {
+		name: "Categories",
+		url: "/categories/",
+		icon: "material-symbols:folder-open-rounded",
+	},
+	Projects: {
+		name: "Projects",
+		url: "/projects/",
+		icon: "material-symbols:rocket",
+	},
+	HardwareNotes: {
+		name: "Hardware Notes",
+		url: "/hardware-notes/",
+		icon: "material-symbols:memory",
+	},
+	Services: {
+		name: "Services",
+		url: "/services/",
+		icon: "material-symbols:build",
+	},
+	About: {
+		name: "About",
+		url: "/about/",
+		icon: "material-symbols:person",
+	},
+	Links: {
+		name: "Links",
+		url: "#",
+		icon: "material-symbols:link",
+		children: [
+			{
+				name: "GitHub",
+				url: "https://github.com/Max-Sora",
+				external: true,
+				icon: "fa7-brands:github",
+			},
+			{
+				name: "GitHub Repo",
+				url: "https://github.com/Max-Sora/soramax-blog",
+				external: true,
+				icon: "fa7-brands:github",
+			},
+			{
+				name: "Website",
+				url: "https://soramax.xyz",
+				external: true,
+				icon: "material-symbols:language",
+			},
+			{
+				name: "Email",
+				url: "mailto:maxxtang@qq.com",
+				external: true,
+				icon: "fa7-solid:envelope",
+			},
+		],
+	},
+	Search: {
+		name: "Search",
+		url: "/search/",
+		icon: "material-symbols:search",
+	},
 	Friends: {
-		name: "友链",
+		name: "Friend Links",
 		url: "/friends/",
 		icon: "material-symbols:group",
 		pageKey: "friends",
 	},
-	Sponsor: {
-		name: "打赏",
-		url: "/sponsor/",
-		icon: "material-symbols:favorite",
-		pageKey: "sponsor",
-	},
 	Guestbook: {
-		name: "留言",
+		name: "Guestbook",
 		url: "/guestbook/",
 		icon: "material-symbols:chat",
 		pageKey: "guestbook",
 	},
-	About: {
-		name: "关于我",
-		url: "/about/",
-		icon: "material-symbols:person",
-	},
 	Bangumi: {
-		name: "番组计划",
+		name: "Bangumi",
 		url: "/bangumi/",
 		icon: "material-symbols:movie",
 		pageKey: "bangumi",
 	},
 	Gallery: {
-		name: "相册",
+		name: "Gallery",
 		url: "/gallery/",
 		icon: "material-symbols:photo-library",
 		pageKey: "gallery",
+	},
+	Sponsor: {
+		name: "Sponsor",
+		url: "/sponsor/",
+		icon: "material-symbols:favorite",
+		pageKey: "sponsor",
 	},
 };
 

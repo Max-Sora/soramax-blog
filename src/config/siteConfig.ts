@@ -3,23 +3,15 @@
 const SITE_LANG = "en";
 
 export const siteConfig: SiteConfig = {
-	// 站点标题
+	// Site title
 	title: "Max",
-	// 副标题
+	// Site subtitle
 	subtitle: "Hardware, servers, AI tools, and engineering notes.",
-	// 站点 URL
+	// Site URL
 	site_url: "https://soramax.xyz",
-	// 站点描述
-	description: "Max's English personal blog about hardware, servers, embedded systems, AI workflows, and PC building.",
-	keywords: [
-		"Max",
-		"Hardware",
-		"Servers",
-		"AI Tools",
-		"Embedded Systems",
-		"PC Building",
-		"Minecraft",
-	],
+	// Site description
+	description:
+		"Max's English personal blog about hardware, servers, embedded systems, AI workflows, and PC building.",
 	lang: SITE_LANG,
 
 	themeColor: {
@@ -63,6 +55,8 @@ export const siteConfig: SiteConfig = {
 		guestbook: true,
 		bangumi: true,
 		gallery: true,
+		// Enable anime page
+		anime: true,
 	},
 
 	categoryBar: true,
@@ -94,9 +88,14 @@ export const siteConfig: SiteConfig = {
 	bangumi: {
 		userId: "1143164",
 		mode: "dynamic",
-		apiUrl: "https://api.bangumi.one",
-		subjectBaseUrl: "https://bangumi.one/subject/",
+		apiUrl: "https://bgmapi.anibt.net",
+		subjectBaseUrl: "https://bgmmi.anibt.net/subject/",
 		categoryOrder: ["anime", "book", "music", "game"],
+	},
+	anime: {
+		bilibili: {
+			uid: "38932988",
+		},
 	},
 
 	pagination: {
@@ -106,6 +105,6 @@ export const siteConfig: SiteConfig = {
 	imageOptimization: {
 		formats: "webp",
 		quality: 85,
-		noReferrerDomains: [],
+		noReferrerDomains: ["*.hdslb.com", "*.bilibili.com"],
 	},
 };

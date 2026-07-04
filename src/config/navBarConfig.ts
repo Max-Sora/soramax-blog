@@ -1,4 +1,4 @@
-﻿import {
+import {
 	type NavBarConfig,
 	type NavBarLink,
 	type NavBarSearchConfig,
@@ -11,6 +11,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		LinkPresets.Posts,
 		LinkPresets.Projects,
 		LinkPresets.HardwareNotes,
+		LinkPresets.LifeNotes,
 		LinkPresets.Services,
 		LinkPresets.About,
 		LinkPresets.Links,
@@ -59,6 +60,11 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		name: "Hardware Notes",
 		url: "/hardware-notes/",
 		icon: "material-symbols:memory",
+	},
+	LifeNotes: {
+		name: "Life Notes",
+		url: "/life-notes/",
+		icon: "material-symbols:book",
 	},
 	Services: {
 		name: "Services",

@@ -1,0 +1,144 @@
+---
+import { Icon } from "astro-icon/components";
+import ShopProductCard from "@/components/shop/ShopProductCard.astro";
+import { shopConfig } from "@/config/shopConfig";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getVisibleShopProducts } from "@/utils/shop-utils";
+
+const products = shopConfig.enabled ? await getVisibleShopProducts() : [];
+const featuredProducts = products
+	.filter((product) => product.data.featured)
+	.slice(0, shopConfig.featuredLimit);
+const catalogLabel =
+	products.length > 0
+		? `${products.length} ${products.length === 1 ? "listing" : "listings"}`
+		: "Catalog opening soon";
+---
+
+<MainGridLayout title={shopConfig.name} description={shopConfig.tagline}>
+	<section class="shop-hero card-base relative mb-4 overflow-hidden border border-amber-300/45 p-6 sm:p-9 dark:border-amber-500/25">
+		<div class="shop-orbit pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full" aria-hidden="true"></div>
+		<div class="relative max-w-3xl">
+			<div class="mb-3 flex items-center gap-2 text-sm font-extrabold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-300">
+				<Icon is:inline name="material-symbols:storefront" class="text-xl" />
+				Independent shop
+			</div>
+			<h2 class="text-3xl font-black leading-tight text-black/90 sm:text-5xl dark:text-white/90">{shopConfig.name}</h2>
+			<p class="mt-3 text-lg font-bold text-black/70 dark:text-white/70">{shopConfig.tagline}</p>
+			<p class="mt-2 max-w-2xl text-black/55 dark:text-white/55">{shopConfig.description}</p>
+
+			<div class="mt-6 flex flex-wrap items-center gap-2">
+				{shopConfig.categories.map((category) => (
+					<span class="inline-flex items-center gap-1.5 rounded-full border border-black/8 bg-white/55 px-3 py-1.5 text-sm font-bold text-black/65 dark:border-white/10 dark:bg-white/6 dark:text-white/65">
+						<Icon is:inline name={category.icon} />
+						{category.label}
+					</span>
+				))}
+				<span class="rounded-full bg-(--primary) px-3 py-1.5 text-sm font-extrabold text-white dark:text-black/75">{catalogLabel}</span>
+			</div>
+		</div>
+	</section>
+
+	{featuredProducts.length > 0 && (
+		<section class="mb-4" aria-labelledby="featured-products-heading">
+			<div class="mb-3 flex items-center gap-2 px-1">
+				<Icon is:inline name="material-symbols:star-rounded" class="text-xl text-amber-500" />
+				<h2 id="featured-products-heading" class="text-xl font-black text-black/85 dark:text-white/85">Featured</h2>
+			</div>
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+				{featuredProducts.map((product) => <ShopProductCard product={product} />)}
+			</div>
+		</section>
+	)}
+
+	<section class="mb-4" aria-labelledby="all-listings-heading">
+		<div class="mb-3 flex items-center gap-2 px-1">
+			<Icon is:inline name="material-symbols:inventory-2" class="text-xl text-(--primary)" />
+			<h2 id="all-listings-heading" class="text-xl font-black text-black/85 dark:text-white/85">All Listings</h2>
+		</div>
+
+		{products.length > 0 ? (
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+				{products.map((product) => <ShopProductCard product={product} />)}
+			</div>
+		) : (
+			<div class="card-base border border-dashed border-amber-300/60 p-6 sm:p-8 dark:border-amber-600/35">
+				<div class="flex max-w-2xl items-start gap-4">
+					<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-2xl text-amber-700 dark:bg-amber-950/55 dark:text-amber-300">
+						<Icon is:inline name="material-symbols:inventory" />
+					</div>
+					<div>
+						<h3 class="text-xl font-black text-black/85 dark:text-white/85">SoraMax Shop is being stocked.</h3>
+						<p class="mt-2 text-black/55 dark:text-white/55">The first small-batch listings are still being prepared. These are the areas I plan to explore.</p>
+					</div>
+				</div>
+				<div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+					{shopConfig.categories.map((category) => (
+						<div class="rounded-2xl bg-black/4 p-4 dark:bg-white/6">
+							<Icon is:inline name={category.icon} class="text-2xl text-(--primary)" />
+							<div class="mt-2 text-sm font-extrabold text-black/75 dark:text-white/75">{category.label}</div>
+						</div>
+					))}
+				</div>
+			</div>
+		)}
+	</section>
+
+	<section class="card-base p-6" aria-labelledby="store-notes-heading">
+		<h2 id="store-notes-heading" class="flex items-center gap-2 text-lg font-black text-black/80 dark:text-white/80">
+			<Icon is:inline name="material-symbols:info-outline" class="text-(--primary)" />
+			Store Notes
+		</h2>
+		<ul class="mt-4 space-y-2 text-sm text-black/58 dark:text-white/58">
+			<li>Small-batch availability can change.</li>
+			<li>Delivery or shipping details are listed per item.</li>
+			<li>Contact before purchase when a listing does not have checkout enabled.</li>
+		</ul>
+	</section>
+
+	<section class="card-base mt-4 p-6" aria-labelledby="shop-contact-heading">
+		<div class="max-w-2xl">
+			<h2 id="shop-contact-heading" class="text-lg font-black text-black/80 dark:text-white/80">
+				Questions or looking for something specific?
+			</h2>
+			<div class="mt-4 grid min-w-0 gap-2 text-sm text-black/58 sm:grid-cols-2 dark:text-white/58">
+				<div class="min-w-0">
+					<span class="font-bold text-black/72 dark:text-white/72">Email:</span>
+					<a href={shopConfig.contactEmailUrl} class="ml-1 break-all rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactEmail}</a>
+				</div>
+				<div>
+					<span class="font-bold text-black/72 dark:text-white/72">Text:</span>
+					<a href={shopConfig.contactSmsUrl} class="ml-1 rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactPhoneDisplay}</a>
+				</div>
+			</div>
+			<div class="mt-5 flex flex-col gap-2 sm:flex-row">
+				<a href={shopConfig.contactEmailUrl} aria-label={`Email SoraMax Shop at ${shopConfig.contactEmail}`} class="inline-flex items-center justify-center gap-2 rounded-xl bg-(--primary) px-4 py-2.5 text-sm font-extrabold text-white transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:text-black/75">
+					<Icon is:inline name="material-symbols:mail" /> Email Shop
+				</a>
+				<a href={shopConfig.contactSmsUrl} aria-label={`Text SoraMax Shop at ${shopConfig.contactPhoneDisplay}`} class="inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-black/4 px-4 py-2.5 text-sm font-extrabold text-black/72 transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:border-white/12 dark:bg-white/6 dark:text-white/72">
+					<Icon is:inline name="material-symbols:sms" /> Text Shop
+				</a>
+			</div>
+		</div>
+	</section>
+</MainGridLayout>
+
+<style>
+	.shop-hero {
+		background:
+			linear-gradient(125deg, rgb(255 255 255 / 0.72), rgb(255 247 237 / 0.78)),
+			var(--card-bg);
+	}
+
+	:global(.dark) .shop-hero {
+		background:
+			linear-gradient(125deg, rgb(15 23 42 / 0.36), rgb(69 26 3 / 0.24)),
+			var(--card-bg);
+	}
+
+	.shop-orbit {
+		background:
+			radial-gradient(circle at center, rgb(251 146 60 / 0.3), transparent 62%),
+			radial-gradient(circle at 25% 75%, color-mix(in srgb, var(--primary) 32%, transparent), transparent 46%);
+	}
+</style>

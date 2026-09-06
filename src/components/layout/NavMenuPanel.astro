@@ -49,12 +49,18 @@ const processedLinks = Astro.props.links;
                 </div>
             ) : (
                 /* 普通链接项目 */
-                <a href={link.external ? link.url : url(link.url)} class="group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8
-                    hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition
-                "
+				<a
+					href={link.external ? link.url : url(link.url)}
+					class:list={[
+						"group flex justify-between items-center py-2 pl-3 pr-1 rounded-lg gap-8 hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) transition",
+						link.highlight && "mobile-link-highlight",
+					]}
                    target={link.external ? "_blank" : null}
                 >
-                    <div class="flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-(--primary) group-active:text-(--primary)">
+					<div class:list={[
+						"flex items-center transition text-black/75 dark:text-white/75 font-bold group-hover:text-(--primary) group-active:text-(--primary)",
+						link.highlight && "highlight-label",
+					]}>
 						{link.icon && <Icon is:inline name={link.icon} class="text-[1.1rem] mr-2" />}
                         {link.name}
                     </div>
@@ -84,6 +90,37 @@ const processedLinks = Astro.props.links;
     .mobile-dropdown[data-expanded="true"] .mobile-dropdown-arrow {
         @apply rotate-180;
     }
+
+	.mobile-link-highlight {
+		color: #422006;
+		background: linear-gradient(
+			135deg,
+			color-mix(in srgb, var(--primary) 48%, #fbbf24),
+			#fb923c
+		);
+		box-shadow: 0 8px 20px rgb(245 158 11 / 0.18);
+	}
+
+	.mobile-link-highlight .highlight-label,
+	.mobile-link-highlight:hover .highlight-label,
+	.mobile-link-highlight:active .highlight-label {
+		color: inherit;
+	}
+
+	.mobile-link-highlight:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
+	}
+
+	:global(.dark) .mobile-link-highlight {
+		color: #fff7ed;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mobile-link-highlight {
+			transition: none;
+		}
+	}
 </style>
 
 <script>

@@ -36,7 +36,37 @@ const specCollection = defineCollection({
 	schema: z.object({}),
 });
 
+const productsCollection = defineCollection({
+	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/products" }),
+	schema: z.object({
+		slug: z.string(),
+		title: z.string(),
+		description: z.string().default(""),
+		category: z.string(),
+		tags: z.array(z.string()).default([]),
+		price: z.number().optional(),
+		priceMin: z.number().optional(),
+		priceMax: z.number().optional(),
+		compareAtPrice: z.number().optional(),
+		currency: z.string().default("USD"),
+		image: z.string().optional().default(""),
+		imageAlt: z.string().optional(),
+		featured: z.boolean().default(false),
+		draft: z.boolean().default(false),
+		status: z
+			.enum(["in-stock", "low-stock", "by-request", "sold-out", "coming-soon"])
+			.default("coming-soon"),
+		productType: z.enum(["physical", "digital", "service"]).default("physical"),
+		condition: z.enum(["new", "open-box", "used"]).optional(),
+		purchaseUrl: z.string().url().optional().nullable(),
+		purchaseLabel: z.string().optional(),
+		shippingNote: z.string().optional().nullable(),
+		sku: z.string().optional(),
+	}),
+});
+
 export const collections = {
 	posts: postsCollection,
 	spec: specCollection,
+	products: productsCollection,
 };

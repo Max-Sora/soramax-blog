@@ -8,6 +8,7 @@ import {
 const getDynamicNavBarConfig = (): NavBarConfig => {
 	const links: NavBarLink[] = [
 		LinkPresets.Home,
+		LinkPresets.Shop,
 		LinkPresets.Posts,
 		LinkPresets.Projects,
 		LinkPresets.HardwareNotes,
@@ -30,6 +31,12 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		name: "Home",
 		url: "/",
 		icon: "material-symbols:home",
+	},
+	Shop: {
+		name: "Shop",
+		url: "/shop/",
+		icon: "material-symbols:shopping-bag",
+		highlight: true,
 	},
 	Posts: {
 		name: "Posts",

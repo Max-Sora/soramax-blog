@@ -25,6 +25,12 @@ export type { Live2DWidgetConfig, SpineModelConfig } from "./pioConfig";
 export type { PlantUMLConfig } from "./plantumlConfig";
 export type { ProfileConfig } from "./profileConfig";
 export type {
+	ShopCategory,
+	ShopConfig,
+	ShopProductCondition,
+	ShopProductStatus,
+} from "./shopConfig";
+export type {
 	AdConfig,
 	CalendarConfig,
 	MobileBottomComponentConfig,

@@ -1,0 +1,91 @@
+---
+import { Icon } from "astro-icon/components";
+import { shopConfig } from "@/config/shopConfig";
+import { getVisibleShopProducts } from "@/utils/shop-utils";
+import { url } from "@/utils/url-utils";
+import ShopProductCard from "./ShopProductCard.astro";
+
+const products = shopConfig.enabled ? await getVisibleShopProducts() : [];
+const featuredProducts = products
+	.filter((product) => product.data.featured)
+	.slice(0, shopConfig.featuredLimit);
+---
+
+{shopConfig.enabled && (
+	<section class="shop-promo card-base relative mb-4 overflow-hidden border border-amber-300/45 p-5 sm:p-7 dark:border-amber-500/25" aria-labelledby="shop-promo-title">
+		<div class="shop-glow pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full" aria-hidden="true"></div>
+		<div class="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+			<div class="max-w-2xl">
+				<div class="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-300/60 bg-amber-100/80 px-3 py-1 text-xs font-extrabold tracking-[0.16em] text-amber-900 dark:border-amber-500/30 dark:bg-amber-950/45 dark:text-amber-200">
+					<Icon is:inline name="material-symbols:new-releases" />
+					NEW · SORAMAX SHOP
+				</div>
+				<h2 id="shop-promo-title" class="text-2xl font-black leading-tight text-black/90 sm:text-3xl dark:text-white/90">
+					Gear, imports, and interesting finds.
+				</h2>
+				<p class="mt-3 max-w-xl text-black/62 dark:text-white/62">
+					Hard-to-find racket-sport gear, selected imports, and small-batch listings.
+				</p>
+			</div>
+
+			<a
+				href={url("/shop/")}
+				class="shop-cta scale-animation inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-xl px-5 py-3 font-extrabold text-stone-900 shadow-lg focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--primary) lg:self-center"
+			>
+				<Icon is:inline name="material-symbols:shopping-bag" class="text-xl" />
+				Browse Shop
+				<Icon is:inline name="material-symbols:arrow-forward-rounded" />
+			</a>
+		</div>
+
+		{featuredProducts.length > 0 ? (
+			<div class="relative mt-6 grid gap-3 lg:grid-cols-3">
+				{featuredProducts.map((product) => <ShopProductCard product={product} compact />)}
+			</div>
+		) : (
+			<div class="relative mt-6 border-t border-black/8 pt-5 dark:border-white/10">
+				<div class="mb-3 text-sm font-bold text-black/55 dark:text-white/55">Catalog is being stocked.</div>
+				<div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+					{shopConfig.categories.slice(0, 4).map((category) => (
+						<div class="flex min-w-0 items-center gap-2 rounded-xl bg-black/4 px-3 py-3 text-sm font-bold text-black/70 dark:bg-white/6 dark:text-white/70">
+							<Icon is:inline name={category.icon} class="shrink-0 text-lg text-(--primary)" />
+							<span class="truncate">{category.label}</span>
+						</div>
+					))}
+				</div>
+			</div>
+		)}
+	</section>
+)}
+
+<style>
+	.shop-promo {
+		background:
+			linear-gradient(120deg, rgb(255 255 255 / 0.75), rgb(255 247 237 / 0.72)),
+			var(--card-bg);
+	}
+
+	:global(.dark) .shop-promo {
+		background:
+			linear-gradient(120deg, rgb(15 23 42 / 0.35), rgb(69 26 3 / 0.25)),
+			var(--card-bg);
+	}
+
+	.shop-glow {
+		background: radial-gradient(circle, rgb(251 146 60 / 0.3), transparent 68%);
+	}
+
+	.shop-cta {
+		background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 45%, #fbbf24), #fb923c);
+	}
+
+	.shop-cta:hover {
+		filter: brightness(1.06) saturate(1.05);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.shop-cta {
+			transition: none;
+		}
+	}
+</style>

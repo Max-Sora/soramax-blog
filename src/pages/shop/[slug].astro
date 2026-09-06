@@ -1,0 +1,169 @@
+---
+import { getCollection, render } from "astro:content";
+import { Icon } from "astro-icon/components";
+import Markdown from "@/components/common/Markdown.astro";
+import ShopStatusBadge from "@/components/shop/ShopStatusBadge.astro";
+import { shopConfig } from "@/config/shopConfig";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { url } from "@/utils/url-utils";
+
+export async function getStaticPaths() {
+	const products = (await getCollection("products")).filter(
+		(product) => product.data.draft !== true,
+	);
+
+	return products.map((product) => ({
+		params: { slug: product.data.slug },
+		props: { product },
+	}));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+const data = product.data;
+const category = shopConfig.categories.find(
+	(item) => item.id === data.category,
+);
+
+const formatPrice = (value: number) => {
+	try {
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: data.currency,
+		}).format(value);
+	} catch {
+		return `${data.currency} ${value.toFixed(2)}`;
+	}
+};
+
+const conditionLabel = data.condition
+	? data.condition
+			.split("-")
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(" ")
+	: null;
+
+const canPurchase =
+	(data.status === "in-stock" || data.status === "low-stock") &&
+	Boolean(data.purchaseUrl);
+---
+
+<MainGridLayout title={data.title} description={data.description}>
+	<nav class="mb-3 flex flex-wrap items-center gap-2 px-1 text-sm text-black/48 dark:text-white/48" aria-label="Breadcrumb">
+		<a href={url("/shop/")} class="rounded font-bold hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">Shop</a>
+		<Icon is:inline name="material-symbols:chevron-right-rounded" />
+		<span>{category?.label || data.category}</span>
+		<Icon is:inline name="material-symbols:chevron-right-rounded" />
+		<span class="text-black/70 dark:text-white/70" aria-current="page">{data.title}</span>
+	</nav>
+
+	<article class="card-base overflow-hidden">
+		<div class="grid grid-cols-1 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+			<div class="relative min-h-72 bg-black/3 sm:min-h-96 dark:bg-white/5">
+				{data.image ? (
+					<img src={url(data.image)} alt={data.imageAlt || data.title} class="absolute inset-0 h-full w-full object-cover" />
+				) : (
+					<div class="product-placeholder absolute inset-0 flex flex-col items-center justify-center gap-3 text-black/42 dark:text-white/42">
+						<Icon is:inline name={category?.icon || "material-symbols:inventory-2"} class="text-6xl" />
+						<span class="text-sm font-extrabold uppercase tracking-[0.16em]">Image coming soon</span>
+					</div>
+				)}
+			</div>
+
+			<div class="p-6 sm:p-9">
+				<div class="flex flex-wrap items-center gap-2">
+					<span class="text-sm font-extrabold uppercase tracking-[0.14em] text-(--primary)">{category?.label || data.category}</span>
+					<ShopStatusBadge status={data.status} />
+					{conditionLabel && <span class="rounded-full border border-black/10 px-2.5 py-1 text-xs font-bold text-black/55 dark:border-white/12 dark:text-white/55">{conditionLabel}</span>}
+				</div>
+
+				<h2 class="mt-4 text-3xl font-black leading-tight text-black/90 sm:text-4xl dark:text-white/90">{data.title}</h2>
+				{data.description && <p class="mt-4 text-lg leading-relaxed text-black/58 dark:text-white/58">{data.description}</p>}
+
+				<div class="mt-6 flex flex-wrap items-baseline gap-3">
+					{typeof data.price === "number" ? (
+						<>
+							<span class="text-3xl font-black text-black/88 dark:text-white/90">{formatPrice(data.price)}</span>
+							{typeof data.compareAtPrice === "number" && data.compareAtPrice > data.price && (
+								<span class="text-lg text-black/35 line-through dark:text-white/35">{formatPrice(data.compareAtPrice)}</span>
+							)}
+						</>
+					) : (
+						<span class="text-lg font-extrabold text-black/55 dark:text-white/55">Price coming soon</span>
+					)}
+				</div>
+
+				{data.shippingNote && (
+					<div class="mt-5 flex items-start gap-2 rounded-xl bg-black/4 p-3 text-sm text-black/58 dark:bg-white/6 dark:text-white/58">
+						<Icon is:inline name="material-symbols:local-shipping-outline" class="mt-0.5 shrink-0 text-lg text-(--primary)" />
+						<span>{data.shippingNote}</span>
+					</div>
+				)}
+
+				<div class="mt-7">
+					{canPurchase ? (
+						<a
+							href={data.purchaseUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="purchase-cta scale-animation inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 font-extrabold text-stone-900 shadow-lg focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--primary) sm:w-auto"
+						>
+							<Icon is:inline name="material-symbols:shopping-bag" />
+							{data.purchaseLabel || "Buy / View Listing"}
+							<Icon is:inline name="fa7-solid:arrow-up-right-from-square" class="text-xs" />
+						</a>
+					) : data.status === "coming-soon" ? (
+						<span class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-black/6 px-5 py-3.5 font-extrabold text-black/42 sm:w-auto dark:bg-white/7 dark:text-white/42">
+							<Icon is:inline name="material-symbols:schedule" /> Coming Soon
+						</span>
+					) : data.status === "sold-out" ? (
+						<span class="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-black/6 px-5 py-3.5 font-extrabold text-black/42 sm:w-auto dark:bg-white/7 dark:text-white/42">
+							<Icon is:inline name="material-symbols:remove-shopping-cart" /> Sold Out
+						</span>
+					) : (
+						<a
+							href={shopConfig.contactUrl}
+							class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-(--primary) px-5 py-3.5 font-extrabold text-white transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--primary) sm:w-auto dark:text-black/75"
+						>
+							<Icon is:inline name="material-symbols:mail" /> Ask availability
+						</a>
+					)}
+				</div>
+
+				{data.tags.length > 0 && (
+					<div class="mt-6 flex flex-wrap gap-2 border-t border-black/8 pt-5 dark:border-white/10">
+						{data.tags.map((tag) => <span class="rounded-lg bg-black/4 px-2.5 py-1 text-xs font-bold text-black/48 dark:bg-white/6 dark:text-white/48">#{tag}</span>)}
+					</div>
+				)}
+			</div>
+		</div>
+
+		<div class="border-t border-black/8 px-6 py-7 sm:px-9 dark:border-white/10">
+			<Markdown class="markdown-content">
+				<Content />
+			</Markdown>
+		</div>
+	</article>
+</MainGridLayout>
+
+<style>
+	.product-placeholder {
+		background:
+			radial-gradient(circle at 72% 24%, rgb(251 191 36 / 0.28), transparent 38%),
+			linear-gradient(135deg, color-mix(in srgb, var(--primary) 15%, transparent), transparent);
+	}
+
+	.purchase-cta {
+		background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 45%, #fbbf24), #fb923c);
+	}
+
+	.purchase-cta:hover {
+		filter: brightness(1.06) saturate(1.05);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.purchase-cta {
+			transition: none;
+		}
+	}
+</style>

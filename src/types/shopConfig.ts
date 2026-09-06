@@ -1,10 +1,13 @@
 export type ShopProductStatus =
 	| "in-stock"
 	| "low-stock"
+	| "by-request"
 	| "sold-out"
 	| "coming-soon";
 
 export type ShopProductCondition = "new" | "open-box" | "used";
+
+export type ShopProductType = "physical" | "digital" | "service";
 
 export type ShopCategory = {
 	id: string;
@@ -19,5 +22,9 @@ export type ShopConfig = {
 	description: string;
 	featuredLimit: number;
 	categories: ShopCategory[];
-	contactUrl: string;
+	contactEmail: string;
+	contactPhone: string;
+	contactPhoneDisplay: string;
+	contactEmailUrl: string;
+	contactSmsUrl: string;
 };

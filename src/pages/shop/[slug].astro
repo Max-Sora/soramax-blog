@@ -5,6 +5,7 @@ import Markdown from "@/components/common/Markdown.astro";
 import ShopStatusBadge from "@/components/shop/ShopStatusBadge.astro";
 import { shopConfig } from "@/config/shopConfig";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { formatShopCurrency, formatShopPrice } from "@/utils/shop-utils";
 import { url } from "@/utils/url-utils";
 
 export async function getStaticPaths() {
@@ -25,23 +26,19 @@ const category = shopConfig.categories.find(
 	(item) => item.id === data.category,
 );
 
-const formatPrice = (value: number) => {
-	try {
-		return new Intl.NumberFormat("en-US", {
-			style: "currency",
-			currency: data.currency,
-		}).format(value);
-	} catch {
-		return `${data.currency} ${value.toFixed(2)}`;
-	}
-};
-
 const conditionLabel = data.condition
 	? data.condition
 			.split("-")
 			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 			.join(" ")
 	: null;
+
+const productTypeLabel =
+	data.productType === "digital"
+		? "Digital"
+		: data.productType === "service"
+			? "Service"
+			: null;
 
 const canPurchase =
 	(data.status === "in-stock" || data.status === "low-stock") &&
@@ -74,6 +71,7 @@ const canPurchase =
 				<div class="flex flex-wrap items-center gap-2">
 					<span class="text-sm font-extrabold uppercase tracking-[0.14em] text-(--primary)">{category?.label || data.category}</span>
 					<ShopStatusBadge status={data.status} />
+					{productTypeLabel && <span class="rounded-full border border-black/10 px-2.5 py-1 text-xs font-bold text-black/55 dark:border-white/12 dark:text-white/55">{productTypeLabel}</span>}
 					{conditionLabel && <span class="rounded-full border border-black/10 px-2.5 py-1 text-xs font-bold text-black/55 dark:border-white/12 dark:text-white/55">{conditionLabel}</span>}
 				</div>
 
@@ -81,22 +79,19 @@ const canPurchase =
 				{data.description && <p class="mt-4 text-lg leading-relaxed text-black/58 dark:text-white/58">{data.description}</p>}
 
 				<div class="mt-6 flex flex-wrap items-baseline gap-3">
-					{typeof data.price === "number" ? (
-						<>
-							<span class="text-3xl font-black text-black/88 dark:text-white/90">{formatPrice(data.price)}</span>
-							{typeof data.compareAtPrice === "number" && data.compareAtPrice > data.price && (
-								<span class="text-lg text-black/35 line-through dark:text-white/35">{formatPrice(data.compareAtPrice)}</span>
-							)}
-						</>
-					) : (
-						<span class="text-lg font-extrabold text-black/55 dark:text-white/55">Price coming soon</span>
+					<span class="text-3xl font-black text-black/88 dark:text-white/90">{formatShopPrice(data)}</span>
+					{typeof data.price === "number" && typeof data.compareAtPrice === "number" && data.compareAtPrice > data.price && (
+						<span class="text-lg text-black/35 line-through dark:text-white/35">{formatShopCurrency(data.compareAtPrice, data.currency)}</span>
 					)}
 				</div>
 
 				{data.shippingNote && (
 					<div class="mt-5 flex items-start gap-2 rounded-xl bg-black/4 p-3 text-sm text-black/58 dark:bg-white/6 dark:text-white/58">
-						<Icon is:inline name="material-symbols:local-shipping-outline" class="mt-0.5 shrink-0 text-lg text-(--primary)" />
-						<span>{data.shippingNote}</span>
+						<Icon is:inline name={data.productType === "digital" ? "material-symbols:download" : "material-symbols:local-shipping-outline"} class="mt-0.5 shrink-0 text-lg text-(--primary)" />
+						<span>
+							<strong>{data.productType === "digital" ? "Delivery:" : data.productType === "service" ? "Service details:" : "Shipping:"}</strong>{" "}
+							{data.productType === "digital" ? "Digital / confirmed before purchase" : data.shippingNote}
+						</span>
 					</div>
 				)}
 
@@ -121,12 +116,21 @@ const canPurchase =
 							<Icon is:inline name="material-symbols:remove-shopping-cart" /> Sold Out
 						</span>
 					) : (
-						<a
-							href={shopConfig.contactUrl}
-							class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-(--primary) px-5 py-3.5 font-extrabold text-white transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-(--primary) sm:w-auto dark:text-black/75"
-						>
-							<Icon is:inline name="material-symbols:mail" /> Ask availability
-						</a>
+						<div class="rounded-2xl border border-orange-200 bg-orange-50/70 p-4 dark:border-orange-800/55 dark:bg-orange-950/25">
+							<h3 class="font-black text-black/82 dark:text-white/82">Ask Availability</h3>
+							<div class="mt-2 grid min-w-0 gap-1 text-sm text-black/58 dark:text-white/58">
+								<div class="min-w-0"><span class="font-bold">Email:</span> <a href={shopConfig.contactEmailUrl} class="break-all rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactEmail}</a></div>
+								<div><span class="font-bold">Text:</span> <a href={shopConfig.contactSmsUrl} class="rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactPhoneDisplay}</a></div>
+							</div>
+							<div class="mt-4 flex flex-col gap-2 sm:flex-row">
+								<a href={shopConfig.contactEmailUrl} aria-label={`Email SoraMax Shop at ${shopConfig.contactEmail}`} class="inline-flex items-center justify-center gap-2 rounded-xl bg-(--primary) px-4 py-2.5 text-sm font-extrabold text-white transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:text-black/75">
+									<Icon is:inline name="material-symbols:mail" /> Email
+								</a>
+								<a href={shopConfig.contactSmsUrl} aria-label={`Text SoraMax Shop at ${shopConfig.contactPhoneDisplay}`} class="inline-flex items-center justify-center gap-2 rounded-xl border border-orange-300 bg-white/65 px-4 py-2.5 text-sm font-extrabold text-orange-900 transition hover:border-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500 dark:border-orange-700 dark:bg-white/6 dark:text-orange-200">
+									<Icon is:inline name="material-symbols:sms" /> Text (Google Voice)
+								</a>
+							</div>
+						</div>
 					)}
 				</div>
 

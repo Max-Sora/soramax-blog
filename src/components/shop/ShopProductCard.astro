@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 import { shopConfig } from "@/config/shopConfig";
+import { formatShopCurrency, formatShopPrice } from "@/utils/shop-utils";
 import { url } from "@/utils/url-utils";
 import ShopStatusBadge from "./ShopStatusBadge.astro";
 
@@ -15,17 +16,6 @@ const data = product.data;
 const category = shopConfig.categories.find(
 	(item) => item.id === data.category,
 );
-
-const formatPrice = (value: number) => {
-	try {
-		return new Intl.NumberFormat("en-US", {
-			style: "currency",
-			currency: data.currency,
-		}).format(value);
-	} catch {
-		return `${data.currency} ${value.toFixed(2)}`;
-	}
-};
 
 const conditionLabel = data.condition
 	? data.condition
@@ -86,16 +76,12 @@ const conditionLabel = data.condition
 
 		<div class="mt-auto flex flex-wrap items-end justify-between gap-3 pt-5">
 			<div>
-				{typeof data.price === "number" ? (
-					<div class="flex flex-wrap items-baseline gap-2">
-						<span class="text-lg font-extrabold text-black/85 dark:text-white/90">{formatPrice(data.price)}</span>
-						{typeof data.compareAtPrice === "number" && data.compareAtPrice > data.price && (
-							<span class="text-sm text-black/35 line-through dark:text-white/35">{formatPrice(data.compareAtPrice)}</span>
-						)}
-					</div>
-				) : (
-					<span class="text-sm font-bold text-black/55 dark:text-white/55">Price coming soon</span>
-				)}
+				<div class="flex flex-wrap items-baseline gap-2">
+					<span class="text-lg font-extrabold text-black/85 dark:text-white/90">{formatShopPrice(data)}</span>
+					{typeof data.price === "number" && typeof data.compareAtPrice === "number" && data.compareAtPrice > data.price && (
+						<span class="text-sm text-black/35 line-through dark:text-white/35">{formatShopCurrency(data.compareAtPrice, data.currency)}</span>
+					)}
+				</div>
 				{conditionLabel && <div class="mt-1 text-xs text-black/45 dark:text-white/45">Condition: {conditionLabel}</div>}
 			</div>
 

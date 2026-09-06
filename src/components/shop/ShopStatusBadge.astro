@@ -10,6 +10,7 @@ const { status } = Astro.props;
 const statusLabels: Record<ShopProductStatus, string> = {
 	"in-stock": "In Stock",
 	"low-stock": "Low Stock",
+	"by-request": "Check Availability",
 	"sold-out": "Sold Out",
 	"coming-soon": "Coming Soon",
 };
@@ -19,6 +20,8 @@ const statusStyles: Record<ShopProductStatus, string> = {
 		"bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-200 dark:border-emerald-800",
 	"low-stock":
 		"bg-amber-100 text-amber-900 border-amber-200 dark:bg-amber-950/60 dark:text-amber-200 dark:border-amber-800",
+	"by-request":
+		"bg-orange-100 text-orange-900 border-orange-200 dark:bg-orange-950/60 dark:text-orange-200 dark:border-orange-800",
 	"sold-out":
 		"bg-neutral-200 text-neutral-700 border-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:border-neutral-700",
 	"coming-soon":

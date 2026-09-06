@@ -45,6 +45,8 @@ const productsCollection = defineCollection({
 		category: z.string(),
 		tags: z.array(z.string()).default([]),
 		price: z.number().optional(),
+		priceMin: z.number().optional(),
+		priceMax: z.number().optional(),
 		compareAtPrice: z.number().optional(),
 		currency: z.string().default("USD"),
 		image: z.string().optional().default(""),
@@ -52,8 +54,9 @@ const productsCollection = defineCollection({
 		featured: z.boolean().default(false),
 		draft: z.boolean().default(false),
 		status: z
-			.enum(["in-stock", "low-stock", "sold-out", "coming-soon"])
+			.enum(["in-stock", "low-stock", "by-request", "sold-out", "coming-soon"])
 			.default("coming-soon"),
+		productType: z.enum(["physical", "digital", "service"]).default("physical"),
 		condition: z.enum(["new", "open-box", "used"]).optional(),
 		purchaseUrl: z.string().url().optional().nullable(),
 		purchaseLabel: z.string().optional(),

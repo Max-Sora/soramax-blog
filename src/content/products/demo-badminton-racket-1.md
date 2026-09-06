@@ -10,7 +10,7 @@ tags:
 price: 129.99
 currency: USD
 featured: true
-draft: false
+draft: true
 status: coming-soon
 condition: new
 purchaseUrl:

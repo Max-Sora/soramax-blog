@@ -11,7 +11,7 @@ price: 39.99
 compareAtPrice: 49.99
 currency: USD
 featured: true
-draft: false
+draft: true
 status: low-stock
 condition: new
 purchaseUrl:

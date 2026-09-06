@@ -91,9 +91,35 @@ const catalogLabel =
 		</h2>
 		<ul class="mt-4 space-y-2 text-sm text-black/58 dark:text-white/58">
 			<li>Small-batch availability can change.</li>
-			<li>Shipping details are listed per item.</li>
+			<li>Delivery or shipping details are listed per item.</li>
 			<li>Contact before purchase when a listing does not have checkout enabled.</li>
 		</ul>
+	</section>
+
+	<section class="card-base mt-4 p-6" aria-labelledby="shop-contact-heading">
+		<div class="max-w-2xl">
+			<h2 id="shop-contact-heading" class="text-lg font-black text-black/80 dark:text-white/80">
+				Questions or looking for something specific?
+			</h2>
+			<div class="mt-4 grid min-w-0 gap-2 text-sm text-black/58 sm:grid-cols-2 dark:text-white/58">
+				<div class="min-w-0">
+					<span class="font-bold text-black/72 dark:text-white/72">Email:</span>
+					<a href={shopConfig.contactEmailUrl} class="ml-1 break-all rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactEmail}</a>
+				</div>
+				<div>
+					<span class="font-bold text-black/72 dark:text-white/72">Text:</span>
+					<a href={shopConfig.contactSmsUrl} class="ml-1 rounded hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-(--primary)">{shopConfig.contactPhoneDisplay}</a>
+				</div>
+			</div>
+			<div class="mt-5 flex flex-col gap-2 sm:flex-row">
+				<a href={shopConfig.contactEmailUrl} aria-label={`Email SoraMax Shop at ${shopConfig.contactEmail}`} class="inline-flex items-center justify-center gap-2 rounded-xl bg-(--primary) px-4 py-2.5 text-sm font-extrabold text-white transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:text-black/75">
+					<Icon is:inline name="material-symbols:mail" /> Email Shop
+				</a>
+				<a href={shopConfig.contactSmsUrl} aria-label={`Text SoraMax Shop at ${shopConfig.contactPhoneDisplay}`} class="inline-flex items-center justify-center gap-2 rounded-xl border border-black/10 bg-black/4 px-4 py-2.5 text-sm font-extrabold text-black/72 transition hover:border-(--primary) hover:text-(--primary) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary) dark:border-white/12 dark:bg-white/6 dark:text-white/72">
+					<Icon is:inline name="material-symbols:sms" /> Text Shop
+				</a>
+			</div>
+		</div>
 	</section>
 </MainGridLayout>
 

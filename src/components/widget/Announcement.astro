@@ -28,7 +28,7 @@ const showTitle = widgetConfig?.showTitle !== false;
 >
   <div>
     <!-- 公告栏内容 -->
-    <div class="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
+    <div class="announcement-content text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
       {config.content}
     </div>
 
@@ -52,7 +52,7 @@ const showTitle = widgetConfig?.showTitle !== false;
       {
         config.closable && (
           <button
-            class="btn-regular rounded-lg h-8 w-8 text-sm hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+            class="announcement-close btn-regular rounded-lg h-8 w-8 text-sm transition-colors"
             onclick="this.closest('widget-layout').style.display='none'"
             aria-label={i18n(I18nKey.announcementClose)}
           >
@@ -63,3 +63,20 @@ const showTitle = widgetConfig?.showTitle !== false;
     </div>
   </div>
 </WidgetLayout>
+
+<style>
+  .announcement-content {
+    border-inline-start: 3px solid var(--secondary-accent);
+    padding-inline-start: 0.75rem;
+  }
+
+  .announcement-close:hover {
+    color: var(--secondary-accent);
+    background: color-mix(in srgb, var(--secondary-accent) 12%, transparent);
+  }
+
+  :global(.dark) .announcement-close:hover {
+    color: color-mix(in srgb, var(--secondary-accent) 70%, white);
+    background: color-mix(in srgb, var(--secondary-accent) 18%, transparent);
+  }
+</style>

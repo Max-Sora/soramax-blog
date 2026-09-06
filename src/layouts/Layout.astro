@@ -287,8 +287,21 @@ const siteLang = lang.replace("_", "-");
         isDark ? darkTheme : lightTheme
       );
 
-      // Load the hue from local storage
-      const hue = localStorage.getItem("hue") || configHue;
+      // Migrate obsolete site defaults once while preserving intentional custom hues.
+      const hueStorageKey = "hue";
+      const hueMigrationKey = "soramax-theme-hue-v1";
+      const legacyDefaultHues = ["165", "215"];
+      const storedHue = localStorage.getItem(hueStorageKey);
+      let hue = storedHue || String(configHue);
+
+      if (localStorage.getItem(hueMigrationKey) !== "complete") {
+        if (storedHue === null || legacyDefaultHues.includes(storedHue)) {
+          hue = String(configHue);
+          localStorage.setItem(hueStorageKey, hue);
+        }
+        localStorage.setItem(hueMigrationKey, "complete");
+      }
+
       document.documentElement.style.setProperty("--hue", hue);
 
       // 设置卡片透明度（全屏透明模式下使用），优先使用用户自定义值

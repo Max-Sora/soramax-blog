@@ -1,11 +1,11 @@
 ---
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import ArchivePanel from "@components/controls/ArchivePanel.svelte";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import { getSortedPostsList } from "@/utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
 const lifeNotesPosts = sortedPostsList.filter(
-  (post) => post.data.category?.trim() === "Life Notes",
+	(post) => post.data.category?.trim() === "Life Notes",
 );
 ---
 

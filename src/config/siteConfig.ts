@@ -6,16 +6,16 @@ export const siteConfig: SiteConfig = {
 	// Site title
 	title: "Max",
 	// Site subtitle
-	subtitle: "Hardware, servers, AI tools, and engineering notes.",
+	subtitle: "Engineering, hardware, racket sports, and everyday notes.",
 	// Site URL
 	site_url: "https://soramax.xyz",
 	// Site description
 	description:
-		"Max's English personal blog about hardware, servers, embedded systems, AI workflows, and PC building.",
+		"Max's personal notes on engineering, hardware and embedded systems, AI workflows, racket sports, and everyday projects.",
 	lang: SITE_LANG,
 
 	themeColor: {
-		hue: 165,
+		hue: 215,
 		fixed: false,
 		defaultMode: "system",
 	},

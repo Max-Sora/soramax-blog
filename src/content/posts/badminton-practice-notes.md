@@ -1,6 +1,6 @@
 ---
-title: "Badminton Practice Notes: Footwork, Clears, and Recovery"
-description: Personal notes from badminton practice focused on footwork and shot control.
+title: "Badminton Practice Notes: A Casual Summer Log"
+description: A personal record of casual badminton sessions, movement, and small adjustments.
 published: 2026-07-02
 category: Life Notes
 draft: false
@@ -11,14 +11,10 @@ tags:
   - Training Notes
 ---
 
-# Badminton Practice Notes: Footwork, Clears, and Recovery
+# Badminton Practice Notes: A Casual Summer Log
 
-I keep these notes to stay consistent during short practice windows.
+Badminton has been another easy way to stay active this summer without making every session feel like a training plan. I mostly use these notes to remember what felt better from one casual session to the next.
 
-- Keep split-step timing tied to shuttle height rather than opponent movement cues.
-- For baseline clears, return to neutral stance quickly instead of overreaching.
-- Rehearse recovery after each cross-court clear with three small steps.
-- Prioritize balance over raw speed for the first 15 minutes of every session.
-- Record one target each session (for example, deeper backhand clear consistently).
+I keep returning to a few simple things: arriving balanced, making clears without rushing, and recovering early enough to be ready for the next shot. When I have a short window to play, one small adjustment is more useful than trying to solve everything at once.
 
-This is a casual note log so I can review progress without turning every session into theory.
+This stays a casual notebook, not a technical guide. It gives me a place to keep the small observations that would otherwise disappear after the session.

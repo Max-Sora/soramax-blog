@@ -1,6 +1,6 @@
 ---
-title: "Table Tennis Practice Notes: Serve, Footwork, and First Attack"
-description: Personal field notes from table tennis practice sessions.
+title: "Table Tennis This Summer: Practice, People, and Equipment"
+description: A personal summer log of table tennis sessions, people, and gear experiments.
 published: 2026-07-01
 category: Life Notes
 draft: false
@@ -11,14 +11,14 @@ tags:
   - Training Notes
 ---
 
-# Table Tennis Practice Notes: Serve, Footwork, and First Attack
+# Table Tennis This Summer: Practice, People, and Equipment
 
-A short log from my table tennis sessions, keeping the notes practical and simple.
+This summer, table tennis has been a good reason to keep moving and meet people outside my usual engineering projects. I've played around Irvine, UCI, and Pasadena, and each place has its own rhythm: different tables, different regulars, and a different kind of rally to settle into.
 
-- Build a high-arcing serve, then flatten it once rhythm is stable.
-- Focus on first foot step toward the ball direction before contact.
-- Start each rally with an opening routine: ready stance, contact cue, short recovery.
-- Shorten recovery distance on fast exchanges to keep the next shot cleaner.
-- Review one rally replay at a time and keep only one correction per session.
+My game is still more about control, arc, and keeping the ball on the table than trying to force every point. I have been paying attention to how a little more patience in the rally changes what I can do with placement and consistency.
 
-This page is just a working notebook, not a polished coaching guide. I keep it for myself as I iterate.
+Equipment has become part of the learning process, too. My forehand and backhand do not always ask for the same thing, so I keep noticing the tradeoffs between a tacky Chinese rubber, a springier tensor rubber, and the blade underneath them. A pairing that feels stable for one wing can feel too lively or too demanding for the other.
+
+It is also hard not to notice the price and availability gap between the United States and China. Trying a rubber, finding a replacement, or comparing blades can take more planning here, which makes each setup change feel worth writing down.
+
+This is an ongoing summer record, not a coaching guide. I will keep adding notes as I play with more people, learn what my equipment is doing, and figure out what I want to change next.

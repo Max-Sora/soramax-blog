@@ -28,9 +28,22 @@ const localPlaylist =
 			})
 		: [];
 
+const neteasePlaylist =
+	config.mode === "meting" && config.meting?.playlist
+		? config.meting.playlist.map((song) => ({
+				name: song.title,
+				artist: song.artist ?? "Monster Siren Records",
+				id: song.id,
+				url: "",
+				pic: "",
+				lrc: "",
+			}))
+		: [];
+
 const managerConfigStr = JSON.stringify({
 	mode: config.mode,
 	meting: config.meting,
+	neteasePlaylist: neteasePlaylist,
 	localPlaylist: localPlaylist,
 	volume: config.volume ?? 0.7,
 	playMode: config.playMode ?? "list",
@@ -96,15 +109,18 @@ const managerConfigStr = JSON.stringify({
 
     // ── Audio element (persistent, attached to body) ────────
     var audio = document.createElement('audio');
-    audio.crossOrigin = 'anonymous';
     audio.style.display = 'none';
     document.body.appendChild(audio);
 
     // ── State ────────────────────────────────────────────────
     var loadVersion = 0; // incremented on each loadTrack to discard stale play() results
+    var handledFailureVersion = -1;
+    var consecutiveFailures = 0;
+    var savedIndex = parseInt(localStorage.getItem('music-player-index') || '0', 10);
+    if (isNaN(savedIndex) || savedIndex < 0) savedIndex = 0;
     var state = {
         playlist: [],
-        currentIndex: 0,
+        currentIndex: savedIndex,
         isPlaying: false,
         playMode: 0, // 0: list, 1: one, 2: random
         volume: localStorage.getItem('music-player-volume') !== null
@@ -168,6 +184,53 @@ const managerConfigStr = JSON.stringify({
         throw new Error('All Meting APIs failed');
     }
 
+    async function resolveMetingTrack(track) {
+        if (track.url) return track;
+        if (!config.meting || !track.id) throw new Error('Missing Meting track ID');
+
+        var m = config.meting;
+        var apis = [m.api].concat(m.fallbackApis || []);
+
+        for (var i = 0; i < apis.length; i++) {
+            var baseApi = apis[i];
+            if (!baseApi) continue;
+
+            var controller = new AbortController();
+            var timeoutId = setTimeout(function () { controller.abort(); }, 6000);
+
+            try {
+                var fetchUrl = baseApi
+                    .replace(':server', m.server)
+                    .replace(':type', 'song')
+                    .replace(':id', track.id)
+                    .replace(':r', Math.random());
+                if (m.auth) fetchUrl += '&auth=' + m.auth;
+
+                var res = await fetch(fetchUrl, { signal: controller.signal });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                var data = await res.json();
+                var item = Array.isArray(data) ? data[0] : null;
+
+                if (item && item.url) {
+                    track.name = item.title || item.name || track.name;
+                    track.artist = item.author || item.artist || track.artist;
+                    track.url = item.url;
+                    track.pic = item.pic || item.cover || '';
+                    track.lrc = item.lrc || '';
+                    return track;
+                }
+            } catch (e) {
+                if (e.name !== 'AbortError') {
+                    console.warn('Meting track lookup failed for ' + baseApi, e);
+                }
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        throw new Error('No playable URL returned for ' + track.name);
+    }
+
     // ── Lyrics ───────────────────────────────────────────────
     function loadLyrics(track) {
         state.lyrics = [];
@@ -201,17 +264,10 @@ const managerConfigStr = JSON.stringify({
     }
 
     // ── Track loading ────────────────────────────────────────
-    function loadTrack(index, autoPlay) {
-        if (index < 0 || index >= state.playlist.length) return;
-        state.currentIndex = index;
-        var track = state.playlist[index];
-        var ver = ++loadVersion;
-
+    function startTrack(track, autoPlay, ver) {
         audio.src = track.url;
-
         loadLyrics(track);
-
-        emit('fm:track', { index: index, track: track, autoPlay: !!autoPlay });
+        emit('fm:track', { index: state.currentIndex, track: track, autoPlay: !!autoPlay });
 
         if (autoPlay) {
             audio.play().then(function () {
@@ -221,12 +277,39 @@ const managerConfigStr = JSON.stringify({
             }).catch(function (e) {
                 if (ver !== loadVersion) return; // stale, discard
                 if (e.name === 'AbortError') return; // interrupted by new load
-                console.warn('Autoplay blocked:', e);
+                if (e.name === 'NotAllowedError') {
+                    console.warn('Playback requires user interaction.');
+                    return;
+                }
+                handleTrackFailure(e);
             });
         } else {
             state.isPlaying = false;
             emit('fm:play-state', { isPlaying: false });
         }
+    }
+
+    function loadTrack(index, autoPlay) {
+        if (index < 0 || index >= state.playlist.length) return;
+        state.currentIndex = index;
+        localStorage.setItem('music-player-index', index.toString());
+        var track = state.playlist[index];
+        var ver = ++loadVersion;
+
+        emit('fm:track', { index: index, track: track, autoPlay: !!autoPlay });
+
+        if (track.url) {
+            startTrack(track, autoPlay, ver);
+            return;
+        }
+
+        resolveMetingTrack(track).then(function (resolvedTrack) {
+            if (ver !== loadVersion) return;
+            startTrack(resolvedTrack, autoPlay, ver);
+        }).catch(function (e) {
+            if (ver !== loadVersion) return;
+            handleTrackFailure(e);
+        });
     }
 
     // ── Playback controls ────────────────────────────────────
@@ -235,6 +318,12 @@ const managerConfigStr = JSON.stringify({
             audio.play().then(function () {
                 state.isPlaying = true;
                 emit('fm:play-state', { isPlaying: true });
+            }).catch(function (e) {
+                if (e.name === 'NotAllowedError') {
+                    console.warn('Playback requires user interaction.');
+                    return;
+                }
+                handleTrackFailure(e);
             });
         } else {
             audio.pause();
@@ -244,6 +333,7 @@ const managerConfigStr = JSON.stringify({
     }
 
     function playNext(auto) {
+        if (!auto) consecutiveFailures = 0;
         if (state.playMode === 1 && auto) {
             audio.currentTime = 0;
             audio.play();
@@ -258,7 +348,28 @@ const managerConfigStr = JSON.stringify({
         loadTrack(nextIndex, true);
     }
 
+    function handleTrackFailure(reason) {
+        if (handledFailureVersion === loadVersion) return;
+        handledFailureVersion = loadVersion;
+        consecutiveFailures += 1;
+
+        var track = state.playlist[state.currentIndex];
+        console.warn('Skipping unavailable track:', track ? track.name : state.currentIndex, reason);
+        if (track && track.id) track.url = '';
+
+        if (state.playlist.length > 0 && consecutiveFailures < state.playlist.length) {
+            playNext(true);
+            return;
+        }
+
+        state.isPlaying = false;
+        state.error = 'No playlist tracks are currently available';
+        emit('fm:play-state', { isPlaying: false });
+        emit('fm:error', { message: state.error });
+    }
+
     function playPrev() {
+        consecutiveFailures = 0;
         var prevIndex;
         if (state.playMode === 2) {
             prevIndex = Math.floor(Math.random() * state.playlist.length);
@@ -304,6 +415,7 @@ const managerConfigStr = JSON.stringify({
     }
 
     function playTrackByIndex(index) {
+        consecutiveFailures = 0;
         if (index === state.currentIndex && !audio.paused) {
             togglePlay();
         } else {
@@ -344,9 +456,13 @@ const managerConfigStr = JSON.stringify({
         playNext(true);
     });
 
+    audio.addEventListener('playing', function () {
+        consecutiveFailures = 0;
+        state.error = null;
+    });
+
     audio.addEventListener('error', function () {
-        state.error = 'Audio playback error';
-        emit('fm:error', { message: state.error });
+        handleTrackFailure(audio.error || new Error('Audio playback error'));
     });
 
     // ── Init (idempotent) ────────────────────────────────────
@@ -355,7 +471,9 @@ const managerConfigStr = JSON.stringify({
         state.initializing = true;
 
         try {
-            if (config.mode === 'meting' && config.meting) {
+            if (config.mode === 'meting' && config.neteasePlaylist.length > 0) {
+                state.playlist = config.neteasePlaylist;
+            } else if (config.mode === 'meting' && config.meting) {
                 await fetchMetingData();
             } else if (config.mode === 'local') {
                 state.playlist = config.localPlaylist || [];
@@ -365,7 +483,9 @@ const managerConfigStr = JSON.stringify({
                 // Apply volume
                 audio.volume = state.volume;
 
-                var startIndex = 0;
+                var startIndex = state.currentIndex < state.playlist.length
+                    ? state.currentIndex
+                    : 0;
                 if (state.playMode === 2) {
                     startIndex = Math.floor(Math.random() * state.playlist.length);
                 }

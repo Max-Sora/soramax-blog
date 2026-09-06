@@ -34,6 +34,13 @@ export type MusicPlayerConfig = {
 
 		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis?: string[];
+
+		// 可选的固定网易云单曲列表；配置后直接按顺序播放
+		playlist?: Array<{
+			title: string;
+			id: number;
+			artist?: string;
+		}>;
 	};
 
 	// 本地音乐配置（当 mode 为 'local' 时使用）

@@ -2,7 +2,7 @@ const PARCEL_QUERY = 'https://www.ocgis.com/survey/rest/services/WebApps/ParcelF
 const PARCEL_LAYER = 'https://www.ocgis.com/survey/rest/services/WebApps/ParcelFeatures/FeatureServer/0'
 const ZONING_LAYER = 'https://www.ocgis.com/survey/rest/services/WebApps/Map_Layers_Associated_Documents/MapServer/9'
 
-const state = { mode: 'apn', parcels: [], selected: null, compare: new Set(), loading: false }
+const state = { mode: 'apn', parcels: [], selected: null, compare: new Set(), compareData: new Map(), loading: false }
 const $ = (selector) => document.querySelector(selector)
 const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
 const fmt = new Intl.NumberFormat('en-US')
@@ -74,7 +74,11 @@ function card(parcel) {
   return `<article class="parcel-card"><div class="card-top"><span class="status-chip ${parcel.screen.label.toLowerCase()}">${parcel.screen.label}</span><button class="compare-check ${selected ? 'selected' : ''}" data-compare="${escapeHtml(parcel.id)}" aria-label="${selected ? 'Remove from compare' : 'Add to compare'}">${selected ? '✓' : '+'} Compare</button></div><button class="parcel-title" data-open="${escapeHtml(parcel.id)}"><span class="apn">APN ${escapeHtml(parcel.apn)}</span><strong>${escapeHtml(parcel.address)}</strong><span>${escapeHtml(parcel.city || 'Orange County, CA')}</span></button><dl class="facts"><div><dt>Land area</dt><dd>${parcel.sqft ? `${fmt.format(Math.round(parcel.sqft))} sf` : 'Unknown'}${parcel.acres ? ` · ${parcel.acres.toFixed(2)} ac` : ''}</dd></div><div><dt>Zoning</dt><dd>${escapeHtml(parcel.zoning || 'Unknown')}</dd></div></dl><div class="card-footer"><span>${escapeHtml(parcel.screen.note)}</span><button class="text-link" data-open="${escapeHtml(parcel.id)}">View details →</button></div></article>`
 }
 
-function toggleCompare(id) { if (state.compare.has(id)) state.compare.delete(id); else if (state.compare.size < 3) state.compare.add(id); renderResults(); if (!$('#compare-section').classList.contains('hidden')) renderCompare() }
+function toggleCompare(id) {
+  if (state.compare.has(id)) { state.compare.delete(id); state.compareData.delete(id) }
+  else if (state.compare.size < 3) { const parcel = state.parcels.find((item) => item.id === id); if (parcel) { state.compare.add(id); state.compareData.set(id, parcel) } }
+  renderResults(); if (!$('#compare-section').classList.contains('hidden')) renderCompare()
+}
 
 function openDetail(id) {
   const parcel = state.parcels.find((item) => item.id === id)
@@ -103,7 +107,7 @@ function printReport(parcel) {
 }
 
 function renderCompare() {
-  const parcels = [...state.compare].map((id) => state.parcels.find((parcel) => parcel.id === id)).filter(Boolean)
+  const parcels = [...state.compare].map((id) => state.compareData.get(id)).filter(Boolean)
   if (parcels.length < 2) { $('#compare-section').classList.add('hidden'); return }
   $('#compare-section').classList.remove('hidden')
   $('#compare-section').innerHTML = `<div class="detail-header"><div><div class="section-kicker">SIDE BY SIDE</div><h2>Parcel comparison</h2><p class="muted">Keep the first-pass differences visible while you verify the details.</p></div><button class="ghost" id="close-compare">Close</button></div><div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Fact</th>${parcels.map((parcel) => `<th>${escapeHtml(parcel.apn)}</th>`).join('')}</tr></thead><tbody>${[['Address', (parcel) => parcel.address], ['City / ZIP', (parcel) => parcel.city], ['Land area', (parcel) => parcel.sqft ? `${fmt.format(Math.round(parcel.sqft))} sf · ${parcel.acres.toFixed(2)} ac` : 'Unknown'], ['Zoning', (parcel) => parcel.zoning || 'Unknown'], ['Screen', (parcel) => parcel.screen.label], ['Source', () => 'OC Survey']].map(([label, getter]) => `<tr><th>${label}</th>${parcels.map((parcel) => `<td>${escapeHtml(getter(parcel))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`

@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "check": "astro check",
-    "build": "node scripts/generate-icons.js && npx tsx scripts/generate-lqips.ts && astro build && npx tsx scripts/subset-fonts.ts && pagefind --site dist",
+    "build": "node scripts/generate-icons.js && node node_modules/tsx/dist/cli.mjs scripts/generate-lqips.ts && node node_modules/astro/bin/astro.mjs build && node scripts/build-homepath-site-scout.mjs && node node_modules/tsx/dist/cli.mjs scripts/subset-fonts.ts && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "type-check": "tsc --noEmit --isolatedDeclarations",

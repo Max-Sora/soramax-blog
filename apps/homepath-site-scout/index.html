@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="HomePath Site Scout: a parcel-first due diligence starting point for Orange County, California." />
+    <title>HomePath Site Scout</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="site-header">
+        <a class="brand" href="./">homepath<span>site scout</span></a>
+        <div class="header-meta"><span class="live-dot"></span> OC GIS connected</div>
+      </header>
+      <main>
+        <section class="hero">
+          <div class="eyebrow">LANE 1 · FIND IT</div>
+          <h1>Start with the parcel,<br /><em>then ask better questions.</em></h1>
+          <p class="hero-copy">Find an Orange County parcel, see the official APN and land facts, and make a first-pass due diligence plan before you spend time on a site.</p>
+          <div class="source-strip"><span>Official source</span><a href="https://www.ocgis.com/survey/rest/services/WebApps/ParcelFeatures/FeatureServer/0" target="_blank" rel="noreferrer">OC Survey · Legal Lots Attributes ↗</a><span>·</span><a href="https://www.ocgis.com/survey/rest/services/WebApps/Map_Layers_Associated_Documents/MapServer/9" target="_blank" rel="noreferrer">OC Development Services zoning ↗</a></div>
+        </section>
+
+        <section class="scout-shell" aria-labelledby="scout-heading">
+          <div class="search-card">
+            <div class="section-kicker">PARCEL SCOUT</div>
+            <h2 id="scout-heading">Find a real parcel</h2>
+            <p class="muted">Search by APN / Assessment No. or a street address. Results come from the live public GIS service.</p>
+            <div class="search-controls">
+              <div class="mode-toggle" role="tablist" aria-label="Search type">
+                <button class="mode active" data-mode="apn" role="tab" aria-selected="true">APN</button>
+                <button class="mode" data-mode="address" role="tab" aria-selected="false">Address</button>
+              </div>
+              <form id="search-form" class="search-form">
+                <label class="sr-only" for="search-input">Search parcel</label>
+                <input id="search-input" autocomplete="off" placeholder="Try 891-770-97" />
+                <button class="primary" type="submit">Find parcel <span>→</span></button>
+              </form>
+            </div>
+            <div class="hint-row"><button class="example" data-example="891-770-97">Use example APN 891-770-97</button><span>Tip: APNs may include dashes.</span></div>
+            <div id="search-status" class="search-status" role="status"></div>
+          </div>
+
+          <div class="results-column">
+            <div class="results-toolbar"><div><span class="section-kicker">RESULTS</span><h2 id="results-title">Search to load parcels</h2></div><div class="toolbar-actions"><label>Screen<select id="screen-filter"><option value="all">All</option><option value="Met">Met</option><option value="Conflict">Conflict</option><option value="Unknown">Unknown</option></select></label><button id="compare-button" class="ghost" disabled>Compare <span id="compare-count">0</span></button></div></div>
+            <div id="results" class="results-grid"><div class="empty-state"><div class="empty-icon">⌖</div><h3>Parcel facts, not guesses</h3><p>Run a search to see APN, acreage, zoning and a preliminary screen.</p></div></div>
+          </div>
+        </section>
+
+        <section id="detail-section" class="detail-section hidden" aria-live="polite"></section>
+        <section id="compare-section" class="compare-section hidden" aria-live="polite"></section>
+
+        <section class="method-section">
+          <div><div class="section-kicker">HOW TO READ THIS</div><h2>A first screen is a starting point.</h2></div>
+          <div class="method-grid"><div><span class="status-chip met">MET</span><p>Residential or potentially residential zoning code is present in the official layer.</p></div><div><span class="status-chip conflict">CONFLICT</span><p>Commercial, industrial, agricultural or open-space coding needs a closer land-use review.</p></div><div><span class="status-chip unknown">UNKNOWN</span><p>The parcel record does not include a usable zoning code. Verify with the city or county.</p></div></div>
+          <p class="disclaimer">Site Scout is an early research aid, not a zoning determination, title report, survey, environmental review, or legal opinion. Confirm every item with the jurisdiction and qualified professionals.</p>
+        </section>
+      </main>
+      <footer class="site-footer"><span>HomePath Site Scout · Orange County, California</span><a href="https://www.ocgis.com/survey/" target="_blank" rel="noreferrer">Verify at OC Survey ↗</a></footer>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

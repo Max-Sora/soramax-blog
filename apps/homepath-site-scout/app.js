@@ -37,6 +37,21 @@ function normalize(feature) {
   return { id: String(a.OBJECTID), apn: a.AssessmentNo || 'Unavailable', address: a.SiteAddress || 'Address not published', city: [a.SiteCityState, a.SiteZip5].filter(Boolean).join(' '), acres: area ? area / 43560 : 0, sqft: area, zoning: a.ZC_DETAIL || a.ZCLASS || a.ZC_DESCR || a.CAT_DIST || '', category: a.CAT_DIST || a.ZC_DESCR || '', landUse: a.GPLU_DESC || a.GPLU_CODE || '', legal: a.LegalDescr || '', geometry: geometrySummary(feature.geometry), screen: screenFor(a), source: PARCEL_LAYER }
 }
 
+async function enrichZoning(parcel) {
+  if (!parcel.geometry) return parcel
+  const params = new URLSearchParams({ geometry: [parcel.geometry.minX, parcel.geometry.minY, parcel.geometry.maxX, parcel.geometry.maxY].join(','), geometryType: 'esriGeometryEnvelope', inSR: '4326', spatialRel: 'esriSpatialRelIntersects', outFields: 'ZONECLASS,CATEGORY,DESCRIPTIO,ZONE_AND_H', returnGeometry: 'false', f: 'json' })
+  try {
+    const response = await fetch(`${ZONING_LAYER}/query?${params}`)
+    const payload = await response.json()
+    const attrs = payload.features?.[0]?.attributes
+    if (!attrs) return parcel
+    parcel.zoning = attrs.ZONE_AND_H || attrs.ZONECLASS || parcel.zoning
+    parcel.category = attrs.CATEGORY || attrs.DESCRIPTIO || parcel.category
+    parcel.screen = screenFor({ ZCLASS: attrs.ZONECLASS, ZC_DETAIL: attrs.ZONE_AND_H, ZC_DESCR: attrs.DESCRIPTIO, CAT_DIST: attrs.CATEGORY })
+  } catch { /* Keep the parcel result usable when the optional zoning overlay is unavailable. */ }
+  return parcel
+}
+
 async function search(where, label) {
   state.loading = true
   setStatus(`Looking up ${label} in the official OC Survey layer…`)
@@ -44,7 +59,7 @@ async function search(where, label) {
     const response = await fetch(queryUrl(where))
     const payload = await response.json()
     if (payload.error) throw new Error(payload.error.message || 'GIS service returned an error')
-    state.parcels = (payload.features || []).map(normalize)
+    state.parcels = await Promise.all((payload.features || []).map(normalize).map(enrichZoning))
     state.selected = null
     renderResults()
     setStatus(state.parcels.length ? `${state.parcels.length} parcel record${state.parcels.length === 1 ? '' : 's'} returned from OC Survey.` : 'No parcel records matched. Try a shorter APN or street name.')

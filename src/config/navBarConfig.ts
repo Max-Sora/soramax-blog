@@ -11,6 +11,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		LinkPresets.Shop,
 		LinkPresets.Posts,
 		LinkPresets.Projects,
+		LinkPresets.CareerNavigator,
 		LinkPresets.HardwareNotes,
 		LinkPresets.LifeNotes,
 		LinkPresets.Services,
@@ -62,6 +63,12 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		name: "Projects",
 		url: "/projects/",
 		icon: "material-symbols:rocket",
+	},
+	CareerNavigator: {
+		name: "Career Navigator",
+		url: "/tools/career-navigator/",
+		icon: "material-symbols:route",
+		highlight: true,
 	},
 	HardwareNotes: {
 		name: "Hardware Notes",

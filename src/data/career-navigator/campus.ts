@@ -1,4 +1,7 @@
-import type { CampusOpportunity, SourceEvidence } from "@/lib/career-navigator/types";
+import type {
+	CampusOpportunity,
+	SourceEvidence,
+} from "@/lib/career-navigator/types";
 
 export const UCI_CAMPUS_CHECKED_AT = "2026-11-04T00:00:00.000Z";
 
@@ -49,19 +52,26 @@ export const uciCampusOpportunities: CampusOpportunity[] = [
 	{
 		id: "uci-career-fairs-resource",
 		title: "Review upcoming UCI career fairs",
-		description: "Use the official page to confirm dates, participating employers, registration, and eligibility. Date: UNKNOWN in this static snapshot.",
+		description:
+			"Use the official page to confirm dates, participating employers, registration, and eligibility. Date: UNKNOWN in this static snapshot.",
 		url: "https://career.uci.edu/career-fairs/",
 		sourceEvidenceId: "uci-career-fairs",
 		kind: "event",
 		dateStatus: "unknown",
 		lastCheckedAt: UCI_CAMPUS_CHECKED_AT,
 		registrationUrl: "https://career.uci.edu/career-fairs/",
-		relevantInterests: ["embedded systems", "robotics", "hardware", "digital design"],
+		relevantInterests: [
+			"embedded systems",
+			"robotics",
+			"hardware",
+			"digital design",
+		],
 	},
 	{
 		id: "uci-career-events-resource",
 		title: "Check UCI career workshops and employer events",
-		description: "The official events page is the source of truth for dates and registration. No event is treated as current without a confirmed date.",
+		description:
+			"The official events page is the source of truth for dates and registration. No event is treated as current without a confirmed date.",
 		url: "https://career.uci.edu/about/events/",
 		sourceEvidenceId: "uci-career-events",
 		kind: "career",
@@ -72,18 +82,24 @@ export const uciCampusOpportunities: CampusOpportunity[] = [
 	{
 		id: "uci-course-planning-resource",
 		title: "Confirm course planning with UCI Engineering advising",
-		description: "Use this official planning resource before relying on a course or prerequisite recommendation. The navigator does not copy a counselor-approved schedule.",
+		description:
+			"Use this official planning resource before relying on a course or prerequisite recommendation. The navigator does not copy a counselor-approved schedule.",
 		url: "https://undergraduate.eng.uci.edu/advising/course-planning/",
 		sourceEvidenceId: "uci-engineering-advising",
 		kind: "resource",
 		dateStatus: "unknown",
 		lastCheckedAt: UCI_CAMPUS_CHECKED_AT,
-		relevantInterests: ["academic planning", "electrical engineering", "computer engineering"],
+		relevantInterests: [
+			"academic planning",
+			"electrical engineering",
+			"computer engineering",
+		],
 	},
 	{
 		id: "uci-catalogue-resource",
 		title: "Verify catalog-year requirements and prerequisites",
-		description: "Use the UCI Catalogue for the applicable catalog year. This resource is informational and does not enforce graduation requirements in the MVP.",
+		description:
+			"Use the UCI Catalogue for the applicable catalog year. This resource is informational and does not enforce graduation requirements in the MVP.",
 		url: "https://catalogue.uci.edu/",
 		sourceEvidenceId: "uci-catalogue",
 		kind: "resource",
@@ -93,12 +109,18 @@ export const uciCampusOpportunities: CampusOpportunity[] = [
 	{
 		id: "uci-urop-resource",
 		title: "Explore UCI undergraduate research",
-		description: "Use UROP as an official starting point; verify current faculty opportunities, application windows, and eligibility directly.",
+		description:
+			"Use UROP as an official starting point; verify current faculty opportunities, application windows, and eligibility directly.",
 		url: "https://urop.uci.edu/",
 		sourceEvidenceId: "uci-urop",
 		kind: "research",
 		dateStatus: "unknown",
 		lastCheckedAt: UCI_CAMPUS_CHECKED_AT,
-		relevantInterests: ["undergraduate research", "embedded systems", "robotics", "computer vision"],
+		relevantInterests: [
+			"undergraduate research",
+			"embedded systems",
+			"robotics",
+			"computer vision",
+		],
 	},
 ];

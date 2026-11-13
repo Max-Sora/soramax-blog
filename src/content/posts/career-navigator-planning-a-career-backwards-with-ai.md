@@ -18,6 +18,8 @@ Career advice often starts with a broad question: "What job should I get?" I hav
 
 The first release is aimed at UCI Electrical Engineering students. The scope is intentionally small. I want to connect a career direction to skills, courses, projects, research opportunities, and applications without pretending that a model can predict hiring or replace an advisor.
 
+[Launch Career Navigator](/tools/career-navigator/)
+
 ## Starting from the destination
 
 The product has three modes:
@@ -50,7 +52,7 @@ I also want deterministic rules and AI suggestions to remain separate. The curre
 
 The default privacy settings are local-first: local persistence is off, private data is not sent to an AI provider, and automatic application submission is off. A user can enable local saving, save a draft, or export the current plan as JSON. The point is to keep the plan editable and portable.
 
-The test suite covers the deterministic engine's normalization, matching, roadmap generation, stale and expiry logic, and validation helpers. The current implementation is a functional Phase 1 foundation with local sample data and a manual tracker. It is not a deployed recruiting platform, a live job aggregator, or an AI service.
+The test suite covers the deterministic engine's normalization, matching, partial evidence, bounded roadmap generation, stale and expiry logic, draft validation, and export helpers. The current implementation is a functional local-first tool with editable profile evidence, time-bounded roadmap actions, JSON and Markdown export, build-time source adapters, and a manual application tracker. It is not a deployed recruiting platform, a live job aggregator, or an AI service.
 
 ## What comes next
 

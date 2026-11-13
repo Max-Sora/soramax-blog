@@ -8,15 +8,10 @@ import {
 const getDynamicNavBarConfig = (): NavBarConfig => {
 	const links: NavBarLink[] = [
 		LinkPresets.Home,
-		LinkPresets.Shop,
 		LinkPresets.Posts,
 		LinkPresets.Projects,
-		LinkPresets.CareerNavigator,
-		LinkPresets.HardwareNotes,
-		LinkPresets.LifeNotes,
-		LinkPresets.Services,
+		LinkPresets.Shop,
 		LinkPresets.About,
-		LinkPresets.Links,
 		LinkPresets.Search,
 	];
 
@@ -64,62 +59,10 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/projects/",
 		icon: "material-symbols:rocket",
 	},
-	CareerNavigator: {
-		name: "Career Navigator",
-		url: "/tools/career-navigator/",
-		icon: "material-symbols:route",
-		highlight: true,
-	},
-	HardwareNotes: {
-		name: "Hardware Notes",
-		url: "/hardware-notes/",
-		icon: "material-symbols:memory",
-	},
-	LifeNotes: {
-		name: "Life Notes",
-		url: "/life-notes/",
-		icon: "material-symbols:book",
-	},
-	Services: {
-		name: "Services",
-		url: "/services/",
-		icon: "material-symbols:build",
-	},
 	About: {
 		name: "About",
 		url: "/about/",
 		icon: "material-symbols:person",
-	},
-	Links: {
-		name: "Links",
-		url: "#",
-		icon: "material-symbols:link",
-		children: [
-			{
-				name: "GitHub",
-				url: "https://github.com/Max-Sora",
-				external: true,
-				icon: "fa7-brands:github",
-			},
-			{
-				name: "GitHub Repo",
-				url: "https://github.com/Max-Sora/soramax-blog",
-				external: true,
-				icon: "fa7-brands:github",
-			},
-			{
-				name: "Website",
-				url: "https://soramax.xyz",
-				external: true,
-				icon: "material-symbols:language",
-			},
-			{
-				name: "Email",
-				url: "mailto:maxxtang@qq.com",
-				external: true,
-				icon: "fa7-solid:envelope",
-			},
-		],
 	},
 	Search: {
 		name: "Search",

@@ -1,14 +1,3 @@
 ---
-import ArchivePanel from "@components/controls/ArchivePanel.svelte";
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import { getSortedPostsList } from "@/utils/content-utils";
-
-const sortedPostsList = await getSortedPostsList();
-const lifeNotesPosts = sortedPostsList.filter(
-	(post) => post.data.category?.trim() === "Life Notes",
-);
+return Astro.redirect("/posts/?category=Life%20Notes", 301);
 ---
-
-<MainGridLayout title="Life Notes">
-  <ArchivePanel sortedPosts={lifeNotesPosts} client:only="svelte" />
-</MainGridLayout>

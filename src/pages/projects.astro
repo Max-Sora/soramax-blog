@@ -1,24 +1,67 @@
-﻿---
+---
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const projects = [
+	{
+		name: "Career Navigator",
+		status: "Live tool",
+		description:
+			"Reverse-plan a target role into evidence, an editable roadmap, and manual application tracking.",
+		href: "/tools/career-navigator/",
+		label: "Open tool",
+	},
+	{
+		name: "EE Intelligence",
+		status: "Experimental",
+		description:
+			"A personal engineering assistant experiment for turning technical research and debugging notes into useful workflows.",
+		href: "/posts/building-ee-intelligence-my-personal-engineering-ai-agent/",
+		label: "Read details",
+	},
+	{
+		name: "Hardware and PC Builds",
+		status: "Ongoing notes",
+		description:
+			"PC building, firmware tuning, troubleshooting, and practical hardware experiments documented as posts.",
+		href: "/posts/?tag=Hardware",
+		label: "Browse posts",
+	},
+	{
+		name: "Servers and Networking",
+		status: "Ongoing notes",
+		description:
+			"Home server deployment, Linux services, networking, and self-hosting experiments.",
+		href: "/posts/?tag=Servers",
+		label: "Browse posts",
+	},
+	{
+		name: "Embedded Prototypes",
+		status: "Ongoing notes",
+		description:
+			"Arduino, ESP32, embedded systems, and small hardware prototypes built while learning by iteration.",
+		href: "/posts/?tag=Embedded%20Systems",
+		label: "Browse posts",
+	},
+];
 ---
 
 <MainGridLayout title="Projects" description="Hardware, server, and software engineering projects.">
 	<div class="card-base p-8">
-		<p class="text-lg">A compact list of my side projects and experiments in hardware and software.</p>
-		<ul class="mt-6 list-disc pl-6 space-y-2">
-			<li>PC builds and BIOS/firmware tuning notes</li>
-			<li>Home server deployment and networking notes</li>
-			<li>Embedded systems prototypes and demos</li>
-		</ul>
+		<p class="text-lg">A single entry point for the tools, experiments, and engineering notes I am actively building.</p>
 	</div>
-	<a href="/tools/career-navigator/" class="card-base mt-6 block p-8 transition hover:-translate-y-1">
-		<div class="flex items-start justify-between gap-4">
-			<div>
-				<p class="text-xs font-bold tracking-[0.16em] text-[var(--primary)]">SORAMAX TOOL · LOCAL-FIRST</p>
-				<h2 class="mt-2 text-2xl font-semibold">Career Navigator</h2>
-				<p class="mt-3 max-w-2xl text-[var(--content-meta)]">Work backwards from a target role to evidence, a time-bounded roadmap, and manual application tracking. Sample data is labeled and personal data stays local by default.</p>
-			</div>
-			<span class="text-xl text-[var(--primary)]">↗</span>
-		</div>
-	</a>
+	<div class="mt-6 grid gap-4 md:grid-cols-2">
+		{projects.map((project) => (
+			<a href={project.href} class="card-base group block p-6 transition hover:-translate-y-1">
+				<div class="flex items-start justify-between gap-4">
+					<div>
+						<p class="text-xs font-bold tracking-[0.16em] text-[var(--primary)]">{project.status}</p>
+						<h2 class="mt-2 text-xl font-semibold">{project.name}</h2>
+						<p class="mt-3 text-[var(--content-meta)]">{project.description}</p>
+						<span class="mt-5 inline-block text-sm font-semibold text-[var(--primary)]">{project.label}</span>
+					</div>
+					<span class="text-xl text-[var(--primary)] transition group-hover:translate-x-1">-&gt;</span>
+				</div>
+			</a>
+		))}
+	</div>
 </MainGridLayout>

@@ -1,0 +1,1715 @@
+{
+  "mode": "live",
+  "status": "stale",
+  "fetchedAt": "2026-11-13T06:08:54.185Z",
+  "items": [
+    {
+      "id": "the-verge-c8bf1443",
+      "sourceId": "the-verge-c8bf1443",
+      "title": "Donald Trump really wants Tim Cook to run Nvidia",
+      "summary": "Jensen Huang resigned this morning as Nvidia's CEO following reports of affairs, including one with an alleged Chinese spy. Right now, the company is being led by its CFO on an interim basis. But President Donald Trump is already throwing around one person he thinks should take over the chipmaking giant: former Apple CEO Tim […]",
+      "body": "Jensen Huang resigned this morning as Nvidia's CEO following reports of affairs, including one with an alleged Chinese spy. Right now, the company is being led by its CFO on an interim basis. But President Donald Trump is already throwing around one person he thinks should take over the chipmaking giant: former Apple CEO Tim […]",
+      "url": "https://www.theverge.com/tech/1032774/president-donald-trump-tim-cook-nvidia-jensen-huang",
+      "publishedAt": "2026-11-13T00:46:07.000Z",
+      "category": "supply",
+      "entities": [
+        "NVIDIA",
+        "NVDA",
+        "Apple",
+        "AAPL"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/tech/1032774/president-donald-trump-tim-cook-nvidia-jensen-huang",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:3b259634",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        },
+        {
+          "name": "Apple",
+          "ticker": "AAPL",
+          "aliases": [
+            "apple",
+            "aapl",
+            "iphone"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-26122dff",
+      "sourceId": "the-verge-26122dff",
+      "title": "Xbox announces Wolfenstein 3",
+      "summary": "It's been nearly a decade since Bethesda's MachineGames released Wolfenstein II: The New Colossus in 2017, and now Xbox is ready to announce a sequel from the studio. Wolfenstein 3 was officially announced today, just days after Bethesda also confirmed that the next Elder Scrolls game will be called The Elder Scrolls VI: Sentinel. In […]",
+      "body": "It's been nearly a decade since Bethesda's MachineGames released Wolfenstein II: The New Colossus in 2017, and now Xbox is ready to announce a sequel from the studio. Wolfenstein 3 was officially announced today, just days after Bethesda also confirmed that the next Elder Scrolls game will be called The Elder Scrolls VI: Sentinel. In […]",
+      "url": "https://www.theverge.com/news/1032431/xbox-bethesda-wolfenstein-3",
+      "publishedAt": "2026-11-13T00:11:44.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/news/1032431/xbox-bethesda-wolfenstein-3",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:afa8f1cd",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-919e91fe",
+      "sourceId": "the-verge-919e91fe",
+      "title": "Whoop launched a social network where every user has a ‘verified heartbeat’",
+      "summary": "Starting Thursday, Whoop members can share their data from its wearables on the app's new Whoop Humans social network. Users can make their metrics, activities, and achievements visible to other Whoop wearers, post Story-like \"Moments\" with photos and captions, and add comments and reactions on other members' posts. Whoop claims its platform is \"entirely human,\" […]",
+      "body": "Starting Thursday, Whoop members can share their data from its wearables on the app's new Whoop Humans social network. Users can make their metrics, activities, and achievements visible to other Whoop wearers, post Story-like \"Moments\" with photos and captions, and add comments and reactions on other members' posts. Whoop claims its platform is \"entirely human,\" […]",
+      "url": "https://www.theverge.com/gadgets/1032630/whoop-humans-social-network",
+      "publishedAt": "2026-11-12T23:43:22.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://www.theverge.com/gadgets/1032630/whoop-humans-social-network",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:8bb3a699",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-641c74f2",
+      "sourceId": "the-verge-641c74f2",
+      "title": "Humble Bundle redesign removes two-factor verification from settings",
+      "summary": "The Humble Bundle storefront for buying games and other software recently got a new look, but on the settings page, it no longer offers a way to add or update two-factor verification methods, as reported by Kotaku. PC Gamer also points out that there are Humble Bundle support pages discussing two-factor verification, and the writer […]",
+      "body": "The Humble Bundle storefront for buying games and other software recently got a new look, but on the settings page, it no longer offers a way to add or update two-factor verification methods, as reported by Kotaku. PC Gamer also points out that there are Humble Bundle support pages discussing two-factor verification, and the writer […]",
+      "url": "https://www.theverge.com/games/1032659/humble-bundle-redesign-two-factor-verification-security-settings",
+      "publishedAt": "2026-11-12T23:30:52.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/games/1032659/humble-bundle-redesign-two-factor-verification-security-settings",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:f19bc064",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-c62aab5",
+      "sourceId": "the-verge-c62aab5",
+      "title": "Microsoft Outlook is still down",
+      "summary": "Since just before 1PM ET on Thursday, reports have come in from around the world that people can't access their Outlook email, either through the web or apps. Microsoft quickly acknowledged the issue from its Microsoft 365 Status account, saying that \"We've determined a portion of infrastructure is experiencing elevated load across multiple regions, which […]",
+      "body": "Since just before 1PM ET on Thursday, reports have come in from around the world that people can't access their Outlook email, either through the web or apps. Microsoft quickly acknowledged the issue from its Microsoft 365 Status account, saying that \"We've determined a portion of infrastructure is experiencing elevated load across multiple regions, which […]",
+      "url": "https://www.theverge.com/tech/1032226/microsoft-outlook-is-down",
+      "publishedAt": "2026-11-12T23:24:13.000Z",
+      "category": "market",
+      "entities": [
+        "Microsoft",
+        "MSFT"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/tech/1032226/microsoft-outlook-is-down",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:16c2c41b",
+      "companies": [
+        {
+          "name": "Microsoft",
+          "ticker": "MSFT",
+          "aliases": [
+            "microsoft",
+            "msft",
+            "azure"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-cff98c76",
+      "sourceId": "the-verge-cff98c76",
+      "title": "Xbox owners are getting more customizations for backgrounds and the Guide menu",
+      "summary": "Microsoft is starting to test new customization options for Xbox consoles today. Xbox Insiders will be able to start testing new rotating backgrounds, new library options for digital games, and the ability to move the Xbox Guide menu to the right-hand side. \"Xbox Insiders can now save favorite dynamic backgrounds and shuffle through them automatically,\" […]",
+      "body": "Microsoft is starting to test new customization options for Xbox consoles today. Xbox Insiders will be able to start testing new rotating backgrounds, new library options for digital games, and the ability to move the Xbox Guide menu to the right-hand side. \"Xbox Insiders can now save favorite dynamic backgrounds and shuffle through them automatically,\" […]",
+      "url": "https://www.theverge.com/news/1032396/xbox-dashboard-guide-menu-right-side-background-shuffle-feature",
+      "publishedAt": "2026-11-12T23:00:00.000Z",
+      "category": "market",
+      "entities": [
+        "Microsoft",
+        "MSFT"
+      ],
+      "impact": 0.56,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/news/1032396/xbox-dashboard-guide-menu-right-side-background-shuffle-feature",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:a71acbc2",
+      "companies": [
+        {
+          "name": "Microsoft",
+          "ticker": "MSFT",
+          "aliases": [
+            "microsoft",
+            "msft",
+            "azure"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-4cd3a3a9",
+      "sourceId": "the-verge-4cd3a3a9",
+      "title": "Google’s new Gemini model is better at understanding complicated questions",
+      "summary": "Google says its new Gemini 4 Hydrogen model can give more helpful answers to complex questions, including \"questions with multiple parts, hard-to-understand typos, or highly specific requests.\" The new model can break down your questions and address each part in its responses. It's available starting today in search, the Gemini app, all tiers of Google […]",
+      "body": "Google says its new Gemini 4 Hydrogen model can give more helpful answers to complex questions, including \"questions with multiple parts, hard-to-understand typos, or highly specific requests.\" The new model can break down your questions and address each part in its responses. It's available starting today in search, the Gemini app, all tiers of Google […]",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1032505/google-search-ai-mode-gemini-4-hydrogen",
+      "publishedAt": "2026-11-12T21:55:32.000Z",
+      "category": "research",
+      "entities": [
+        "Alphabet",
+        "GOOGL"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/ai-artificial-intelligence/1032505/google-search-ai-mode-gemini-4-hydrogen",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:6b2d2328",
+      "companies": [
+        {
+          "name": "Alphabet",
+          "ticker": "GOOGL",
+          "aliases": [
+            "google",
+            "alphabet",
+            "googl"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-12fdf12e",
+      "sourceId": "the-verge-12fdf12e",
+      "title": "‘It’s a mistake’: reactions from tech leaders on Jensen Huang’s resignation",
+      "summary": "Nvidia announced this morning that Jensen Huang has resigned as CEO following reports of two affairs, including one with an alleged Chinese spy and one with a direct report. The situation surrounding Huang has unfolded quickly, with The New York Times only reporting on Friday that Huang and the suspected spy were \"close\" before other […]",
+      "body": "Nvidia announced this morning that Jensen Huang has resigned as CEO following reports of two affairs, including one with an alleged Chinese spy and one with a direct report. The situation surrounding Huang has unfolded quickly, with The New York Times only reporting on Friday that Huang and the suspected spy were \"close\" before other […]",
+      "url": "https://www.theverge.com/tech/1032434/nvidia-jensen-huang-resignation-reactions",
+      "publishedAt": "2026-11-12T21:45:00.000Z",
+      "category": "market",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/tech/1032434/nvidia-jensen-huang-resignation-reactions",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:8bb2b926",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-1c39d69a",
+      "sourceId": "the-verge-1c39d69a",
+      "title": "The Oura Ring 4 is almost as good as the newer model, but $150 cheaper",
+      "summary": "The previous-generation Oura Ring 4 is on sale for as low as $249 at Amazon, Best Buy, and Target, $100 off the retail price, and the first big discount on the device since July. The price varies a bit by size and color, with most silver and black models in stock at the lowest price […]",
+      "body": "The previous-generation Oura Ring 4 is on sale for as low as $249 at Amazon, Best Buy, and Target, $100 off the retail price, and the first big discount on the device since July. The price varies a bit by size and color, with most silver and black models in stock at the lowest price […]",
+      "url": "https://www.theverge.com/gadgets/1032311/oura-ring-4-smart-ring-deal-sale",
+      "publishedAt": "2026-11-12T21:28:53.000Z",
+      "category": "market",
+      "entities": [
+        "Amazon",
+        "AMZN"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://www.theverge.com/gadgets/1032311/oura-ring-4-smart-ring-deal-sale",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:6ab7f486",
+      "companies": [
+        {
+          "name": "Amazon",
+          "ticker": "AMZN",
+          "aliases": [
+            "amazon",
+            "amzn",
+            "aws"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "the-verge-58d836fa",
+      "sourceId": "the-verge-58d836fa",
+      "title": "Here are the 25 original Xbox games you can now play on PC",
+      "summary": "For the 25th anniversary of Xbox, Microsoft is beginning to make good on its paid \"next-gen game preservation\" promise. Starting today, you can play 25 different original Xbox games on your Windows PC, as long as you have (or are willing to pay) for digital copies. In July, Microsoft originally launched the idea with just […]",
+      "body": "For the 25th anniversary of Xbox, Microsoft is beginning to make good on its paid \"next-gen game preservation\" promise. Starting today, you can play 25 different original Xbox games on your Windows PC, as long as you have (or are willing to pay) for digital copies. In July, Microsoft originally launched the idea with just […]",
+      "url": "https://www.theverge.com/games/1032321/microsoft-xbox-original-games-pc-backwards-compatibility",
+      "publishedAt": "2026-11-12T21:00:00.000Z",
+      "category": "market",
+      "entities": [
+        "Microsoft",
+        "MSFT"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://www.theverge.com/games/1032321/microsoft-xbox-original-games-pc-backwards-compatibility",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "the-verge:9f74a043",
+      "companies": [
+        {
+          "name": "Microsoft",
+          "ticker": "MSFT",
+          "aliases": [
+            "microsoft",
+            "msft",
+            "azure"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-6f86e928",
+      "sourceId": "ars-technica-6f86e928",
+      "title": "In reversal, American Cancer Society urges routine prostate cancer screening",
+      "summary": "Men aged 50–69 and at average risk should get PSA screening every two years.",
+      "body": "Men aged 50–69 and at average risk should get PSA screening every two years.",
+      "url": "https://arstechnica.com/health/2026/11/in-reversal-american-cancer-society-urges-prostate-cancer-tests-for-all-men/",
+      "publishedAt": "2026-11-12T22:59:51.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/health/2026/11/in-reversal-american-cancer-society-urges-prostate-cancer-tests-for-all-men/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:e43468c6",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-c8a3bebc",
+      "sourceId": "ars-technica-c8a3bebc",
+      "title": "FAA expands AI advice to manage air traffic congestion across entire US airspace",
+      "summary": "Airlines praised the AI tool, but the air traffic controllers’ union wasn’t involved.",
+      "body": "Airlines praised the AI tool, but the air traffic controllers’ union wasn’t involved.",
+      "url": "https://arstechnica.com/ai/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/",
+      "publishedAt": "2026-11-12T22:28:47.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://arstechnica.com/ai/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:7f52889e",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-4be4333e",
+      "sourceId": "ars-technica-4be4333e",
+      "title": "Ars Live: What drone attacks on data centers mean for modern life in the cloud",
+      "summary": "A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.",
+      "body": "A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.",
+      "url": "https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/",
+      "publishedAt": "2026-11-12T19:59:59.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:32c91a8f",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-4fa6b775",
+      "sourceId": "ars-technica-4fa6b775",
+      "title": "The Elder Scrolls' most obscure adventure gets a 4K PC makeover",
+      "summary": "N-Gage exclusive Shadowkey gets an AI-coded glow-up with plenty of new features.",
+      "body": "N-Gage exclusive Shadowkey gets an AI-coded glow-up with plenty of new features.",
+      "url": "https://arstechnica.com/gaming/2026/11/the-elder-scrolls-most-obscure-adventure-gets-a-4k-pc-makeover/",
+      "publishedAt": "2026-11-12T19:49:11.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/gaming/2026/11/the-elder-scrolls-most-obscure-adventure-gets-a-4k-pc-makeover/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:3374627c",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-f30f5fed",
+      "sourceId": "ars-technica-f30f5fed",
+      "title": "Google rolls out Gemini 4 Hydrogen, finally replacing 3.8 Flash",
+      "summary": "Gemini 4 Hydrogen isn't getting a slow, security-conscious release like Carbon and Argon.",
+      "body": "Gemini 4 Hydrogen isn't getting a slow, security-conscious release like Carbon and Argon.",
+      "url": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash/",
+      "publishedAt": "2026-11-12T19:23:03.000Z",
+      "category": "policy",
+      "entities": [
+        "Alphabet",
+        "GOOGL"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:47f9ee29",
+      "companies": [
+        {
+          "name": "Alphabet",
+          "ticker": "GOOGL",
+          "aliases": [
+            "google",
+            "alphabet",
+            "googl"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-9d4b70a9",
+      "sourceId": "ars-technica-9d4b70a9",
+      "title": "Ukraine says it can’t stop Russian strikes because Starshield is limited again",
+      "summary": "Report: Ukraine suspects speeds limits are intended to help Russia in peace talks.",
+      "body": "Report: Ukraine suspects speeds limits are intended to help Russia in peace talks.",
+      "url": "https://arstechnica.com/tech-policy/2026/11/ukraine-says-spacex-starshield-is-restricted-again-spacex-claims-it-isnt/",
+      "publishedAt": "2026-11-12T19:09:57.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/tech-policy/2026/11/ukraine-says-spacex-starshield-is-restricted-again-spacex-claims-it-isnt/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:cc639024",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-a679e18b",
+      "sourceId": "ars-technica-a679e18b",
+      "title": "Google faces calls for AI moratoriums in schools after Gemini pilot backlash",
+      "summary": "Families confront Google after teen’s lawsuit labels Gemini a “suicide coach.”",
+      "body": "Families confront Google after teen’s lawsuit labels Gemini a “suicide coach.”",
+      "url": "https://arstechnica.com/tech-policy/2026/11/families-fight-to-keep-googles-disturbing-ai-off-school-issued-chromebooks/",
+      "publishedAt": "2026-11-12T18:57:45.000Z",
+      "category": "policy",
+      "entities": [
+        "Amazon",
+        "AMZN",
+        "Alphabet",
+        "GOOGL"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "https://arstechnica.com/tech-policy/2026/11/families-fight-to-keep-googles-disturbing-ai-off-school-issued-chromebooks/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:d33cfb01",
+      "companies": [
+        {
+          "name": "Amazon",
+          "ticker": "AMZN",
+          "aliases": [
+            "amazon",
+            "amzn",
+            "aws"
+          ]
+        },
+        {
+          "name": "Alphabet",
+          "ticker": "GOOGL",
+          "aliases": [
+            "google",
+            "alphabet",
+            "googl"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-266276b3",
+      "sourceId": "ars-technica-266276b3",
+      "title": "Netflix releases new trailer for Ray Gunn",
+      "summary": "\"It's hard being the only honest players in a crooked game.\"",
+      "body": "\"It's hard being the only honest players in a crooked game.\"",
+      "url": "https://arstechnica.com/culture/2026/11/netflix-releases-new-trailer-for-ray-gunn/",
+      "publishedAt": "2026-11-12T18:38:38.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/culture/2026/11/netflix-releases-new-trailer-for-ray-gunn/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:9c95cda8",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-24f800d1",
+      "sourceId": "ars-technica-24f800d1",
+      "title": "Building a rocket is hard. AST SpaceMobile thinks it's \"simple.\"",
+      "summary": "\"We're not doing this thing because we like rockets.\"",
+      "body": "\"We're not doing this thing because we like rockets.\"",
+      "url": "https://arstechnica.com/space/2026/11/building-a-rocket-is-hard-ast-spacemobile-thinks-its-simple/",
+      "publishedAt": "2026-11-12T18:28:22.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/space/2026/11/building-a-rocket-is-hard-ast-spacemobile-thinks-its-simple/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:61fde8a0",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-f49e1ebc",
+      "sourceId": "ars-technica-f49e1ebc",
+      "title": "Man's secret use of synthetic testosterone for cows nearly destroyed his heart",
+      "summary": "Doctors warn that such life-threatening cases are becoming more common.",
+      "body": "Doctors warn that such life-threatening cases are becoming more common.",
+      "url": "https://arstechnica.com/health/2026/11/mans-secret-use-of-synthetic-testosterone-for-cows-nearly-destroyed-his-heart/",
+      "publishedAt": "2026-11-12T18:17:19.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/health/2026/11/mans-secret-use-of-synthetic-testosterone-for-cows-nearly-destroyed-his-heart/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:78ae964e",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-8b95af93",
+      "sourceId": "ars-technica-8b95af93",
+      "title": "The amazing disappearing exoplanet",
+      "summary": "An exoplanet seems to have stopped transiting in front of its host star.",
+      "body": "An exoplanet seems to have stopped transiting in front of its host star.",
+      "url": "https://arstechnica.com/science/2026/11/the-amazing-disappearing-exoplanet/",
+      "publishedAt": "2026-11-12T17:18:10.000Z",
+      "category": "research",
+      "entities": [],
+      "impact": 0.38,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/science/2026/11/the-amazing-disappearing-exoplanet/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:5b1dd18b",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "ars-technica-3605b145",
+      "sourceId": "ars-technica-3605b145",
+      "title": "Google pushes privacy angle as Gemini-powered smartglasses debut starting at $395",
+      "summary": "The first Gemini smartglasses are a collab between Google, Samsung, Gentle Monster, and Warby Parker.",
+      "body": "The first Gemini smartglasses are a collab between Google, Samsung, Gentle Monster, and Warby Parker.",
+      "url": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/",
+      "publishedAt": "2026-11-12T14:50:17.000Z",
+      "category": "research",
+      "entities": [
+        "Alphabet",
+        "GOOGL"
+      ],
+      "impact": 0.56,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "ars-technica:958d4575",
+      "companies": [
+        {
+          "name": "Alphabet",
+          "ticker": "GOOGL",
+          "aliases": [
+            "google",
+            "alphabet",
+            "googl"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-e29268a5",
+      "sourceId": "techcrunch-e29268a5",
+      "title": "Democrats launch Nvidia investigation, write scathing letter on Huang’s ‘scheme’ with Trump",
+      "summary": "This Congressional investigation into Nvidia's China sales and its dealings with Trump is the second one, so far, since news of the alleged spy affair broke.",
+      "body": "This Congressional investigation into Nvidia's China sales and its dealings with Trump is the second one, so far, since news of the alleged spy affair broke.",
+      "url": "https://techcrunch.com/2026/11/12/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-with-trump/",
+      "publishedAt": "2026-11-12T22:42:51.000Z",
+      "category": "policy",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3188108",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:b42f97a9",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-642235e8",
+      "sourceId": "techcrunch-642235e8",
+      "title": "Muse can now place calls to US businesses — if you pay",
+      "summary": "Muse's AI can now place outbound calls to U.S. businesses — but it's not free.",
+      "body": "Muse's AI can now place outbound calls to U.S. businesses — but it's not free.",
+      "url": "https://techcrunch.com/2026/11/12/muse-can-now-place-calls-to-u-s-businesses-if-you-pay/",
+      "publishedAt": "2026-11-12T22:22:28.000Z",
+      "category": "company",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3188128",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:9af39048",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-492a4d55",
+      "sourceId": "techcrunch-492a4d55",
+      "title": "The unfolding Jensen Huang scandal: a timeline",
+      "summary": "Jensen Huang has resigned from Nvidia following an affair, which could have ramifications for national security as the U.S. and China race to develop the most advanced AI infrastructure.",
+      "body": "Jensen Huang has resigned from Nvidia following an affair, which could have ramifications for national security as the U.S. and China race to develop the most advanced AI infrastructure.",
+      "url": "https://techcrunch.com/2026/11/12/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/",
+      "publishedAt": "2026-11-12T21:35:00.000Z",
+      "category": "policy",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3186475",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:812beb8d",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-e825cafc",
+      "sourceId": "techcrunch-e825cafc",
+      "title": "Nebius tests the neocloud playbook with $40 billion in planned spending",
+      "summary": "Nebius plans to fund its $40 billion AI infrastructure expansion through customer prepayments and loans, even as delays at a Microsoft data center raise questions about its financing model.",
+      "body": "Nebius plans to fund its $40 billion AI infrastructure expansion through customer prepayments and loans, even as delays at a Microsoft data center raise questions about its financing model.",
+      "url": "https://techcrunch.com/2026/11/12/nebius-tests-the-neocloud-playbook-with-40-billion-in-planned-spending/",
+      "publishedAt": "2026-11-12T21:27:10.000Z",
+      "category": "research",
+      "entities": [
+        "Microsoft",
+        "MSFT"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3188119",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:e6d23c21",
+      "companies": [
+        {
+          "name": "Microsoft",
+          "ticker": "MSFT",
+          "aliases": [
+            "microsoft",
+            "msft",
+            "azure"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-8e254c0a",
+      "sourceId": "techcrunch-8e254c0a",
+      "title": "Jensen Huang was having a third affair, Reuters reports",
+      "summary": "Reuters is withholding the name of the new employee linked to Huang, but says she is an employee of Nvidia.",
+      "body": "Reuters is withholding the name of the new employee linked to Huang, but says she is an employee of Nvidia.",
+      "url": "https://techcrunch.com/2026/11/12/jensen-huang-was-having-a-third-affair-reuters-reports/",
+      "publishedAt": "2026-11-12T20:26:47.000Z",
+      "category": "company",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3188106",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:85069d57",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-8b43bcda",
+      "sourceId": "techcrunch-8b43bcda",
+      "title": "Google’s latest Search upgrade promises better answers to your most complicated questions",
+      "summary": "Powered by Gemini 4 Hydrogen, Google's AI Mode is getting better at understanding complex queries, surfacing relevant links, and delivering richer visual responses.",
+      "body": "Powered by Gemini 4 Hydrogen, Google's AI Mode is getting better at understanding complex queries, surfacing relevant links, and delivering richer visual responses.",
+      "url": "https://techcrunch.com/2026/11/12/googles-latest-search-upgrade-promises-better-answers-to-your-most-complicated-questions/",
+      "publishedAt": "2026-11-12T19:27:45.000Z",
+      "category": "company",
+      "entities": [
+        "Alphabet",
+        "GOOGL"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3188050",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:5417b1bf",
+      "companies": [
+        {
+          "name": "Alphabet",
+          "ticker": "GOOGL",
+          "aliases": [
+            "google",
+            "alphabet",
+            "googl"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-90384e14",
+      "sourceId": "techcrunch-90384e14",
+      "title": "Nectar launches an AI agent to automate creator discovery and outreach for brands",
+      "summary": "Nectar's new AI agent automates influencer marketing, helping brands discover creators, manage outreach and partnerships, and track campaign results.",
+      "body": "Nectar's new AI agent automates influencer marketing, helping brands discover creators, manage outreach and partnerships, and track campaign results.",
+      "url": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands/",
+      "publishedAt": "2026-11-12T19:11:00.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3187494",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:ea49e53c",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-91d2d621",
+      "sourceId": "techcrunch-91d2d621",
+      "title": "Microsoft’s Outlook email hit by new outage",
+      "summary": "Microsoft hasn't yet given a cause for the outage, which is affecting Outlook email users.",
+      "body": "Microsoft hasn't yet given a cause for the outage, which is affecting Outlook email users.",
+      "url": "https://techcrunch.com/2026/11/12/microsofts-outlook-email-hit-by-new-outage/",
+      "publishedAt": "2026-11-12T19:03:39.000Z",
+      "category": "company",
+      "entities": [
+        "Microsoft",
+        "MSFT"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3188070",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:a5be6cd1",
+      "companies": [
+        {
+          "name": "Microsoft",
+          "ticker": "MSFT",
+          "aliases": [
+            "microsoft",
+            "msft",
+            "azure"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-86e3867d",
+      "sourceId": "techcrunch-86e3867d",
+      "title": "Jensen Huang’s exit puts Nvidia’s support for open source in question",
+      "summary": "Jensen Huang’s resignation raises questions about Nvidia’s commitment to open source AI, including its Hugging Face acquisition, open-weight models, and advocacy against restrictions, as the company navigates a leadership transition.",
+      "body": "Jensen Huang’s resignation raises questions about Nvidia’s commitment to open source AI, including its Hugging Face acquisition, open-weight models, and advocacy against restrictions, as the company navigates a leadership transition.",
+      "url": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question/",
+      "publishedAt": "2026-11-12T18:39:23.000Z",
+      "category": "research",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "supports",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3188037",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:fdd78a6b",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-da1b63b9",
+      "sourceId": "techcrunch-da1b63b9",
+      "title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+      "summary": "Hugging Face's CEO pledged to keep fighting for open source AI after Huang's exit, raising questions about Nvidia's $12.9 billion acquisition.",
+      "body": "Hugging Face's CEO pledged to keep fighting for open source AI after Huang's exit, raising questions about Nvidia's $12.9 billion acquisition.",
+      "url": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+      "publishedAt": "2026-11-12T17:36:40.000Z",
+      "category": "company",
+      "entities": [
+        "NVIDIA",
+        "NVDA"
+      ],
+      "impact": 0.7200000000000001,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3187922",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:54f29d7c",
+      "companies": [
+        {
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "aliases": [
+            "nvidia",
+            "nvda",
+            "geforce",
+            "cuda"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-84e4d0e9",
+      "sourceId": "techcrunch-84e4d0e9",
+      "title": "United Airlines blocks AI agents from booking flights, citing cybersecurity risks",
+      "summary": "The airline said it will not allow customers to use AI agents to book flights and manage reservations.",
+      "body": "The airline said it will not allow customers to use AI agents to book flights and manage reservations.",
+      "url": "https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks/",
+      "publishedAt": "2026-11-12T17:17:58.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.54,
+      "polarity": "unknown",
+      "confidence": 0.35,
+      "guid": "https://techcrunch.com/?p=3187972",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:4487b05c",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "techcrunch-214fca93",
+      "sourceId": "techcrunch-214fca93",
+      "title": "SoftBank’s billion-dollar loss may have put a cap on AI’s natural gas ambitions",
+      "summary": "SoftBank lost over $3 billion preordering natural gas turbines to power AI data centers. Here's what the loss means to power markets.",
+      "body": "SoftBank lost over $3 billion preordering natural gas turbines to power AI data centers. Here's what the loss means to power markets.",
+      "url": "https://techcrunch.com/2026/11/12/softbanks-billion-dollar-loss-may-have-put-a-cap-on-ais-natural-gas-ambitions/",
+      "publishedAt": "2026-11-12T17:00:52.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "https://techcrunch.com/?p=3187955",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "techcrunch:5596c913",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "sec-press-a05ec2da",
+      "sourceId": "sec-press-a05ec2da",
+      "title": "SEC Announces Enforcement Annual Results for Fiscal Year 2026",
+      "summary": "The Securities and Exchange Commission today provided its enforcement results for the past fiscal year which ended September 30. Throughout the fiscal year, the SEC’s Division of Enforcement remained focused on its fundamental responsibility: protecting…",
+      "body": "The Securities and Exchange Commission today provided its enforcement results for the past fiscal year which ended September 30. Throughout the fiscal year, the SEC’s Division of Enforcement remained focused on its fundamental responsibility: protecting…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-113-sec-announces-enforcement-annual-results-fiscal-year-2026",
+      "publishedAt": "2026-11-10T16:15:35.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "6342608c-3f9c-42b6-9641-743d75955586",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:77d5456d",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "fresh"
+    },
+    {
+      "id": "sec-press-2d64f604",
+      "sourceId": "sec-press-2d64f604",
+      "title": "SEC Adopts Amendments to Update Definitions of Small Entity for Investment Companies and Investment Advisers",
+      "summary": "The Securities and Exchange Commission today adopted amendments to the rules that define which registered investment companies, investment advisers, and business development companies qualify as small entities for purposes of the Regulatory Flexibility…",
+      "body": "The Securities and Exchange Commission today adopted amendments to the rules that define which registered investment companies, investment advisers, and business development companies qualify as small entities for purposes of the Regulatory Flexibility…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-112-sec-adopts-amendments-update-definitions-small-entity-investment-companies-investment-advisers",
+      "publishedAt": "2026-11-04T16:28:00.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "7285d1d7-0cc4-41d3-8bc9-85d4c76a2c13",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:101eaafb",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-b745837f",
+      "sourceId": "sec-press-b745837f",
+      "title": "SEC Issues Exemptive Relief from Treasury Clearing Requirements for Certain Inter-Affiliate and Non-U.S. Repo Transactions",
+      "summary": "The Securities and Exchange Commission took another step forward today to assist broker-dealers and other market participants on the path to central clearing of U.S. Treasury securities by issuing exemptive relief related to inter-affiliate repo…",
+      "body": "The Securities and Exchange Commission took another step forward today to assist broker-dealers and other market participants on the path to central clearing of U.S. Treasury securities by issuing exemptive relief related to inter-affiliate repo…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-111-sec-issues-exemptive-relief-treasury-clearing-requirements-certain-inter-affiliate-non-us-repo",
+      "publishedAt": "2026-10-30T19:30:00.000Z",
+      "category": "market",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "57c0bf48-4b38-4a9c-8d4c-fc217f39e7aa",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:212b2b5a",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-9f0f22e",
+      "sourceId": "sec-press-9f0f22e",
+      "title": "Two Entities Charged in $130 Million Fraud Scheme That Used False SEC Filings to Boost Investor Confidence",
+      "summary": "The Securities and Exchange Commission today charged two foreign-operated, Colorado-incorporated entities, BG Wealth Sharing Ltd and DSJ Exchange Pty Ltd, for orchestrating a fraud scheme that used false SEC filings to boost confidence in their…",
+      "body": "The Securities and Exchange Commission today charged two foreign-operated, Colorado-incorporated entities, BG Wealth Sharing Ltd and DSJ Exchange Pty Ltd, for orchestrating a fraud scheme that used false SEC filings to boost confidence in their…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-110-two-entities-charged-130-million-fraud-scheme-used-false-sec-filings-boost-investor-confidence",
+      "publishedAt": "2026-10-29T16:42:37.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "a3c85e07-e739-496e-bc7a-7d940c0a84c3",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:784f11b9",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-8549286d",
+      "sourceId": "sec-press-8549286d",
+      "title": "SEC Announces Fiscal Year 2027 Examination Priorities",
+      "summary": "The Securities and Exchange Commission today announced the Division of Examinations’ Fiscal Year 2027 examination priorities. The annual report identifies key areas of focus as the Division carries out its mission to promote compliance, prevent fraud,…",
+      "body": "The Securities and Exchange Commission today announced the Division of Examinations’ Fiscal Year 2027 examination priorities. The annual report identifies key areas of focus as the Division carries out its mission to promote compliance, prevent fraud,…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities",
+      "publishedAt": "2026-10-23T14:10:00.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "131a2c47-83da-4baf-9d99-1ae02a0232a3",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:15893090",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-a26740b1",
+      "sourceId": "sec-press-a26740b1",
+      "title": "SEC and AMF Announce Supervisory MOU To Enhance Cooperation for Investment Advisers and Investment Service Providers",
+      "summary": "The U.S. Securities and Exchange Commission (SEC) and the French Autorité des Marchés Financiers (AMF) announced that they have entered into a Memorandum of Understanding (MOU) designed to facilitate consultation and information-sharing in the…",
+      "body": "The U.S. Securities and Exchange Commission (SEC) and the French Autorité des Marchés Financiers (AMF) announced that they have entered into a Memorandum of Understanding (MOU) designed to facilitate consultation and information-sharing in the…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-108-sec-amf-announce-supervisory-mou-enhance-cooperation-investment-advisers-investment-service",
+      "publishedAt": "2026-10-20T13:25:16.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "44a0baea-4550-40e0-a829-123bea4072d6",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:7663eb07",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-fae1e902",
+      "sourceId": "sec-press-fae1e902",
+      "title": "SEC, FSA Hold Autumn Financial Regulatory Dialogue",
+      "summary": "The U.S. Securities and Exchange Commission (SEC) and the Financial Services Agency of Japan (FSA) convened the Autumn SEC-FSA Financial Regulatory Dialogue in Tokyo on Oct. 19, 2026.The SEC–FSA Dialogue builds upon longstanding efforts between the two…",
+      "body": "The U.S. Securities and Exchange Commission (SEC) and the Financial Services Agency of Japan (FSA) convened the Autumn SEC-FSA Financial Regulatory Dialogue in Tokyo on Oct. 19, 2026.The SEC–FSA Dialogue builds upon longstanding efforts between the two…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-107-sec-fsa-hold-autumn-financial-regulatory-dialogue",
+      "publishedAt": "2026-10-20T12:51:00.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "ef7a94bf-a371-4220-949a-66298ffe9db7",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:e0c1d3be",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-9293d06d",
+      "sourceId": "sec-press-9293d06d",
+      "title": "SEC Announces Roundtable on Machine-Understandable Data in the Age of Super Intelligence",
+      "summary": "The Securities and Exchange Commission announced today that it will host a roundtable on November 9, 2026, to discuss the use of machine-understandable data and Super Intelligence (SI) and related risks and costs.“In the age of SI, high-quality…",
+      "body": "The Securities and Exchange Commission announced today that it will host a roundtable on November 9, 2026, to discuss the use of machine-understandable data and Super Intelligence (SI) and related risks and costs.“In the age of SI, high-quality…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-106-sec-announces-roundtable-machine-understandable-data-age-super-intelligence",
+      "publishedAt": "2026-10-19T17:19:43.000Z",
+      "category": "policy",
+      "entities": [
+        "Intel",
+        "INTC"
+      ],
+      "impact": 0.8400000000000001,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "49929b67-2d92-41e8-bc80-0fd87e9a4681",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:a4218f73",
+      "companies": [
+        {
+          "name": "Intel",
+          "ticker": "INTC",
+          "aliases": [
+            "intel",
+            "intc",
+            "xeon",
+            "foundry"
+          ]
+        }
+      ],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-bbddc65d",
+      "sourceId": "sec-press-bbddc65d",
+      "title": "SEC Small Business Advisory Committee to Discuss IPO Modernization and Regulation Crowdfunding",
+      "summary": "The&nbsp;Securities and Exchange Commission’s&nbsp;Small Business Capital Formation Advisory Committee announced that it will hold a meeting on Tuesday, October 27, 2026, at 10 a.m. to continue discussing IPO modernization and explore potential policy…",
+      "body": "The&nbsp;Securities and Exchange Commission’s&nbsp;Small Business Capital Formation Advisory Committee announced that it will hold a meeting on Tuesday, October 27, 2026, at 10 a.m. to continue discussing IPO modernization and explore potential policy…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-105-sec-small-business-advisory-committee-discuss-ipo-modernization-regulation-crowdfunding",
+      "publishedAt": "2026-10-14T14:30:47.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "24cedc35-40a2-45f1-a64e-40656c3ddcbf",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:e7426b32",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-37b1bc2",
+      "sourceId": "sec-press-37b1bc2",
+      "title": "SEC Proposes Expanding Securities Eligible for Cross Trading by Registered Funds",
+      "summary": "The Securities and Exchange Commission today proposed amendments to the Investment Company Act “cross-trading rule,” which permits transactions in securities between a registered fund and its affiliates under certain conditions. The proposed amendments…",
+      "body": "The Securities and Exchange Commission today proposed amendments to the Investment Company Act “cross-trading rule,” which permits transactions in securities between a registered fund and its affiliates under certain conditions. The proposed amendments…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-104-sec-proposes-expanding-securities-eligible-cross-trading-registered-funds",
+      "publishedAt": "2026-10-09T14:59:00.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "d1fd3bfa-e932-4aa7-a7ee-8ca856f3e27a",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:3805fb11",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-f581d8b1",
+      "sourceId": "sec-press-f581d8b1",
+      "title": "SEC Seeks Final Judgment Against Former Western Asset Co-CIO Ken Leech in Cherry Picking Case",
+      "summary": "The Securities and Exchange Commission today moved for entry of a final judgment by consent against Stephen Kenneth Leech II, the former co-chief investment officer of registered investment adviser Western Asset Management Company LLC, whom the SEC…",
+      "body": "The Securities and Exchange Commission today moved for entry of a final judgment by consent against Stephen Kenneth Leech II, the former co-chief investment officer of registered investment adviser Western Asset Management Company LLC, whom the SEC…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-103-sec-seeks-final-judgment-against-former-western-asset-co-cio-ken-leech-cherry-picking-case",
+      "publishedAt": "2026-10-06T20:30:24.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "82690e0c-d5c7-464f-8bc1-8c24a30d8c52",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:8b66cf19",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    },
+    {
+      "id": "sec-press-7c4144d7",
+      "sourceId": "sec-press-7c4144d7",
+      "title": "SEC to Host Virtual National Compliance Outreach Seminar for Investment Companies and Investment Advisers",
+      "summary": "The Securities and Exchange Commission’s Compliance Outreach Program announced today that it will host a virtual national seminar for investment companies and investment advisers on November 19, 2026. The purpose of the event is to help chief compliance…",
+      "body": "The Securities and Exchange Commission’s Compliance Outreach Program announced today that it will host a virtual national seminar for investment companies and investment advisers on November 19, 2026. The purpose of the event is to help chief compliance…",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-102-sec-host-virtual-national-compliance-outreach-seminar-investment-companies-investment-advisers",
+      "publishedAt": "2026-10-06T14:37:55.000Z",
+      "category": "policy",
+      "entities": [],
+      "impact": 0.66,
+      "polarity": "contradicts",
+      "confidence": 0.52,
+      "guid": "2ea8acb0-c6db-410b-b125-c594a5cf42fa",
+      "firstSeenAt": "2026-11-13T06:08:54.185Z",
+      "dedupeKey": "sec-press:5b15ebeb",
+      "companies": [],
+      "dataMode": "live",
+      "freshnessStatus": "stale"
+    }
+  ],
+  "sources": [
+    {
+      "id": "the-verge-c8bf1443",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/tech/1032774/president-donald-trump-tim-cook-nvidia-jensen-huang",
+      "tier": "secondary",
+      "publishedAt": "2026-11-13T00:46:07.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Jensen Huang resigned this morning as Nvidia's CEO following reports of affairs, including one with an alleged Chinese spy. Right now, the company is being led by its CFO on an interim basis. But President Donald Trump is already throwing a",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-26122dff",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/news/1032431/xbox-bethesda-wolfenstein-3",
+      "tier": "secondary",
+      "publishedAt": "2026-11-13T00:11:44.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "It's been nearly a decade since Bethesda's MachineGames released Wolfenstein II: The New Colossus in 2017, and now Xbox is ready to announce a sequel from the studio. Wolfenstein 3 was officially announced today, just days after Bethesda al",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-919e91fe",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/gadgets/1032630/whoop-humans-social-network",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T23:43:22.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Starting Thursday, Whoop members can share their data from its wearables on the app's new Whoop Humans social network. Users can make their metrics, activities, and achievements visible to other Whoop wearers, post Story-like \"Moments\" with",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-641c74f2",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/games/1032659/humble-bundle-redesign-two-factor-verification-security-settings",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T23:30:52.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Humble Bundle storefront for buying games and other software recently got a new look, but on the settings page, it no longer offers a way to add or update two-factor verification methods, as reported by Kotaku. PC Gamer also points out ",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-c62aab5",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/tech/1032226/microsoft-outlook-is-down",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T23:24:13.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Since just before 1PM ET on Thursday, reports have come in from around the world that people can't access their Outlook email, either through the web or apps. Microsoft quickly acknowledged the issue from its Microsoft 365 Status account, s",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-cff98c76",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/news/1032396/xbox-dashboard-guide-menu-right-side-background-shuffle-feature",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T23:00:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Microsoft is starting to test new customization options for Xbox consoles today. Xbox Insiders will be able to start testing new rotating backgrounds, new library options for digital games, and the ability to move the Xbox Guide menu to the",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-4cd3a3a9",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1032505/google-search-ai-mode-gemini-4-hydrogen",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:55:32.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Google says its new Gemini 4 Hydrogen model can give more helpful answers to complex questions, including \"questions with multiple parts, hard-to-understand typos, or highly specific requests.\" The new model can break down your questions an",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-12fdf12e",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/tech/1032434/nvidia-jensen-huang-resignation-reactions",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:45:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Nvidia announced this morning that Jensen Huang has resigned as CEO following reports of two affairs, including one with an alleged Chinese spy and one with a direct report. The situation surrounding Huang has unfolded quickly, with The New",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-1c39d69a",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/gadgets/1032311/oura-ring-4-smart-ring-deal-sale",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:28:53.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The previous-generation Oura Ring 4 is on sale for as low as $249 at Amazon, Best Buy, and Target, $100 off the retail price, and the first big discount on the device since July. The price varies a bit by size and color, with most silver an",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "the-verge-58d836fa",
+      "name": "The Verge",
+      "url": "https://www.theverge.com/games/1032321/microsoft-xbox-original-games-pc-backwards-compatibility",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:00:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "For the 25th anniversary of Xbox, Microsoft is beginning to make good on its paid \"next-gen game preservation\" promise. Starting today, you can play 25 different original Xbox games on your Windows PC, as long as you have (or are willing to",
+      "isSimulated": false,
+      "feedUrl": "https://www.theverge.com/rss/index.xml"
+    },
+    {
+      "id": "ars-technica-6f86e928",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/health/2026/11/in-reversal-american-cancer-society-urges-prostate-cancer-tests-for-all-men/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T22:59:51.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Men aged 50–69 and at average risk should get PSA screening every two years.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-c8a3bebc",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/ai/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T22:28:47.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Airlines praised the AI tool, but the air traffic controllers’ union wasn’t involved.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-4be4333e",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T19:59:59.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-4fa6b775",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/gaming/2026/11/the-elder-scrolls-most-obscure-adventure-gets-a-4k-pc-makeover/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T19:49:11.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "N-Gage exclusive Shadowkey gets an AI-coded glow-up with plenty of new features.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-f30f5fed",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T19:23:03.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Gemini 4 Hydrogen isn't getting a slow, security-conscious release like Carbon and Argon.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-9d4b70a9",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/tech-policy/2026/11/ukraine-says-spacex-starshield-is-restricted-again-spacex-claims-it-isnt/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T19:09:57.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Report: Ukraine suspects speeds limits are intended to help Russia in peace talks.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-a679e18b",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/tech-policy/2026/11/families-fight-to-keep-googles-disturbing-ai-off-school-issued-chromebooks/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T18:57:45.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Families confront Google after teen’s lawsuit labels Gemini a “suicide coach.”",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-266276b3",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/culture/2026/11/netflix-releases-new-trailer-for-ray-gunn/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T18:38:38.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "\"It's hard being the only honest players in a crooked game.\"",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-24f800d1",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/space/2026/11/building-a-rocket-is-hard-ast-spacemobile-thinks-its-simple/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T18:28:22.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "\"We're not doing this thing because we like rockets.\"",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-f49e1ebc",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/health/2026/11/mans-secret-use-of-synthetic-testosterone-for-cows-nearly-destroyed-his-heart/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T18:17:19.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Doctors warn that such life-threatening cases are becoming more common.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-8b95af93",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/science/2026/11/the-amazing-disappearing-exoplanet/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T17:18:10.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "An exoplanet seems to have stopped transiting in front of its host star.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "ars-technica-3605b145",
+      "name": "Ars Technica",
+      "url": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/",
+      "tier": "specialist",
+      "publishedAt": "2026-11-12T14:50:17.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The first Gemini smartglasses are a collab between Google, Samsung, Gentle Monster, and Warby Parker.",
+      "isSimulated": false,
+      "feedUrl": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "techcrunch-e29268a5",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-with-trump/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T22:42:51.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "This Congressional investigation into Nvidia's China sales and its dealings with Trump is the second one, so far, since news of the alleged spy affair broke.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-642235e8",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/muse-can-now-place-calls-to-u-s-businesses-if-you-pay/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T22:22:28.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Muse's AI can now place outbound calls to U.S. businesses — but it's not free.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-492a4d55",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/nvidia-ceo-jensen-huangs-affair-with-alleged-chinese-spy-a-timeline/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:35:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Jensen Huang has resigned from Nvidia following an affair, which could have ramifications for national security as the U.S. and China race to develop the most advanced AI infrastructure.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-e825cafc",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/nebius-tests-the-neocloud-playbook-with-40-billion-in-planned-spending/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T21:27:10.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Nebius plans to fund its $40 billion AI infrastructure expansion through customer prepayments and loans, even as delays at a Microsoft data center raise questions about its financing model.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-8e254c0a",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/jensen-huang-was-having-a-third-affair-reuters-reports/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T20:26:47.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Reuters is withholding the name of the new employee linked to Huang, but says she is an employee of Nvidia.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-8b43bcda",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/googles-latest-search-upgrade-promises-better-answers-to-your-most-complicated-questions/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T19:27:45.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Powered by Gemini 4 Hydrogen, Google's AI Mode is getting better at understanding complex queries, surfacing relevant links, and delivering richer visual responses.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-90384e14",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T19:11:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Nectar's new AI agent automates influencer marketing, helping brands discover creators, manage outreach and partnerships, and track campaign results.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-91d2d621",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/microsofts-outlook-email-hit-by-new-outage/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T19:03:39.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Microsoft hasn't yet given a cause for the outage, which is affecting Outlook email users.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-86e3867d",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T18:39:23.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Jensen Huang’s resignation raises questions about Nvidia’s commitment to open source AI, including its Hugging Face acquisition, open-weight models, and advocacy against restrictions, as the company navigates a leadership transition.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-da1b63b9",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T17:36:40.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "Hugging Face's CEO pledged to keep fighting for open source AI after Huang's exit, raising questions about Nvidia's $12.9 billion acquisition.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-84e4d0e9",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T17:17:58.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The airline said it will not allow customers to use AI agents to book flights and manage reservations.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "techcrunch-214fca93",
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/12/softbanks-billion-dollar-loss-may-have-put-a-cap-on-ais-natural-gas-ambitions/",
+      "tier": "secondary",
+      "publishedAt": "2026-11-12T17:00:52.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "SoftBank lost over $3 billion preordering natural gas turbines to power AI data centers. Here's what the loss means to power markets.",
+      "isSimulated": false,
+      "feedUrl": "https://techcrunch.com/feed/"
+    },
+    {
+      "id": "sec-press-a05ec2da",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-113-sec-announces-enforcement-annual-results-fiscal-year-2026",
+      "tier": "primary",
+      "publishedAt": "2026-11-10T16:15:35.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today provided its enforcement results for the past fiscal year which ended September 30. Throughout the fiscal year, the SEC’s Division of Enforcement remained focused on its fundamental responsibilit",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-2d64f604",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-112-sec-adopts-amendments-update-definitions-small-entity-investment-companies-investment-advisers",
+      "tier": "primary",
+      "publishedAt": "2026-11-04T16:28:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today adopted amendments to the rules that define which registered investment companies, investment advisers, and business development companies qualify as small entities for purposes of the Regulatory",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-b745837f",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-111-sec-issues-exemptive-relief-treasury-clearing-requirements-certain-inter-affiliate-non-us-repo",
+      "tier": "primary",
+      "publishedAt": "2026-10-30T19:30:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission took another step forward today to assist broker-dealers and other market participants on the path to central clearing of U.S. Treasury securities by issuing exemptive relief related to inter-affiliate",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-9f0f22e",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-110-two-entities-charged-130-million-fraud-scheme-used-false-sec-filings-boost-investor-confidence",
+      "tier": "primary",
+      "publishedAt": "2026-10-29T16:42:37.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today charged two foreign-operated, Colorado-incorporated entities, BG Wealth Sharing Ltd and DSJ Exchange Pty Ltd, for orchestrating a fraud scheme that used false SEC filings to boost confidence in t",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-8549286d",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-109-sec-announces-fiscal-year-2027-examination-priorities",
+      "tier": "primary",
+      "publishedAt": "2026-10-23T14:10:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today announced the Division of Examinations’ Fiscal Year 2027 examination priorities. The annual report identifies key areas of focus as the Division carries out its mission to promote compliance, pre",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-a26740b1",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-108-sec-amf-announce-supervisory-mou-enhance-cooperation-investment-advisers-investment-service",
+      "tier": "primary",
+      "publishedAt": "2026-10-20T13:25:16.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The U.S. Securities and Exchange Commission (SEC) and the French Autorité des Marchés Financiers (AMF) announced that they have entered into a Memorandum of Understanding (MOU) designed to facilitate consultation and information-sharing in ",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-fae1e902",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-107-sec-fsa-hold-autumn-financial-regulatory-dialogue",
+      "tier": "primary",
+      "publishedAt": "2026-10-20T12:51:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The U.S. Securities and Exchange Commission (SEC) and the Financial Services Agency of Japan (FSA) convened the Autumn SEC-FSA Financial Regulatory Dialogue in Tokyo on Oct. 19, 2026.The SEC–FSA Dialogue builds upon longstanding efforts bet",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-9293d06d",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-106-sec-announces-roundtable-machine-understandable-data-age-super-intelligence",
+      "tier": "primary",
+      "publishedAt": "2026-10-19T17:19:43.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission announced today that it will host a roundtable on November 9, 2026, to discuss the use of machine-understandable data and Super Intelligence (SI) and related risks and costs.“In the age of SI, high-qua",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-bbddc65d",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-105-sec-small-business-advisory-committee-discuss-ipo-modernization-regulation-crowdfunding",
+      "tier": "primary",
+      "publishedAt": "2026-10-14T14:30:47.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The&nbsp;Securities and Exchange Commission’s&nbsp;Small Business Capital Formation Advisory Committee announced that it will hold a meeting on Tuesday, October 27, 2026, at 10 a.m. to continue discussing IPO modernization and explore poten",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-37b1bc2",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-104-sec-proposes-expanding-securities-eligible-cross-trading-registered-funds",
+      "tier": "primary",
+      "publishedAt": "2026-10-09T14:59:00.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today proposed amendments to the Investment Company Act “cross-trading rule,” which permits transactions in securities between a registered fund and its affiliates under certain conditions. The propose",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-f581d8b1",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-103-sec-seeks-final-judgment-against-former-western-asset-co-cio-ken-leech-cherry-picking-case",
+      "tier": "primary",
+      "publishedAt": "2026-10-06T20:30:24.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission today moved for entry of a final judgment by consent against Stephen Kenneth Leech II, the former co-chief investment officer of registered investment adviser Western Asset Management Company LLC, whom",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    },
+    {
+      "id": "sec-press-7c4144d7",
+      "name": "U.S. SEC Press Releases",
+      "url": "https://www.sec.gov/newsroom/press-releases/2026-102-sec-host-virtual-national-compliance-outreach-seminar-investment-companies-investment-advisers",
+      "tier": "primary",
+      "publishedAt": "2026-10-06T14:37:55.000Z",
+      "observedAt": "2026-11-13T06:08:54.185Z",
+      "excerpt": "The Securities and Exchange Commission’s Compliance Outreach Program announced today that it will host a virtual national seminar for investment companies and investment advisers on November 19, 2026. The purpose of the event is to help chi",
+      "isSimulated": false,
+      "feedUrl": "https://www.sec.gov/news/pressreleases.rss"
+    }
+  ],
+  "errors": [],
+  "reusedCacheCount": 4,
+  "freshnessHours": 903.5164402777777
+}

@@ -33,12 +33,15 @@ export function titleSimilarity(left: string, right: string): number {
 export function deduplicateNews(items: NewsItem[]): { items: NewsItem[]; duplicatesRemoved: number } {
 	const seenIds = new Set<string>();
 	const seenUrls = new Set<string>();
+	const seenKeys = new Set<string>();
 	const unique: NewsItem[] = [];
 	for (const item of items) {
 		const urlKey = normalizeText(item.url);
-		if (seenIds.has(item.id) || (urlKey && seenUrls.has(urlKey))) continue;
+		const itemKey = normalizeText(item.dedupeKey ?? item.guid ?? "");
+		if (seenIds.has(item.id) || (urlKey && seenUrls.has(urlKey)) || (itemKey && seenKeys.has(itemKey))) continue;
 		seenIds.add(item.id);
 		if (urlKey) seenUrls.add(urlKey);
+		if (itemKey) seenKeys.add(itemKey);
 		unique.push(item);
 	}
 	return { items: unique, duplicatesRemoved: items.length - unique.length };
@@ -98,6 +101,8 @@ export function aggregateEvents(items: NewsItem[], sources: NewsSource[], now = 
 			.map((article) => sources.find((source) => source.id === article.sourceId))
 			.filter((source): source is NewsSource => Boolean(source))
 			.map((source) => [source.id, source] as const)).values()];
+		const companies = [...new Map(articles.flatMap((article) => article.companies ?? []).map((company) => [company.ticker ?? company.name, company] as const)).values()];
+		const dataMode = articles.some((article) => article.dataMode === "live") ? "live" : "synthetic";
 		const meanImpact = articles.reduce((sum, article) => sum + article.impact * 100, 0) / articles.length;
 		const sourceBreadth = Math.min(1, eventSources.length / 3);
 		const recency = Math.max(0, 1 - (new Date(now).getTime() - new Date(first.publishedAt).getTime()) / (DAY_MS * 30));
@@ -126,6 +131,8 @@ export function aggregateEvents(items: NewsItem[], sources: NewsSource[], now = 
 			evidence,
 			uncertainty,
 			uncertaintyReasons: reasons,
+			companies,
+			dataMode,
 		};
 	});
 }
@@ -165,15 +172,16 @@ export function runBacktest(events: EventCluster[], prices: PriceBar[], config: 
 		if (event.importanceScore < config.importanceThreshold) continue;
 		const direction = directionFor(event);
 		if (!direction) continue;
-		const entryIndex = bars.findIndex((bar) => bar.date > event.occurredAt && (!lastExit || bar.date > lastExit));
-		if (entryIndex < 0) continue;
+		const firstEligibleIndex = bars.findIndex((bar) => bar.date > event.occurredAt && (!lastExit || bar.date > lastExit));
+		const entryIndex = firstEligibleIndex < 0 ? -1 : firstEligibleIndex + Math.max(0, config.signalDelayBars ?? 0);
+		if (entryIndex < 0 || entryIndex >= bars.length) continue;
 		const exitIndex = Math.min(bars.length - 1, entryIndex + Math.max(1, config.holdingDays));
 		if (exitIndex <= entryIndex) continue;
 		const entry = bars[entryIndex]!;
 		const exit = bars[exitIndex]!;
 		if (entry.date <= event.occurredAt) violations.push(`${event.id}: entry ${entry.date} is not after signal ${event.occurredAt}`);
 		const grossReturn = direction * ((exit.close - entry.close) / entry.close);
-		const transactionCost = (Math.max(0, config.costBps) / 10000) * 2;
+		const transactionCost = ((Math.max(0, config.costBps) + Math.max(0, config.slippageBps ?? 0)) / 10000) * 2;
 		trades.push({
 			eventId: event.id,
 			eventTitle: event.title,

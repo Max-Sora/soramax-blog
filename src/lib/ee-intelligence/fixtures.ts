@@ -71,6 +71,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.86,
 		polarity: "supports",
 		confidence: 0.62,
+		companies: [{ name: "NVIDIA", ticker: "NVDA", aliases: ["nvidia", "nvda"] }],
+		dataMode: "synthetic",
 	},
 	{
 		id: "news-policy-regulator",
@@ -85,6 +87,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.79,
 		polarity: "mixed",
 		confidence: 0.74,
+		companies: [{ name: "NVIDIA", ticker: "NVDA", aliases: ["nvidia", "nvda"] }],
+		dataMode: "synthetic",
 	},
 	{
 		id: "news-policy-lab",
@@ -99,6 +103,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.55,
 		polarity: "contradicts",
 		confidence: 0.41,
+		companies: [{ name: "NVIDIA", ticker: "NVDA", aliases: ["nvidia", "nvda"] }],
+		dataMode: "synthetic",
 	},
 	{
 		id: "news-thermal-lab",
@@ -113,6 +119,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.71,
 		polarity: "supports",
 		confidence: 0.49,
+		companies: [{ name: "AMD", ticker: "AMD", aliases: ["amd"] }],
+		dataMode: "synthetic",
 	},
 	{
 		id: "news-thermal-company",
@@ -127,6 +135,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.68,
 		polarity: "contradicts",
 		confidence: 0.38,
+		companies: [{ name: "AMD", ticker: "AMD", aliases: ["amd"] }],
+		dataMode: "synthetic",
 	},
 	{
 		id: "news-earnings",
@@ -141,6 +151,8 @@ export const demoNews: NewsItem[] = [
 		impact: 0.63,
 		polarity: "supports",
 		confidence: 0.52,
+		companies: [{ name: "Intel", ticker: "INTC", aliases: ["intel", "intc"] }],
+		dataMode: "synthetic",
 	},
 ];
 

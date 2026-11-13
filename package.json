@@ -9,14 +9,16 @@
     "build": "node scripts/generate-icons.js && npx tsx scripts/generate-lqips.ts && astro build && npx tsx scripts/subset-fonts.ts && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "tsx --test src/lib/ee-intelligence/engine.test.ts",
+    "test": "tsx --test src/lib/ee-intelligence/*.test.ts",
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
     "preinstall": "npx only-allow pnpm",
     "icons": "node scripts/generate-icons.js",
-    "lqips": "npx tsx scripts/generate-lqips.ts"
+    "lqips": "npx tsx scripts/generate-lqips.ts",
+    "ee-intelligence:sync": "tsx scripts/ee-intelligence-sync.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -91,7 +93,8 @@
     "postcss-nesting": "^14.0.0",
     "subset-font": "^2.5.0",
     "tailwindcss": "^4.3.1",
-    "tsx": "^4.22.4"
+    "tsx": "^4.22.4",
+    "@playwright/test": "^1.52.0"
   },
   "packageManager": "pnpm@9.14.4"
 }

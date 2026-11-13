@@ -1,6 +1,14 @@
 export type EvidencePolarity = "supports" | "contradicts" | "mixed" | "unknown";
 export type UncertaintyLevel = "low" | "medium" | "high";
 export type ImportanceLabel = "critical" | "high" | "watch";
+export type DataMode = "live" | "synthetic";
+export type SignalDirection = "bullish" | "bearish" | "neutral" | "insufficient_data";
+
+export interface CompanyRef {
+	name: string;
+	ticker?: string;
+	aliases: string[];
+}
 
 export interface NewsSource {
 	id: string;
@@ -11,6 +19,7 @@ export interface NewsSource {
 	observedAt: string;
 	excerpt: string;
 	isSimulated: boolean;
+	feedUrl?: string;
 }
 
 export interface NewsItem {
@@ -26,6 +35,12 @@ export interface NewsItem {
 	impact: number;
 	polarity: EvidencePolarity;
 	confidence: number;
+	guid?: string;
+	firstSeenAt?: string;
+	dedupeKey?: string;
+	companies?: CompanyRef[];
+	dataMode?: DataMode;
+	freshnessStatus?: "fresh" | "stale" | "unknown";
 }
 
 export interface EvidenceItem {
@@ -47,6 +62,20 @@ export interface EventCluster {
 	evidence: EvidenceItem[];
 	uncertainty: UncertaintyLevel;
 	uncertaintyReasons: string[];
+	companies: CompanyRef[];
+	dataMode: DataMode;
+}
+
+export interface ResearchSignal {
+	company: CompanyRef;
+	direction: SignalDirection;
+	confidence: number;
+	strength: number;
+	eventIds: string[];
+	facts: string[];
+	inferences: string[];
+	unknowns: string[];
+	dataMode: DataMode;
 }
 
 export interface PriceBar {
@@ -62,6 +91,8 @@ export interface BacktestConfig {
 	end: string;
 	importanceThreshold: number;
 	costBps: number;
+	slippageBps?: number;
+	signalDelayBars?: number;
 	holdingDays: number;
 }
 
@@ -90,4 +121,33 @@ export interface BacktestResult {
 	lookaheadViolations: string[];
 	equityCurve: Array<{ date: string; value: number }>;
 	status: "simulated";
+}
+
+export interface WalkForwardFold {
+	trainStart: string;
+	trainEnd: string;
+	testStart: string;
+	testEnd: string;
+	result: BacktestResult;
+	benchmarkReturn: number | null;
+}
+
+export interface WalkForwardResult {
+	status: "ok" | "insufficient_data";
+	mode: DataMode;
+	folds: WalkForwardFold[];
+	combinedReturn: number | null;
+	benchmarkReturn: number | null;
+	message?: string;
+}
+
+export interface LiveSnapshot {
+	mode: "live";
+	status: "fresh" | "stale" | "unavailable";
+	fetchedAt: string;
+	items: NewsItem[];
+	sources: NewsSource[];
+	errors: string[];
+	reusedCacheCount: number;
+	freshnessHours: number | null;
 }

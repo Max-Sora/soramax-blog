@@ -9,6 +9,8 @@
     "build": "node scripts/generate-icons.js && npx tsx scripts/generate-lqips.ts && astro build && npx tsx scripts/subset-fonts.ts && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
+	"test": "tsx --test src/lib/career-navigator/engine.test.ts src/lib/career-navigator/phase2.test.ts src/lib/career-navigator/serialization.test.ts",
+	"career-navigator:sync": "tsx scripts/career-navigator-sync.ts",
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",

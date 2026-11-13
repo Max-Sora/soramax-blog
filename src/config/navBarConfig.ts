@@ -11,6 +11,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		LinkPresets.Shop,
 		LinkPresets.Posts,
 		LinkPresets.Projects,
+		LinkPresets.CareerNavigator,
 		LinkPresets.EEIntelligence,
 		LinkPresets.HardwareNotes,
 		LinkPresets.LifeNotes,
@@ -64,10 +65,16 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/projects/",
 		icon: "material-symbols:rocket",
 	},
+	CareerNavigator: {
+		name: "Career Navigator",
+		url: "/tools/career-navigator/",
+		icon: "material-symbols:route",
+		highlight: true,
+	},
 	EEIntelligence: {
-		name: 'EE Intelligence',
-		url: '/tools/ee-intelligence/',
-		icon: 'material-symbols:query-stats',
+		name: "EE Intelligence",
+		url: "/tools/ee-intelligence/",
+		icon: "material-symbols:query-stats",
 		highlight: true,
 	},
 	HardwareNotes: {

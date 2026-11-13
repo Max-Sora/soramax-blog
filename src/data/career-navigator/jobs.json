@@ -1,0 +1,15 @@
+{
+  "generatedAt": "",
+  "jobs": [],
+  "validatedJobs": 0,
+  "staleJobs": 0,
+  "expiredJobs": 0,
+  "errors": [
+    {
+      "provider": "sample",
+      "message": "No curated public boards are configured for this static snapshot.",
+      "at": ""
+    }
+  ],
+  "status": "unavailable"
+}

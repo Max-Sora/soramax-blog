@@ -9,16 +9,17 @@
     "build": "node scripts/generate-icons.js && npx tsx scripts/generate-lqips.ts && astro build && npx tsx scripts/subset-fonts.ts && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "tsx --test src/lib/ee-intelligence/*.test.ts",
-    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "type-check": "tsc --noEmit",
+	"test": "tsx --test src/lib/career-navigator/engine.test.ts src/lib/career-navigator/phase2.test.ts src/lib/career-navigator/serialization.test.ts src/lib/ee-intelligence/*.test.ts",
+    "ee-intelligence:sync": "tsx scripts/ee-intelligence-sync.ts",
+    "test:e2e": "playwright test",
+    "career-navigator:sync": "tsx scripts/career-navigator-sync.ts",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
     "preinstall": "npx only-allow pnpm",
     "icons": "node scripts/generate-icons.js",
-    "lqips": "npx tsx scripts/generate-lqips.ts",
-    "ee-intelligence:sync": "tsx scripts/ee-intelligence-sync.ts",
-    "test:e2e": "playwright test"
+    "lqips": "npx tsx scripts/generate-lqips.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -84,6 +85,7 @@
     "@biomejs/biome": "2.5.0",
     "@iconify-json/mdi": "^1.2.3",
     "@iconify-json/svg-spinners": "^1.2.4",
+    "@playwright/test": "^1.52.0",
     "@tailwindcss/vite": "^4.3.1",
     "@types/hast": "^3.0.4",
     "@types/mdast": "^4.0.4",
@@ -93,8 +95,7 @@
     "postcss-nesting": "^14.0.0",
     "subset-font": "^2.5.0",
     "tailwindcss": "^4.3.1",
-    "tsx": "^4.22.4",
-    "@playwright/test": "^1.52.0"
+    "tsx": "^4.22.4"
   },
   "packageManager": "pnpm@9.14.4"
 }

@@ -18,6 +18,13 @@ if (!link) {
 }
 
 const processedLink = link;
+const normalizedLinkPath = processedLink.url.replace(/\/$/, "") || "/";
+const isCurrent =
+	!processedLink.external &&
+	(normalizedLinkPath === "/"
+		? Astro.url.pathname === "/"
+		: Astro.url.pathname === normalizedLinkPath ||
+			Astro.url.pathname.startsWith(`${normalizedLinkPath}/`));
 
 const hasChildren = processedLink.children && processedLink.children.length > 0;
 ---
@@ -27,7 +34,8 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 		<button 
 			class:list={[
 				"btn-plain scale-animation rounded-lg h-10 font-bold px-4 pr-8 active:scale-95 dropdown-trigger relative",
-				processedLink.highlight && "nav-link-highlight",
+				processedLink.highlight && `nav-link-highlight nav-link-highlight-${processedLink.highlightVariant ?? "default"}`,
+					 isCurrent && "nav-link-current",
 			]}
 			aria-expanded="false"
 			aria-haspopup="true"
@@ -64,7 +72,8 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 			target={processedLink.external ? "_blank" : null}
 			class:list={[
 				"btn-plain scale-animation rounded-lg h-10 font-bold px-4 active:scale-95",
-				processedLink.highlight && "nav-link-highlight",
+				processedLink.highlight && `nav-link-highlight nav-link-highlight-${processedLink.highlightVariant ?? "default"}`,
+					 isCurrent && "nav-link-current",
 			]}
 		>
 			<div class="flex items-center gap-1.5">
@@ -126,9 +135,97 @@ const hasChildren = processedLink.children && processedLink.children.length > 0;
 	:global(.dark) .nav-link-highlight {
 		color: #fff7ed;
 		box-shadow: 0 8px 24px rgb(251 146 60 / 0.16);
+	}	.nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #4f46e5, #7c3aed 58%, #a855f7);
+		box-shadow: 0 8px 22px rgb(99 102 241 / 0.22);
 	}
 
-	@media (prefers-reduced-motion: reduce) {
+	.nav-link-highlight-career:hover,
+	.nav-link-highlight-career:focus-visible {
+		color: #fff;
+		filter: saturate(1.08) brightness(1.05);
+		box-shadow: 0 10px 26px rgb(124 58 237 / 0.3);
+	}
+
+	.nav-link-highlight-career:focus-visible,
+	.nav-link-current {
+		outline: 2px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	:global(.dark) .nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #6366f1, #8b5cf6 58%, #c084fc);
+	}
+	.nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #4f46e5, #7c3aed 58%, #a855f7);
+		box-shadow: 0 8px 22px rgb(99 102 241 / 0.22);
+	}
+
+	.nav-link-highlight-career:hover,
+	.nav-link-highlight-career:focus-visible {
+		color: #fff;
+		filter: saturate(1.08) brightness(1.05);
+		box-shadow: 0 10px 26px rgb(124 58 237 / 0.3);
+	}
+
+	.nav-link-highlight-career:focus-visible,
+	.nav-link-current {
+		outline: 2px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	:global(.dark) .nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #6366f1, #8b5cf6 58%, #c084fc);
+	}
+	.nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #4f46e5, #7c3aed 58%, #a855f7);
+		box-shadow: 0 8px 22px rgb(99 102 241 / 0.22);
+	}
+
+	.nav-link-highlight-career:hover,
+	.nav-link-highlight-career:focus-visible {
+		color: #fff;
+		filter: saturate(1.08) brightness(1.05);
+		box-shadow: 0 10px 26px rgb(124 58 237 / 0.3);
+	}
+
+	.nav-link-highlight-career:focus-visible,
+	.nav-link-current {
+		outline: 2px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	:global(.dark) .nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #6366f1, #8b5cf6 58%, #c084fc);
+	}		.nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #4f46e5, #7c3aed 58%, #a855f7);
+		box-shadow: 0 8px 22px rgb(99 102 241 / 0.22);
+	}
+
+	.nav-link-highlight-career:hover,
+	.nav-link-highlight-career:focus-visible {
+		color: #fff;
+		filter: saturate(1.08) brightness(1.05);
+		box-shadow: 0 10px 26px rgb(124 58 237 / 0.3);
+	}
+
+	.nav-link-highlight-career:focus-visible,
+	.nav-link-current {
+		outline: 2px solid var(--primary);
+		outline-offset: 3px;
+	}
+
+	:global(.dark) .nav-link-highlight-career {
+		color: #fff;
+		background: linear-gradient(135deg, #6366f1, #8b5cf6 58%, #c084fc);
+	}@media (prefers-reduced-motion: reduce) {
 		.nav-link-highlight {
 			transition: none;
 		}

@@ -1,8 +1,8 @@
+import type { JobSnapshot } from "@/lib/career-navigator/phase2";
 import {
 	EMPTY_JOB_SNAPSHOT,
 	isJobSnapshot,
 } from "@/lib/career-navigator/phase2";
-import type { JobSnapshot } from "@/lib/career-navigator/phase2";
 import { uciCampusOpportunities, uciCampusSources } from "./campus";
 import jobSnapshotJson from "./jobs.json";
 

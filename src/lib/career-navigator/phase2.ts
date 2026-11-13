@@ -54,7 +54,57 @@ export const EMPTY_JOB_SNAPSHOT: JobSnapshot = {
 	status: "unavailable",
 };
 
-export const DEFAULT_CURATED_BOARDS: CuratedJobBoard[] = [];
+export const DEFAULT_CURATED_BOARDS: CuratedJobBoard[] = [
+	{
+		provider: "lever",
+		company: "Simbe Robotics",
+		boardId: "SimbeRobotics",
+		publicUrl: "https://jobs.lever.co/SimbeRobotics",
+		enabled: true,
+	},
+	{
+		provider: "lever",
+		company: "Zoox",
+		boardId: "zoox",
+		publicUrl: "https://jobs.lever.co/zoox",
+		enabled: true,
+	},
+	{
+		provider: "lever",
+		company: "Robotics & AI Institute",
+		boardId: "rai",
+		publicUrl: "https://jobs.lever.co/rai",
+		enabled: true,
+	},
+	{
+		provider: "lever",
+		company: "ANYbotics",
+		boardId: "anybotics",
+		publicUrl: "https://jobs.lever.co/anybotics",
+		enabled: true,
+	},
+	{
+		provider: "ashby",
+		company: "Meter",
+		boardId: "meter",
+		publicUrl: "https://jobs.ashbyhq.com/meter",
+		enabled: true,
+	},
+	{
+		provider: "ashby",
+		company: "Base Power Company",
+		boardId: "base-power",
+		publicUrl: "https://jobs.ashbyhq.com/base-power",
+		enabled: true,
+	},
+	{
+		provider: "ashby",
+		company: "Eight Sleep",
+		boardId: "eightsleep",
+		publicUrl: "https://jobs.ashbyhq.com/eightsleep",
+		enabled: true,
+	},
+];
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return Boolean(value && typeof value === "object" && !Array.isArray(value));
@@ -160,6 +210,7 @@ function requirementCategory(skillId: string): JobRequirement["category"] {
 export function extractRequirements(
 	description: string,
 	sourceEvidenceId: string,
+	retainUnmapped = false,
 ): JobRequirement[] {
 	const lines = description
 		.split(/\r?\n|(?<=[.!?])\s+/)
@@ -170,28 +221,37 @@ export function extractRequirements(
 	const seen = new Set<string>();
 	for (const line of lines) {
 		const skillIds = normalizeSkillIds(line, skills);
-		if (skillIds.length === 0) continue;
+		const isRequirementCandidate =
+			/required|must|preferred|bonus|nice to have|qualifications|requirements|experience with|knowledge of|familiarity|proficiency|ability to|currently enrolled|degree|bachelor|master|years of/i.test(
+				line,
+			);
+		if (skillIds.length === 0 && !isRequirementCandidate && !retainUnmapped)
+			continue;
 		const importance: JobRequirement["importance"] =
-			/required|must|required qualifications|what you.ll bring|need to/i.test(
+			/required|must|required qualifications|what you.ll bring|need to|currently enrolled|degree|bachelor|master|years of/i.test(
 				line,
 			)
 				? "mandatory"
 				: /preferred|bonus|nice to have|plus/i.test(line)
 					? "preferred"
 					: "unknown";
-		for (const skillId of skillIds) {
-			const id = `req-${stableId(`${skillId}:${line}`)}`;
+		const extractedSkills = skillIds.length > 0 ? skillIds : [undefined];
+		for (const skillId of extractedSkills) {
+			const id = `req-${stableId(`${skillId ?? "unknown"}:${line}`)}`;
 			if (seen.has(id)) continue;
 			seen.add(id);
 			requirements.push({
 				id,
 				label: line,
 				skillId,
-				category: requirementCategory(skillId),
+				category: skillId ? requirementCategory(skillId) : "other",
 				importance,
 				evidenceId: sourceEvidenceId,
 				evidenceText: line,
 				extractionMethod: "explicit",
+				note: skillId
+					? undefined
+					: "Requirement retained for review because no known skill mapping was available.",
 			});
 		}
 	}
@@ -321,7 +381,10 @@ export function isJobSnapshot(value: unknown): value is JobSnapshot {
 	return (
 		typeof value.generatedAt === "string" &&
 		Array.isArray(value.jobs) &&
+		value.jobs.every((job) => validateJobPosting(job).ok) &&
 		typeof value.validatedJobs === "number" &&
+		typeof value.staleJobs === "number" &&
+		typeof value.expiredJobs === "number" &&
 		Array.isArray(value.errors)
 	);
 }

@@ -7,6 +7,7 @@ import {
 import {
 	deduplicateNormalizedJobs,
 	EMPTY_JOB_SNAPSHOT,
+	extractRequirements,
 	parseAshbyJob,
 	parseLeverJob,
 	sanitizeText,
@@ -68,6 +69,22 @@ test("normalizes public Ashby data and preserves observed versus published times
 	assert.equal(posting.publishedAt, "2026-10-27T14:08:49.780Z");
 	assert.equal(posting.observedAt, "2026-11-04T00:00:00.000Z");
 	assert.equal(posting.remoteMode, "onsite");
+});
+
+test("retains unknown requirements from arbitrary pasted job text", () => {
+	const requirements = extractRequirements(
+		"Required: Rust and Zephyr RTOS experience. Must work with a proprietary sensor stack.",
+		"user-job-description",
+		true,
+	);
+	assert.ok(
+		requirements.some(
+			(requirement) =>
+				requirement.skillId === undefined &&
+				requirement.importance === "mandatory",
+		),
+	);
+	assert.ok(requirements.every((requirement) => requirement.evidenceText));
 });
 
 test("deduplicates normalized live records and keeps empty snapshots explicit", () => {

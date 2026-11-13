@@ -344,6 +344,30 @@ export function generateRoadmap(
 		completionEvidence: "Save the conversation date and your own notes.",
 	});
 
+	const unknownRequirementIds =
+		matches?.matches
+			.filter((match) => match.status === "unknown")
+			.map((match) => match.requirement.id) ?? [];
+	if (unknownRequirementIds.length > 0) {
+		actions.push({
+			id: `job-${career.id}-unknown-requirements`,
+			title:
+				"Review unclassified job requirements before choosing a learning plan",
+			horizon: "now",
+			kind: "reflection",
+			why: "These requirements were present in the selected job text but could not be mapped safely to the current skill vocabulary. Review the original evidence instead of treating UNKNOWN as missing or matched.",
+			linkedSkillIds: [],
+			linkedRequirementIds: unknownRequirementIds,
+			effort: "light",
+			estimatedHours: 1,
+			priority: 2,
+			status: "suggested",
+			deliverable:
+				"A short note confirming which unknown requirements matter and which need advisor or recruiter clarification.",
+			completionEvidence: "Link or quote the original requirement evidence.",
+		});
+	}
+
 	if (profile.courses.length === 0) {
 		actions.push({
 			id: `career-${career.id}-course-plan`,

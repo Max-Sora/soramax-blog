@@ -1,0 +1,11 @@
+---
+import EEIntelligence from "@/components/pages/EEIntelligence.svelte";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+---
+
+<MainGridLayout
+	title="EE Intelligence"
+	description="A public, read-only Event Intelligence and Signal Lab demo with provenance, uncertainty and leakage-safe backtesting."
+>
+	<EEIntelligence client:load />
+</MainGridLayout>

@@ -1,0 +1,267 @@
+<script lang="ts">
+import { onMount } from "svelte";
+import {
+	aggregateEvents,
+	deduplicateNews,
+	rankEvents,
+	runBacktest,
+	searchNews,
+	sourceTierLabel,
+} from "@/lib/ee-intelligence/engine";
+import {
+	demoNews,
+	demoPrices,
+	demoSources,
+} from "@/lib/ee-intelligence/fixtures";
+import {
+	buildPublicKnowledge,
+	demoCases,
+	diagnoseHardware,
+	searchIntelligenceRecords,
+} from "@/lib/ee-intelligence/knowledge";
+import { fetchPublicHistory } from "@/lib/ee-intelligence/market";
+import { deriveResearchSignals } from "@/lib/ee-intelligence/signals";
+import type {
+	BacktestConfig,
+	DataMode,
+	DiagnosisResult,
+	EventCluster,
+	EvidencePolarity,
+	LiveSnapshot,
+	NewsItem,
+	NewsSource,
+	PriceBar,
+} from "@/lib/ee-intelligence/types";
+import { runWalkForward } from "@/lib/ee-intelligence/walkforward";
+
+type Mode =
+	| "overview"
+	| "feed"
+	| "cases"
+	| "diagnosis"
+	| "monitor"
+	| "events"
+	| "signals"
+	| "method";
+let mode: Mode = "overview";
+let dataMode: DataMode = "synthetic";
+let query = "";
+let category = "all";
+let selectedEventId = "";
+let selectedRecordId = "";
+let selectedCaseId = "";
+let diagnosisQuery = "GPU black screen after driver update under load";
+let diagnosis: DiagnosisResult = diagnoseHardware(
+	diagnosisQuery,
+	demoCases,
+	"2026-09-28T12:00:00Z",
+);
+let threshold = 45;
+let costBps = 25;
+let slippageBps = 10;
+let signalDelayBars = 1;
+let holdingDays = 2;
+let symbol = "SIM-EE";
+let start = "2026-09-07";
+let end = "2026-09-25";
+let liveSnapshot: LiveSnapshot | null = null;
+let liveLoading = false;
+let liveError = "";
+let marketLoading = false;
+let marketError = "";
+let liveMarket: PriceBar[] = [];
+let liveMarketSource = "";
+let activeNews: NewsItem[] = [];
+let activeSources: NewsSource[] = [];
+
+$: activeNews =
+	dataMode === "synthetic" ? demoNews : (liveSnapshot?.items ?? []);
+$: activeSources =
+	dataMode === "synthetic" ? demoSources : (liveSnapshot?.sources ?? []);
+$: activePrices = dataMode === "synthetic" ? demoPrices : liveMarket;
+$: dedupeStats = deduplicateNews(activeNews);
+$: events = rankEvents(
+	aggregateEvents(dedupeStats.items, activeSources, new Date().toISOString()),
+);
+$: signals = deriveResearchSignals(events);
+$: knowledge = buildPublicKnowledge(
+	activeNews,
+	activeSources,
+	dataMode,
+	liveSnapshot?.fetchedAt ?? "2026-09-28T12:00:00Z",
+);
+$: visibleNews = searchNews(dedupeStats.items, query).filter(
+	(item) => category === "all" || item.category === category,
+);
+$: visibleArticleIds = new Set(visibleNews.map((item) => item.id));
+$: visibleEvents = events.filter(
+	(event) =>
+		category === "all" ||
+		event.articleIds.some((articleId) => visibleArticleIds.has(articleId)),
+);
+$: searchableRecords = searchIntelligenceRecords(
+	knowledge.records,
+	query,
+).filter((record) => category === "all" || record.tags.includes(category));
+$: selectedEvent =
+	events.find((event) => event.id === selectedEventId) ??
+	visibleEvents[0] ??
+	events[0];
+$: selectedRecord =
+	knowledge.records.find((record) => record.id === selectedRecordId) ??
+	knowledge.records[0];
+$: selectedCase =
+	knowledge.cases.find((candidate) => candidate.id === selectedCaseId) ??
+	knowledge.cases[0];
+$: selectedSignals = selectedEvent
+	? signals.filter((signal) =>
+			selectedEvent.companies.some(
+				(company) =>
+					(company.ticker ?? company.name) ===
+					(signal.company.ticker ?? signal.company.name),
+			),
+		)
+	: [];
+$: backtestConfig = {
+	symbol,
+	start,
+	end,
+	importanceThreshold: threshold,
+	costBps,
+	slippageBps,
+	signalDelayBars,
+	holdingDays,
+} satisfies BacktestConfig;
+$: backtest = runBacktest(events, activePrices, backtestConfig);
+$: walkForward = runWalkForward(events, activePrices, backtestConfig, dataMode);
+$: sourceCount = new Set(activeNews.map((item) => item.sourceId)).size;
+
+onMount(() => {
+	if (dataMode === "live") void loadLive();
+});
+function formatPercent(value: number | null) {
+	return value === null
+		? "insufficient data"
+		: `${value >= 0 ? "+" : ""}${(value * 100).toFixed(2)}%`;
+}
+function polarityLabel(polarity: EvidencePolarity) {
+	return polarity === "supports"
+		? "支持"
+		: polarity === "contradicts"
+			? "反向"
+			: polarity === "mixed"
+				? "混合"
+				: "未知";
+}
+function dateLabel(value: string | undefined) {
+	return value ? value.slice(0, 16).replace("T", " ") : "—";
+}
+function caseForRecord(recordId: string) {
+	return knowledge.cases.filter((candidate) =>
+		candidate.recordIds.includes(recordId),
+	);
+}
+async function loadLive() {
+	dataMode = "live";
+	liveLoading = true;
+	liveError = "";
+	try {
+		const response = await fetch("/api/ee-intelligence/live.json", {
+			cache: "no-store",
+		});
+		if (!response.ok) throw new Error(`HTTP ${response.status}`);
+		liveSnapshot = (await response.json()) as LiveSnapshot;
+		if (liveSnapshot.status === "unavailable")
+			liveError =
+				liveSnapshot.errors.join(" ") || "Live RSS snapshot unavailable.";
+		const firstTicker = liveSnapshot.items
+			.flatMap((item) => item.companies ?? [])
+			.find((company) => company.ticker)?.ticker;
+		if (firstTicker) symbol = firstTicker;
+	} catch (error) {
+		liveSnapshot = null;
+		liveError =
+			error instanceof Error ? error.message : "Live RSS request failed.";
+	} finally {
+		liveLoading = false;
+	}
+}
+function useSynthetic() {
+	dataMode = "synthetic";
+	liveError = "";
+	liveMarket = [];
+	symbol = "SIM-EE";
+	start = "2026-09-07";
+	end = "2026-09-25";
+}
+async function loadMarket() {
+	if (dataMode !== "live") return;
+	marketLoading = true;
+	marketError = "";
+	const result = await fetchPublicHistory(symbol, start, end);
+	liveMarket = result.prices;
+	liveMarketSource = result.source;
+	if (result.status === "unavailable")
+		marketError = result.error ?? "Market data unavailable.";
+	marketLoading = false;
+}
+function openEvent(event: EventCluster) {
+	selectedEventId = event.id;
+	mode = "events";
+}
+function runDiagnosis() {
+	diagnosis = diagnoseHardware(diagnosisQuery, knowledge.cases);
+}
+</script>
+
+<svelte:head><title>EE Intelligence · SoraMax Demo</title><meta name="description" content="Personal Intelligence Agent Platform demo with provenance, retrieval, diagnosis and agent run monitoring." /></svelte:head>
+
+<div class="ee-shell">
+	<section class="ee-hero card-base"><div class="hero-copy"><div class="eyebrow">EE INTELLIGENCE · PHASE 2</div><h1>Collect → Understand<br /><span>Connect → Reason → Act</span></h1><p>Personal Intelligence Agent Platform：将公开信息、工程案例和可追溯证据放进同一条可审计流水线。页面展示真实可运行的检索和规则分析，不伪造 LLM 推理或实时服务。</p><div class="hero-badges"><span class="badge badge-primary">PUBLIC READ-ONLY</span><span class="badge">LIVE / SYNTHETIC</span><span class="badge">NO AUTO-TRADING</span></div></div><div class="hero-telemetry"><div><span>MODE</span><strong>{dataMode.toUpperCase()}</strong></div><div><span>RECORDS</span><strong>{knowledge.records.length}</strong></div><div><span>CASES</span><strong>{knowledge.cases.length}</strong></div><small>{dataMode === "live" ? dateLabel(liveSnapshot?.fetchedAt) : "Synthetic fixture · review only"}</small></div></section>
+	<div class="demo-notice"><span class="notice-mark">!</span><div><strong>{dataMode === "live" ? "LIVE · 公开 RSS 快照" : "SYNTHETIC · 合成数据演示"}</strong><p>{dataMode === "live" ? "数据来自公开 RSS；抓取失败、缓存复用和新鲜度会明确显示。Live 失败时不会静默替换为模拟数据。" : "标题、来源、案例和价格均为 Synthetic Demo；不连接私有数据库，不代表实时新闻、收益或维修结论。"}</p></div></div>
+	<div class="data-switch" role="group" aria-label="Data mode"><button class:active={dataMode === "live"} class="mode-button" on:click={loadLive} aria-pressed={dataMode === "live"}>Live public RSS</button><button class:active={dataMode === "synthetic"} class="mode-button" on:click={useSynthetic} aria-pressed={dataMode === "synthetic"}>Synthetic fixture</button>{#if liveLoading}<span class="toolbar-meta">Loading public feeds…</span>{/if}</div>
+	{#if liveError}<div class="error-notice"><strong>Live unavailable</strong><span>{liveError}</span></div>{/if}
+	<nav class="mode-tabs" aria-label="EE Intelligence modules">
+		<button class:active={mode === "overview"} class="mode-tab" on:click={() => (mode = "overview")}><strong>OVERVIEW</strong><span>控制中心</span></button>
+		<button class:active={mode === "feed"} class="mode-tab" on:click={() => (mode = "feed")}><strong>INTELLIGENCE FEED</strong><span>统一信息流</span></button>
+		<button class:active={mode === "cases"} class="mode-tab" on:click={() => (mode = "cases")}><strong>CASE EXPLORER</strong><span>工程案例库</span></button>
+		<button class:active={mode === "diagnosis"} class="mode-tab" on:click={() => (mode = "diagnosis")}><strong>AI DIAGNOSIS</strong><span>硬件故障检索</span></button>
+		<button class:active={mode === "monitor"} class="mode-tab" on:click={() => (mode = "monitor")}><strong>AGENT MONITOR</strong><span>运行状态</span></button>
+		<button class:active={mode === "events"} class="mode-tab" on:click={() => (mode = "events")}><strong>EVENT INTELLIGENCE</strong><span>聚合事件与证据</span></button>
+		<button class:active={mode === "signals"} class="mode-tab" on:click={() => (mode = "signals")}><strong>SIGNAL LAB</strong><span>历史回测实验</span></button>
+		<button class:active={mode === "method"} class="mode-tab" on:click={() => (mode = "method")}><strong>METHOD &amp; LIMITS</strong><span>边界与审计线索</span></button>
+	</nav>
+
+	{#if mode === "overview"}
+		<section class="overview-grid"><div class="card-base panel-pad overview-main"><div class="section-heading"><div><span class="section-kicker">CONTROL CENTER</span><h2>Intelligence pipeline</h2></div><span class="status-chip">{dataMode.toUpperCase()}</span></div><div class="pipeline"><div><b>01</b><strong>Collect</strong><span>{sourceCount} sources · {knowledge.records.length} records</span></div><i>→</i><div><b>02</b><strong>Understand</strong><span>{dedupeStats.items.length} after dedupe</span></div><i>→</i><div><b>03</b><strong>Connect</strong><span>{knowledge.cases.length} cases · {knowledge.evidence.length} evidence</span></div><i>→</i><div><b>04</b><strong>Reason / Act</strong><span>{knowledge.agentRuns.length} agent stages</span></div></div><div class="stat-grid"><div><span>Important findings</span><strong>{knowledge.insights.length}</strong></div><div><span>Recent runs</span><strong>{knowledge.agentRuns.length}</strong></div><div><span>Verified sources</span><strong>{knowledge.sources.filter((source) => source.status === "available").length}</strong></div><div><span>Uncertainty visible</span><strong>{knowledge.records.filter((record) => record.uncertainty !== "low").length}</strong></div></div></div><aside class="card-base panel-pad"><span class="section-kicker">DATA STATUS</span><h2>Mode and freshness</h2><div class="detail-row"><span>Dataset</span><strong>{dataMode === "live" ? "Public RSS" : "Synthetic Demo"}</strong></div><div class="detail-row"><span>Updated</span><strong>{dateLabel(knowledge.updatedAt)}</strong></div><div class="detail-row"><span>Live status</span><strong class:warning={dataMode === "live" && liveSnapshot?.status !== "fresh"}>{dataMode === "live" ? liveSnapshot?.status ?? "loading" : "review only"}</strong></div><p class="muted">所有外部连接器都显示实际验证状态。微信、B站和本地私有源不会被标为已连接。</p></aside></section>
+		<section class="overview-grid lower"><div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">RECENT DISCOVERY</span><h2>Recent important findings</h2></div><button class="text-button" on:click={() => (mode = "feed")}>Open feed →</button></div>{#each knowledge.insights.slice(0, 3) as insight}<button class="insight-row" on:click={() => { selectedRecordId = insight.recordIds[0] ?? ""; mode = "feed"; }}><span class="importance {insight.importance}">{insight.importance.toUpperCase()}</span><span><strong>{insight.title}</strong><small>{insight.body}</small></span><span>→</span></button>{/each}</div><div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">EVENT INTELLIGENCE</span><h2>Ranked event queue</h2></div><button class="text-button" on:click={() => (mode = "events")}>Inspect →</button></div><p class="muted">Evidence-first event ranking remains available as an existing module.</p>{#each visibleEvents.slice(0, 3) as event}<button class="mini-event" on:click={() => openEvent(event)}><span class="importance {event.importanceLabel}">{event.importanceScore}</span><span><strong>{event.title}</strong><small>{event.sources.length} sources · uncertainty {event.uncertainty}</small></span></button>{/each}</div></section>
+	{:else if mode === "feed"}
+		<section class="toolbar card-base"><div class="search-field"><span>⌕</span><input bind:value={query} aria-label="Search intelligence records" placeholder="Search records, entities, or cases..." /></div><label>Category<select bind:value={category}><option value="all">All categories</option><option value="policy">Policy</option><option value="supply">Supply</option><option value="research">Research</option><option value="company">Company</option><option value="market">Market</option></select></label><span class="toolbar-meta">{searchableRecords.length} records · {dataMode.toUpperCase()}</span></section>
+		<section class="event-layout"><div class="event-list"><div class="section-heading"><div><span class="section-kicker">UNIFIED RECORDS</span><h2>Intelligence Feed</h2></div><span class="source-chip">PROVENANCE ON</span></div><p class="muted">News and normalized records share a searchable contract. Select a record to inspect source, evidence and linked cases.</p>{#each searchableRecords as record, index}<button class:selected={selectedRecord?.id === record.id} class="event-card" on:click={() => (selectedRecordId = record.id)}><div class="event-index">{String(index + 1).padStart(2, "0")}</div><div><div class="event-card-top"><span class="importance {record.uncertainty}">{record.importance} PRIORITY</span><span class="uncertainty-label">{record.dataMode.toUpperCase()} · {record.uncertainty} uncertainty</span></div><h3>{record.title}</h3><p>{record.summary}</p><div class="event-meta"><span>{dateLabel(record.occurredAt)}</span><span>{record.tags.slice(0, 3).join(" · ")}</span></div></div><span class="event-arrow">→</span></button>{:else}<div class="empty-state">No matching records. Try a broader search.</div>{/each}</div><aside class="event-detail card-base">{#if selectedRecord}<div class="detail-top"><span class="section-kicker">SELECTED RECORD</span><span class="status-chip">{selectedRecord.kind.toUpperCase()}</span></div><h2>{selectedRecord.title}</h2><p>{selectedRecord.summary}</p><div class="detail-row"><span>Occurred</span><strong>{dateLabel(selectedRecord.occurredAt)}</strong></div><div class="detail-row"><span>Data mode</span><strong>{selectedRecord.dataMode.toUpperCase()}</strong></div><div class="detail-section"><div class="section-heading small"><h3>Evidence</h3><span>{selectedRecord.evidenceIds.length} linked</span></div>{#each knowledge.evidence.filter((item) => selectedRecord.evidenceIds.includes(item.id)) as evidence}<div class="evidence-row"><span class="polarity {evidence.polarity}">{polarityLabel(evidence.polarity)}</span><p>{evidence.statement}<br /><small>confidence {(evidence.confidence * 100).toFixed(0)}% · {evidence.verified ? "verified source" : "unverified / synthetic"}</small></p></div>{/each}</div><div class="detail-section"><div class="section-heading small"><h3>Source trace</h3><span>{selectedRecord.sourceIds.length} linked</span></div>{#each knowledge.sources.filter((source) => selectedRecord.sourceIds.includes(source.id)) as source}<a class="source-row" href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.name}</strong><small>{source.type} · {source.status} · observed {dateLabel(source.lastSuccessAt)}</small></span><span>↗</span></a>{/each}</div><div class="detail-section"><div class="section-heading small"><h3>Related cases</h3><span>{caseForRecord(selectedRecord.id).length}</span></div>{#each caseForRecord(selectedRecord.id) as candidate}<button class="related-case" on:click={() => { selectedCaseId = candidate.id; mode = "cases"; }}><strong>{candidate.title}</strong><small>{candidate.dataMode.toUpperCase()} · {candidate.status}</small></button>{:else}<p class="muted">No case link in this snapshot.</p>{/each}</div>{:else}<div class="empty-state">Select a record to inspect its evidence.</div>{/if}</aside></section>
+	{:else if mode === "cases"}
+		<section class="case-layout"><div class="case-list card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">ENGINEERING KNOWLEDGE</span><h2>Case Explorer</h2></div><span class="source-chip">{knowledge.cases.length} CASES</span></div><p class="muted">公开快照只包含字段白名单。案例明确标记为 Synthetic Demo，不等同于现场维修结论。</p>{#each knowledge.cases as candidate}<button class:selected={selectedCase?.id === candidate.id} class="case-card" on:click={() => (selectedCaseId = candidate.id)}><span class="case-status {candidate.status}">{candidate.status}</span><strong>{candidate.title}</strong><small>{candidate.hardware.join(" · ")}</small><span class="tag-row">{#each candidate.tags.slice(0, 4) as tag}<em>{tag}</em>{/each}</span></button>{/each}</div><aside class="card-base panel-pad case-detail">{#if selectedCase}<div class="detail-top"><span class="section-kicker">CASE {selectedCase.id}</span><span class="status-chip">{selectedCase.dataMode.toUpperCase()}</span></div><h2>{selectedCase.title}</h2><div class="detail-section"><h3>Observed symptoms</h3><ul class="plain-list">{#each selectedCase.symptoms as symptom}<li>{symptom}</li>{/each}</ul></div><div class="detail-section"><h3>Hardware context</h3><div class="tag-row">{#each selectedCase.hardware as item}<em>{item}</em>{/each}</div></div><div class="detail-section"><h3>Possible causes</h3><ul class="plain-list">{#each selectedCase.possibleCauses as cause}<li>{cause}</li>{/each}</ul></div><div class="detail-section"><h3>Resolution / next checks</h3><ol class="plain-list">{#each selectedCase.resolutionSteps as step}<li>{step}</li>{/each}</ol></div><p class="uncertainty-box">Synthetic case library · last updated {dateLabel(selectedCase.updatedAt)}. Measurements and component identity still need confirmation.</p>{/if}</aside></section>
+	{:else if mode === "diagnosis"}
+		<section class="diagnosis-grid"><div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">RETRIEVAL + RULES</span><h2>Hardware Diagnosis</h2></div><span class="status-chip">OFFLINE SAFE</span></div><p class="muted">输入 PC、GPU、CPU 或电子电路故障描述。系统先检索 Synthetic Case，再按匹配词和硬件上下文排序，生成可执行排查步骤；无 LLM 后端时不会伪造推理。</p><label class="diagnosis-input">Symptom description<textarea bind:value={diagnosisQuery} rows="5" placeholder="例如：GPU 在游戏 10 分钟后黑屏，风扇满转，更新驱动后出现"></textarea></label><button class="primary-button" on:click={runDiagnosis}>Run retrieval diagnosis</button><div class="rule-callout"><span>↳</span><div><strong>Deterministic trace</strong><p>query → device terms → case matches → ranked causes → step checklist → unknowns</p></div></div></div><div class="card-base panel-pad diagnosis-result"><div class="result-header"><div><span class="section-kicker">RESULT</span><h2>{diagnosis.status === "completed" ? "Reviewable diagnosis" : "Insufficient data"}</h2></div><span class="status-chip">{diagnosis.device.toUpperCase()}</span></div><p class="muted">Generated {dateLabel(diagnosis.generatedAt)} · {diagnosis.matches.length} matching cases</p><div class="match-list">{#each diagnosis.matches as match}<button class="match-row" on:click={() => { selectedCaseId = match.caseId; mode = "cases"; }}><span class="score">{match.score}</span><span><strong>{match.title}</strong><small>matched: {match.matchedTerms.join(" · ") || "context"}<br />evidence: {match.evidence.join("; ")}</small></span><span>→</span></button>{:else}<div class="empty-state">No case matched the current description.</div>{/each}</div><div class="detail-section"><div class="section-heading small"><h3>Possible causes</h3><span>ranked basis</span></div>{#each diagnosis.possibleCauses as cause}<div class="cause-row"><strong>{cause.cause}</strong><span>{Math.round(cause.score * 100)}%</span><small>{cause.basis}</small></div>{/each}</div><div class="detail-section"><div class="section-heading small"><h3>Suggested next checks</h3><span>{diagnosis.steps.length}</span></div><ol class="plain-list">{#each diagnosis.steps as step}<li>{step}</li>{/each}</ol></div><div class="uncertainty-box"><strong>Cannot confirm</strong><ul>{#each diagnosis.unknowns as unknown}<li>{unknown}</li>{/each}</ul></div></div></section>
+	{:else if mode === "monitor"}
+		<section class="monitor-grid"><div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">PIPELINE RUNS</span><h2>Agent Monitor</h2></div><span class="source-chip">REDACTED LOGS</span></div><p class="muted">运行状态来自当前快照或离线规则流水线。耗时和日志用于解释处理过程，不包含私有路径、Cookie、Token 或 API Key。</p><div class="run-list">{#each knowledge.agentRuns as run}<article class="run-card"><div class="run-title"><span class="stage-icon">{run.stage.slice(0, 2).toUpperCase()}</span><strong>{run.name}</strong><span class="run-status {run.status}">{run.status}</span></div><div class="run-meta"><span>{run.itemsProcessed} items</span><span>{run.durationMs ? `${run.durationMs} ms` : "—"}</span><span>{dateLabel(run.finishedAt ?? run.startedAt)}</span></div><p>{run.message}</p><div class="log-row">{#each run.redactedLog as line}<code>{line}</code>{/each}</div></article>{/each}</div></div><aside class="card-base panel-pad"><span class="section-kicker">CONNECTORS</span><h2>Source health</h2><div class="connector-row"><span><strong>Public RSS feeds</strong><small>{dataMode === "live" ? `${sourceCount} feeds observed` : "available in live mode"}</small></span><span class="run-status {dataMode === "live" ? "success" : "unverified"}">{dataMode === "live" ? "success" : "unverified"}</span></div><div class="connector-row"><span><strong>SQLite / FTS5</strong><small>local only · never bundled</small></span><span class="run-status unverified">private</span></div><div class="connector-row"><span><strong>微信 connector</strong><small>credentials and access not verified</small></span><span class="run-status unverified">unverified</span></div><div class="connector-row"><span><strong>Bilibili connector</strong><small>public API limits not verified</small></span><span class="run-status unverified">unverified</span></div><div class="connector-row"><span><strong>LLM diagnosis backend</strong><small>offline deterministic rules only</small></span><span class="run-status unverified">disabled</span></div></aside></section>
+	{:else if mode === "events"}
+		<section class="toolbar card-base"><div class="search-field"><span>⌕</span><input bind:value={query} aria-label="Search news" placeholder="Search event, entity, or source..." /></div><label>Category<select bind:value={category}><option value="all">All categories</option><option value="policy">Policy</option><option value="supply">Supply</option><option value="research">Research</option><option value="company">Company</option><option value="market">Market</option></select></label><span class="toolbar-meta">{visibleNews.length} records · {visibleEvents.length} clusters · {dataMode.toUpperCase()}</span></section>
+		<section class="event-layout"><div class="event-list"><div class="section-heading"><div><span class="section-kicker">01 · TRIAGE</span><h2>Ranked event queue</h2></div><span class="source-chip">PROVENANCE ON</span></div><p class="muted">Importance combines reported impact, source breadth, recency and coverage count. It is a prioritization aid, not a probability of market movement.</p>{#each visibleEvents as event, index}<button class:selected={selectedEvent?.id === event.id} class="event-card" on:click={() => openEvent(event)}><div class="event-index">{String(index + 1).padStart(2, "0")}</div><div><div class="event-card-top"><span class="importance {event.importanceLabel}">{event.importanceLabel.toUpperCase()} · {event.importanceScore}</span><span class="uncertainty-label">uncertainty {event.uncertainty}</span></div><h3>{event.title}</h3><p>{event.summary}</p><div class="event-meta"><span>{dateLabel(event.occurredAt)}</span><span>{event.sources.length} sources</span><span>{event.articleIds.length} reports</span></div></div><span class="event-arrow">→</span></button>{:else}<div class="empty-state">No matching records. Try a broader search.</div>{/each}</div><aside class="event-detail card-base">{#if selectedEvent}<div class="detail-top"><span class="section-kicker">SELECTED EVENT</span><span class="importance {selectedEvent.importanceLabel}">{selectedEvent.importanceScore} PRIORITY</span></div><h2>{selectedEvent.title}</h2><p>{selectedEvent.summary}</p><div class="detail-row"><span>Published / first seen</span><strong>{dateLabel(selectedEvent.occurredAt)}</strong></div><div class="detail-row"><span>Uncertainty</span><strong class="warning">{selectedEvent.uncertainty}</strong></div><div class="detail-row"><span>Data mode</span><strong>{selectedEvent.dataMode.toUpperCase()}</strong></div>{#if selectedEvent.uncertaintyReasons.length > 0}<div class="uncertainty-box"><strong>Why uncertainty stays visible</strong><ul>{#each selectedEvent.uncertaintyReasons as reason}<li>{reason}</li>{/each}</ul></div>{/if}<div class="detail-section"><div class="section-heading small"><h3>Evidence ledger</h3><span>{selectedEvent.evidence.length} signals</span></div>{#each selectedEvent.evidence as evidence}<div class="evidence-row"><span class="polarity {evidence.polarity}">{polarityLabel(evidence.polarity)}</span><p>{evidence.statement}</p></div>{/each}</div><div class="detail-section"><div class="section-heading small"><h3>Sources</h3><span>{selectedEvent.sources.length} linked</span></div>{#each selectedEvent.sources as source}<a class="source-row" href={source.url} target="_blank" rel="noreferrer"><span><strong>{source.name}</strong><small>{sourceTierLabel(source)} · published {dateLabel(source.publishedAt)} · observed {dateLabel(source.observedAt)}</small></span><span>↗</span></a>{/each}</div>{#if selectedSignals.length > 0}<div class="detail-section"><div class="section-heading small"><h3>Research signal</h3><span>explainable cue</span></div>{#each selectedSignals as signal}<div class="signal-card"><div><strong>{signal.company.name}{signal.company.ticker ? ` (${signal.company.ticker})` : ""}</strong><span class="signal-label {signal.direction}">{signal.direction}</span></div><small>confidence {(signal.confidence * 100).toFixed(0)}%</small><p><b>Facts:</b> {signal.facts.slice(0, 2).join(" ") || "insufficient data"}</p><p><b>Inference:</b> {signal.inferences[0]}</p>{#if signal.unknowns.length > 0}<p class="unknown-copy"><b>Unknown:</b> {signal.unknowns[0]}</p>{/if}</div>{/each}</div>{/if}{:else}<div class="empty-state">Select an event to inspect its evidence.</div>{/if}</aside></section>
+	{:else if mode === "signals"}
+		<section class="signal-grid"><div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">01 · CONFIGURE</span><h2>{dataMode === "live" ? "Replay live event history" : "Replay the event timeline"}</h2></div><span class="source-chip">{dataMode === "live" ? "PUBLIC DATA" : "SYNTHETIC ONLY"}</span></div><p class="muted">Signals enter only after the event publication timestamp. Live mode requires public market bars; if unavailable, the result stays <b>insufficient data</b>.</p><div class="field-grid"><label>Symbol<select bind:value={symbol}>{#if dataMode === "synthetic"}<option>SIM-EE</option>{:else}{#each [...new Set(activeNews.flatMap((item) => item.companies ?? []).map((company) => company.ticker).filter((ticker): ticker is string => Boolean(ticker)))] as ticker}<option>{ticker}</option>{:else}<option disabled>No detected tickers</option>{/each}{/if}</select></label><label>Minimum importance<strong class="range-value">{threshold}</strong><input type="range" min="35" max="80" step="1" bind:value={threshold} /></label><label>Fees (round trip bps)<strong class="range-value">{costBps}</strong><input type="range" min="0" max="100" step="5" bind:value={costBps} /></label><label>Slippage (round trip bps)<strong class="range-value">{slippageBps}</strong><input type="range" min="0" max="100" step="5" bind:value={slippageBps} /></label><label>Signal delay bars<strong class="range-value">{signalDelayBars}</strong><input type="range" min="0" max="3" step="1" bind:value={signalDelayBars} /></label><label>Holding bars<strong class="range-value">{holdingDays}</strong><input type="range" min="1" max="5" step="1" bind:value={holdingDays} /></label></div><div class="date-row"><label>Start<input type="date" bind:value={start} /></label><label>End<input type="date" bind:value={end} /></label></div>{#if dataMode === "live"}<button class="primary-button" on:click={loadMarket} disabled={marketLoading || !symbol || symbol === "SIM-EE"}>{marketLoading ? "Loading market bars…" : "Load public market bars"}</button>{#if marketError}<div class="error-notice compact"><strong>Market data unavailable</strong><span>{marketError}</span></div>{/if}{#if liveMarket.length > 0}<small class="market-source">{liveMarket.length} bars · {liveMarketSource}</small>{/if}{/if}<div class="rule-callout"><span>↳</span><div><strong>Leakage guard</strong><p>Entry must be later than publication, then waits the selected signal delay. Walk-forward reports a later event window separately.</p></div></div></div><div class="card-base result-panel"><div class="result-header"><div><span class="section-kicker">02 · RESULT</span><h2>Backtest snapshot</h2></div><span class="status-chip">{backtest.noLookahead ? "NO LOOKAHEAD" : "REVIEW"}</span></div><div class="result-hero"><strong>{dataMode === "live" && activePrices.length === 0 ? "insufficient data" : formatPercent(backtest.totalReturn)}</strong><span>{dataMode === "live" ? "public data · never silently synthetic" : "simulated replay · not a verified record"}</span></div><div class="metric-grid"><div><span>Trades</span><strong>{backtest.trades.length}</strong></div><div><span>Win rate</span><strong>{(backtest.winRate * 100).toFixed(0)}%</strong></div><div><span>Costs + slippage</span><strong>{formatPercent(backtest.totalCosts)}</strong></div><div><span>Max drawdown</span><strong>{formatPercent(-backtest.maxDrawdown)}</strong></div><div><span>Walk-forward</span><strong>{walkForward.status === "ok" ? formatPercent(walkForward.combinedReturn) : "insufficient data"}</strong></div><div><span>Benchmark</span><strong>{formatPercent(walkForward.benchmarkReturn)}</strong></div></div><div class="curve"><span class="curve-label">EQUITY PATH</span><div class="curve-line">{#each backtest.equityCurve as point, index}<i style={`height: ${Math.max(12, Math.min(100, point.value * 72))}%`} class:down={index > 0 && point.value < backtest.equityCurve[index - 1]!.value} title={point.date}></i>{/each}</div><small>1.00 start · fees, slippage and delay included</small></div><p class="result-disclaimer">{dataMode === "live" ? "Live prices are public historical data and may omit corporate actions, delistings or venue-specific adjustments. This is research infrastructure, not a validated strategy." : "This result is a deterministic replay of synthetic prices. It is not a validated strategy, forecast, or recommendation."}</p></div></section><section class="card-base panel-pad trade-panel"><div class="section-heading"><div><span class="section-kicker">03 · AUDIT TRAIL</span><h2>Trade ledger</h2></div><span class="source-chip">{backtest.trades.length} FILLED</span></div>{#if backtest.trades.length > 0}<div class="table-wrap"><table><thead><tr><th>Event</th><th>Signal</th><th>Entry → exit</th><th>Direction</th><th>Net</th></tr></thead><tbody>{#each backtest.trades as trade}<tr><td><strong>{trade.eventTitle}</strong><small>{trade.eventId}</small></td><td>{trade.signalDate}</td><td>{trade.entryDate} → {trade.exitDate}</td><td class:negative={trade.direction < 0}>{trade.direction > 0 ? "LONG" : "SHORT"}</td><td class:negative={trade.netReturn < 0}>{formatPercent(trade.netReturn)}</td></tr>{/each}</tbody></table></div>{:else}<div class="empty-state">No events meet this threshold and polarity combination.</div>{/if}</section>
+	{:else}
+		<section class="method-grid"><div class="card-base panel-pad"><span class="section-kicker">DATA PATH</span><h2>What is implemented</h2><div class="method-step"><strong>01</strong><div><h3>Collect &amp; normalize</h3><p>Public feeds preserve source URL, publication time, first-seen time, feed URL, dedupe key and company mapping. Conditional headers and per-feed cache support incremental sync.</p></div></div><div class="method-step"><strong>02</strong><div><h3>Build one intelligence contract</h3><p>Source, IntelligenceRecord, Evidence, Case, AgentRun and Insight are projected from the same data path. The browser never receives the private SQLite database.</p></div></div><div class="method-step"><strong>03</strong><div><h3>Retrieve before reasoning</h3><p>Hardware diagnosis searches the case library, ranks matches, exposes evidence and produces rule-based steps with unknowns. No LLM result is invented.</p></div></div><div class="method-step"><strong>04</strong><div><h3>Replay with guardrails</h3><p>Signal Lab enforces publication-time ordering, signal delay, fees, slippage and walk-forward windows.</p></div></div></div><div class="card-base panel-pad"><span class="section-kicker">REVIEW BOUNDARY</span><h2>What stays private or unverified</h2><ul class="boundary-list"><li><strong>SQLite / FTS5</strong><span>The local knowledge path remains private. The public page reads an allowlisted JSON projection; raw SQLite is never published.</span></li><li><strong>Public RSS feeds</strong><span>RSS availability is shown only when the sync path succeeds. Feed terms, licensing, rate limits and parser drift remain external risks.</span></li><li><strong>WeChat / Bilibili</strong><span>Connectors are shown as unverified until access, permissions and a successful run are actually observed.</span></li><li><strong>Strategy and diagnosis claims</strong><span>Signals are research cues and diagnosis is a triage checklist. Neither is a verified forecast, repair conclusion, or recommendation.</span></li></ul><p class="method-footer">Public snapshot export: <code>pnpm ee-intelligence:sync</code> · review guide: <a href="/docs/ee-intelligence/PHASE-2-REVIEW.md">PHASE-2-REVIEW.md ↗</a></p></div></section>
+	{/if}
+	<footer class="ee-footer"><span>EE Intelligence · public read-only research surface</span><span>{dataMode === "live" ? `RSS snapshot ${dateLabel(liveSnapshot?.fetchedAt)}` : "Synthetic fixture · review only"} · <a href="/posts/building-ee-intelligence-my-personal-engineering-ai-agent/">Read the project note ↗</a></span></footer>
+</div>
+
+<style>
+	.ee-shell { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 1.5rem 0 3rem; color: var(--terminal-ink); }.card-base { border: 1px solid var(--terminal-line); border-radius: var(--radius-large); background: var(--terminal-surface); box-shadow: var(--terminal-shadow); }.ee-hero { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(14rem, .65fr); gap: 2rem; padding: clamp(1.3rem, 4vw, 2.6rem); overflow: hidden; position: relative; }.ee-hero::after { content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, var(--terminal-amber) 0 18%, var(--primary) 18% 42%, transparent 42%); }.eyebrow, .section-kicker { color: var(--terminal-amber); font: 700 .68rem/1.2 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }.hero-copy h1 { margin: .7rem 0 .8rem; font-size: clamp(2rem, 5vw, 4.15rem); line-height: .98; letter-spacing: -.055em; }.hero-copy h1 span { color: var(--primary); }.hero-copy p { max-width: 44rem; margin: 0; color: var(--content-meta); font-size: .95rem; line-height: 1.7; }.hero-badges, .tag-row { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: 1.25rem; }.badge, .source-chip, .status-chip, .importance { border: 1px solid var(--terminal-line); border-radius: .18rem; padding: .35rem .5rem; font: 700 .64rem/1 ui-monospace, monospace; letter-spacing: .06em; }.badge-primary, .status-chip { border-color: color-mix(in srgb, var(--primary) 45%, transparent); background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); }.hero-telemetry { align-self: end; display: grid; grid-template-columns: repeat(3, 1fr); gap: .55rem; padding-top: 2.5rem; }.hero-telemetry div { border-left: 2px solid var(--terminal-line-strong); padding-left: .65rem; }.hero-telemetry span { display: block; color: var(--content-meta); font: 700 .58rem/1.2 ui-monospace, monospace; }.hero-telemetry strong { display: block; margin-top: .25rem; font: 800 1.65rem/1 ui-monospace, monospace; color: var(--primary); }.hero-telemetry small { grid-column: 1/-1; color: var(--content-meta); font-size: .68rem; }
+	.demo-notice { display: flex; gap: .8rem; margin: 1rem 0; padding: .8rem 1rem; border: 1px solid color-mix(in srgb, var(--terminal-amber) 50%, transparent); border-left: 3px solid var(--terminal-amber); background: var(--terminal-amber-soft); }.notice-mark { display: grid; width: 1.35rem; height: 1.35rem; flex: 0 0 auto; place-items: center; border: 1px solid var(--terminal-amber); color: var(--terminal-amber); font-weight: 800; }.demo-notice strong { font-size: .82rem; }.demo-notice p { margin: .2rem 0 0; color: var(--content-meta); font-size: .75rem; line-height: 1.5; }.data-switch { display: flex; gap: .4rem; align-items: center; margin: .7rem 0; }.mode-button, .text-button { border: 1px solid var(--terminal-line); border-radius: .18rem; padding: .45rem .65rem; background: var(--terminal-surface-muted); color: var(--content-meta); font: 700 .65rem ui-monospace, monospace; cursor: pointer; }.mode-button.active, .mode-button:hover, .text-button:hover { border-color: var(--primary); color: var(--primary); }.error-notice { display: flex; gap: .6rem; margin: .7rem 0; padding: .65rem .8rem; border-left: 3px solid #c25b5b; background: color-mix(in srgb, #c25b5b 9%, transparent); color: #b24f4f; font-size: .72rem; }.error-notice span { color: var(--content-meta); }
+	.mode-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .45rem; margin: 1rem 0; }.mode-tab { display: grid; gap: .25rem; text-align: left; padding: .8rem .85rem; border: 1px solid var(--terminal-line); border-radius: .2rem; background: var(--terminal-surface-muted); color: var(--content-meta); cursor: pointer; }.mode-tab strong { font: 800 .67rem/1 ui-monospace, monospace; letter-spacing: .06em; }.mode-tab span { font-size: .7rem; }.mode-tab:hover, .mode-tab.active { border-color: var(--primary); color: var(--primary); background: color-mix(in srgb, var(--primary) 9%, transparent); }.overview-grid, .diagnosis-grid, .monitor-grid, .signal-grid, .method-grid, .event-layout, .case-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr); gap: 1rem; }.overview-grid.lower { margin-top: 1rem; }.panel-pad, .result-panel { padding: 1.1rem; }.section-heading, .detail-top, .result-header, .run-title, .connector-row { display: flex; justify-content: space-between; gap: .7rem; align-items: center; }.section-heading { align-items: start; }.section-heading h2, .section-heading h3, .panel-pad > h2 { margin: .35rem 0 0; font-size: 1.25rem; }.section-heading.small h3 { font-size: .88rem; }.section-heading.small span { color: var(--content-meta); font-size: .68rem; }.muted { color: var(--content-meta); font-size: .76rem; line-height: 1.55; }.warning, .unknown-copy { color: var(--terminal-amber) !important; }
+	.pipeline { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: .5rem; align-items: center; margin: 1.3rem 0; }.pipeline div { display: grid; gap: .18rem; min-width: 0; padding: .7rem; border: 1px solid var(--terminal-line); background: var(--terminal-surface-muted); }.pipeline b { color: var(--primary); font: .64rem ui-monospace, monospace; }.pipeline strong { font-size: .78rem; }.pipeline span { color: var(--content-meta); font-size: .63rem; line-height: 1.35; }.pipeline i { color: var(--primary); font-style: normal; }.stat-grid, .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }.stat-grid div, .metric-grid div { padding: .6rem; border: 1px solid var(--terminal-line); }.stat-grid span, .metric-grid span { display: block; color: var(--content-meta); font-size: .64rem; }.stat-grid strong, .metric-grid strong { display: block; margin-top: .2rem; font: 700 .9rem ui-monospace, monospace; }.detail-row { display: flex; justify-content: space-between; gap: .7rem; padding: .65rem 0; border-bottom: 1px solid var(--terminal-line); color: var(--content-meta); font-size: .7rem; }.detail-row strong { color: inherit; font: 700 .68rem ui-monospace, monospace; }
+	.toolbar { display: flex; align-items: center; gap: .7rem; padding: .7rem; margin-bottom: 1rem; }.search-field { display: flex; align-items: center; gap: .35rem; flex: 1; border: 1px solid var(--terminal-line); padding: .45rem .6rem; background: var(--terminal-surface-muted); }.search-field span { color: var(--primary); font-size: 1.1rem; }.search-field input { width: 100%; border: 0; outline: 0; background: transparent; color: inherit; font-size: .82rem; }.toolbar label, .diagnosis-input, .field-grid label, .date-row label { display: grid; gap: .3rem; color: var(--content-meta); font-size: .68rem; }.toolbar select, .field-grid select, .date-row input, .diagnosis-input textarea { border: 1px solid var(--terminal-line); border-radius: .15rem; padding: .5rem; background: var(--terminal-surface-muted); color: inherit; font-size: .75rem; }.toolbar-meta { color: var(--content-meta); font: .68rem ui-monospace, monospace; white-space: nowrap; }.event-list { min-width: 0; padding: .25rem 0; }.event-card { display: grid; grid-template-columns: 2rem 1fr auto; width: 100%; gap: .7rem; margin-top: .55rem; padding: .85rem; border: 1px solid var(--terminal-line); border-left: 2px solid transparent; border-radius: .2rem; text-align: left; background: var(--terminal-surface); color: inherit; cursor: pointer; }.event-card:hover, .event-card.selected, .case-card:hover, .case-card.selected { border-color: var(--terminal-line-strong); border-left-color: var(--primary); background: var(--terminal-surface-muted); }.event-index { color: var(--content-meta); font: 700 .72rem ui-monospace, monospace; }.event-card-top { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; }.importance { padding: .22rem .35rem; font-size: .58rem; }.importance.critical { border-color: #c25b5b; color: #c25b5b; }.importance.high { border-color: var(--terminal-amber); color: var(--terminal-amber); }.importance.watch, .importance.medium { color: var(--content-meta); }.uncertainty-label { color: var(--content-meta); font-size: .63rem; }.event-card h3 { margin: .45rem 0 .25rem; font-size: .92rem; line-height: 1.25; }.event-card p { margin: 0; color: var(--content-meta); font-size: .73rem; line-height: 1.45; }.event-meta { display: flex; gap: .8rem; margin-top: .65rem; color: var(--content-meta); font: .63rem ui-monospace, monospace; }.event-arrow { color: var(--primary); font-size: 1.1rem; }.event-detail { position: sticky; top: 1rem; align-self: start; padding: 1.05rem; }.event-detail h2, .case-detail h2 { margin: .75rem 0 .45rem; font-size: 1.35rem; line-height: 1.15; }.event-detail > p { color: var(--content-meta); font-size: .78rem; line-height: 1.5; }.detail-section { margin-top: 1rem; }.evidence-row { display: grid; grid-template-columns: 3.4rem 1fr; gap: .5rem; padding: .55rem 0; border-bottom: 1px solid var(--terminal-line); }.evidence-row p { margin: 0; color: var(--content-meta); font-size: .7rem; line-height: 1.45; }.evidence-row small { font: .6rem ui-monospace, monospace; }.polarity { align-self: start; padding: .18rem .3rem; border: 1px solid var(--terminal-line); color: var(--content-meta); font: 700 .58rem ui-monospace, monospace; text-align: center; }.polarity.supports { border-color: #63a27d; color: #4a8a67; }.polarity.contradicts { border-color: #c25b5b; color: #b24f4f; }.polarity.mixed { border-color: var(--terminal-amber); color: var(--terminal-amber); }.source-row, .related-case { display: flex; justify-content: space-between; gap: .5rem; width: 100%; padding: .55rem 0; border: 0; border-bottom: 1px solid var(--terminal-line); color: inherit; text-decoration: none; text-align: left; background: transparent; cursor: pointer; font-size: .75rem; }.source-row:hover, .related-case:hover, .text-button:hover { color: var(--primary); }.source-row strong, .source-row small, .related-case strong, .related-case small { display: block; }.source-row small, .related-case small { margin-top: .18rem; color: var(--content-meta); font: .6rem ui-monospace, monospace; }.empty-state { padding: 1.4rem; margin-top: .7rem; border: 1px dashed var(--terminal-line-strong); color: var(--content-meta); text-align: center; font-size: .78rem; }.uncertainty-box, .rule-callout { display: flex; gap: .55rem; margin: .85rem 0; padding: .7rem; background: var(--terminal-surface-muted); border-left: 2px solid var(--terminal-amber); color: var(--content-meta); font-size: .7rem; line-height: 1.45; }.uncertainty-box strong, .rule-callout strong { color: var(--terminal-ink); }.uncertainty-box ul { margin: .35rem 0 0; padding-left: .9rem; }
+	.case-card { display: grid; gap: .3rem; width: 100%; margin-top: .55rem; padding: .8rem; border: 1px solid var(--terminal-line); border-left: 2px solid transparent; background: var(--terminal-surface); color: inherit; text-align: left; cursor: pointer; }.case-card strong { font-size: .82rem; }.case-card small { color: var(--content-meta); font-size: .68rem; }.case-status, .run-status { border: 1px solid var(--terminal-line); padding: .18rem .32rem; width: fit-content; color: var(--content-meta); font: 700 .58rem ui-monospace, monospace; text-transform: uppercase; }.case-status.resolved, .run-status.success { border-color: #63a27d; color: #4a8a67; }.case-status.partial { border-color: var(--terminal-amber); color: var(--terminal-amber); }.case-status.open, .run-status.failed { border-color: #c25b5b; color: #b24f4f; }.tag-row { margin-top: .2rem; }.tag-row em { padding: .2rem .35rem; border: 1px solid var(--terminal-line); color: var(--primary); font: .6rem ui-monospace, monospace; font-style: normal; }.plain-list { margin: .45rem 0 0; padding-left: 1.1rem; color: var(--content-meta); font-size: .72rem; line-height: 1.55; }.plain-list li + li { margin-top: .3rem; }.diagnosis-input { margin-top: 1.1rem; }.diagnosis-input textarea { width: 100%; resize: vertical; line-height: 1.5; }.primary-button { margin-top: .8rem; border: 1px solid var(--primary); border-radius: .18rem; padding: .5rem .7rem; background: var(--primary); color: white; font: 700 .68rem ui-monospace, monospace; cursor: pointer; }.match-row { display: grid; grid-template-columns: 2.4rem 1fr auto; align-items: start; gap: .55rem; width: 100%; margin-top: .55rem; padding: .65rem; border: 1px solid var(--terminal-line); background: var(--terminal-surface-muted); color: inherit; text-align: left; cursor: pointer; }.match-row:hover { border-color: var(--primary); }.match-row strong, .match-row small { display: block; }.match-row small { margin-top: .2rem; color: var(--content-meta); font-size: .64rem; line-height: 1.45; }.score { color: var(--primary); font: 800 1rem ui-monospace, monospace; }.cause-row { display: grid; grid-template-columns: 1fr auto; gap: .2rem .5rem; padding: .55rem 0; border-bottom: 1px solid var(--terminal-line); font-size: .72rem; }.cause-row span { color: var(--primary); font: .68rem ui-monospace, monospace; }.cause-row small { grid-column: 1 / -1; color: var(--content-meta); font-size: .62rem; }.run-list { margin-top: 1rem; }.run-card { padding: .75rem 0; border-bottom: 1px solid var(--terminal-line); }.stage-icon { color: var(--primary); font: 700 .62rem ui-monospace, monospace; }.run-title strong { margin-right: auto; font-size: .8rem; }.run-meta { display: flex; gap: .7rem; margin-top: .45rem; color: var(--content-meta); font: .61rem ui-monospace, monospace; }.run-card p { margin: .4rem 0; color: var(--content-meta); font-size: .68rem; }.log-row { display: flex; gap: .35rem; flex-wrap: wrap; }.log-row code { padding: .18rem .3rem; background: var(--terminal-surface-muted); color: var(--content-meta); font-size: .58rem; }.connector-row { padding: .75rem 0; border-bottom: 1px solid var(--terminal-line); }.connector-row strong, .connector-row small { display: block; }.connector-row small { margin-top: .2rem; color: var(--content-meta); font-size: .63rem; }
+	.field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.1rem; }.field-grid strong { margin-left: auto; color: var(--primary); font: 700 .72rem ui-monospace, monospace; }.field-grid input[type="range"] { width: 100%; accent-color: var(--primary); }.range-value { float: right; }.date-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: .8rem; }.date-row input { width: 100%; }.result-hero { margin: 1.2rem 0; padding: 1rem; border-left: 3px solid var(--primary); background: color-mix(in srgb, var(--primary) 8%, transparent); }.result-hero strong { display: block; color: var(--primary); font: 800 2.4rem/1 ui-monospace, monospace; }.result-hero span, .curve small, .result-disclaimer { color: var(--content-meta); font-size: .68rem; }.curve { margin-top: 1rem; }.curve-label { color: var(--content-meta); font: 700 .6rem ui-monospace, monospace; letter-spacing: .1em; }.curve-line { display: flex; gap: .16rem; height: 5rem; align-items: end; margin-top: .35rem; border-bottom: 1px solid var(--terminal-line-strong); }.curve-line i { min-width: .45rem; flex: 1; background: var(--primary); opacity: .7; }.curve-line i.down { background: #c25b5b; }.trade-panel { margin-top: 1rem; }.table-wrap { overflow-x: auto; }.trade-panel table { width: 100%; margin-top: .75rem; border-collapse: collapse; font-size: .7rem; }.trade-panel th { color: var(--content-meta); font: 700 .6rem ui-monospace, monospace; text-align: left; }.trade-panel td, .trade-panel th { padding: .6rem .45rem; border-bottom: 1px solid var(--terminal-line); white-space: nowrap; }.trade-panel td strong, .trade-panel td small { display: block; white-space: normal; max-width: 16rem; }.trade-panel td small { margin-top: .15rem; color: var(--content-meta); font: .6rem ui-monospace, monospace; }.negative { color: #b24f4f !important; }.method-step { display: grid; grid-template-columns: 2rem 1fr; gap: .65rem; margin-top: 1.1rem; }.method-step > strong { color: var(--primary); font: 700 .85rem ui-monospace, monospace; }.method-step h3 { margin: 0; font-size: .83rem; }.method-step p { margin: .2rem 0 0; color: var(--content-meta); font-size: .73rem; line-height: 1.5; }.boundary-list { display: grid; gap: .7rem; margin: 1rem 0; padding: 0; list-style: none; }.boundary-list li { display: grid; gap: .25rem; padding-bottom: .7rem; border-bottom: 1px solid var(--terminal-line); }.boundary-list strong { font-size: .76rem; }.boundary-list span { color: var(--content-meta); font-size: .72rem; line-height: 1.5; }.method-footer { color: var(--content-meta); font-size: .7rem; }.method-footer a, .ee-footer a { color: var(--primary); }.ee-footer { display: flex; justify-content: space-between; gap: .8rem; margin-top: 1.3rem; padding: .8rem 0; color: var(--content-meta); font: .65rem ui-monospace, monospace; }.insight-row, .mini-event { display: grid; grid-template-columns: auto 1fr auto; gap: .55rem; align-items: start; width: 100%; padding: .65rem 0; border: 0; border-bottom: 1px solid var(--terminal-line); background: transparent; color: inherit; text-align: left; cursor: pointer; }.insight-row:hover, .mini-event:hover { color: var(--primary); }.insight-row strong, .insight-row small, .mini-event strong, .mini-event small { display: block; }.insight-row small, .mini-event small { margin-top: .2rem; color: var(--content-meta); font-size: .63rem; line-height: 1.4; }.mini-event .importance { color: var(--primary); }
+	@media (max-width: 900px) { .ee-hero, .overview-grid, .diagnosis-grid, .monitor-grid, .event-layout, .case-layout, .signal-grid, .method-grid { grid-template-columns: 1fr; }.event-detail { position: static; }.mode-tabs { grid-template-columns: repeat(2, 1fr); }.pipeline { grid-template-columns: 1fr auto 1fr; }.pipeline div:nth-of-type(3), .pipeline i:nth-of-type(2) { display: none; } } @media (max-width: 600px) { .ee-shell { width: min(100% - 1rem, 1180px); padding-top: .65rem; }.ee-hero { padding: 1.1rem; }.hero-copy h1 { font-size: 2.25rem; }.hero-telemetry strong { font-size: 1.25rem; }.toolbar { align-items: stretch; flex-wrap: wrap; }.search-field { flex-basis: 100%; }.toolbar-meta { margin-left: auto; }.event-card { grid-template-columns: 1.5rem 1fr; }.event-arrow { display: none; }.event-meta { gap: .45rem; flex-wrap: wrap; }.field-grid, .date-row, .stat-grid, .metric-grid { grid-template-columns: repeat(2, 1fr); }.ee-footer { display: grid; }.pipeline { grid-template-columns: 1fr; }.pipeline i { display: none; } }
+</style>

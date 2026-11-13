@@ -4,6 +4,7 @@ export type NavBarLink = {
 	external?: boolean;
 	icon?: string; // 菜单项图标
 	highlight?: boolean;
+	highlightVariant?: "default" | "shop" | "career";
 	children?: NavBarLink[]; // 支持子菜单
 	pageKey?: string;
 };

@@ -1,0 +1,52 @@
+name: Career Navigator public job snapshot
+
+on:
+  schedule:
+    - cron: "15 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: career-navigator-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync public job snapshot
+        run: pnpm career-navigator:sync
+
+      - name: Open snapshot review pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(career-navigator): refresh public job snapshot"
+          title: "chore: refresh Career Navigator public job snapshot"
+          body: |
+            Automated snapshot refresh from explicitly allowlisted public Greenhouse, Lever, and Ashby boards.
+
+            Review source URLs, freshness, errors, and removals before merging. This workflow does not scrape authenticated platforms and does not publish personal profile data.
+          branch: automation/career-navigator-job-snapshot
+          delete-branch: true
+          add-paths: |
+            src/data/career-navigator/jobs.json

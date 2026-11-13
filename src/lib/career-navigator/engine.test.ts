@@ -243,6 +243,23 @@ test("generates a bounded roadmap and recalculates when career goal changes", ()
 	assert.ok(embedded.every((action) => action.why.length > 20));
 });
 
+test("links job requirements to generated roadmap gaps", () => {
+	const gapProfile = {
+		...profile,
+		interests: [],
+		strengths: "",
+		experiences: [],
+	};
+	const actions = generateRoadmap(
+		gapProfile,
+		careers[0]!,
+		skills,
+		{ workload: "balanced" },
+		sampleJobPostings[0],
+	);
+	assert.ok(actions.some((action) => action.linkedRequirementIds.length > 0));
+});
+
 test("distinguishes partial evidence from demonstrated evidence", () => {
 	const partialProfile = {
 		...profile,

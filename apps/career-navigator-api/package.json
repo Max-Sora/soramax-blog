@@ -1,0 +1,15 @@
+{
+  "name": "soramax-career-navigator-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "type-check": "tsc --noEmit",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260319.0",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.102.0"
+  }
+}

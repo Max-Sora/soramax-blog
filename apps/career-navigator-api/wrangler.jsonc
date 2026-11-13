@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "soramax-career-navigator-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGIN": "https://soramax.xyz"
+  }
+}

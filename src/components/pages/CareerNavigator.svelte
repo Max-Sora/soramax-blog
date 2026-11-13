@@ -5,6 +5,7 @@ import {
 	uciCampusOpportunities,
 	uciCampusSources,
 } from "@/data/career-navigator";
+import { analyzeWithWorker } from "@/lib/career-navigator/ai-client";
 import {
 	analyzePosting,
 	compareCareers,
@@ -14,7 +15,6 @@ import {
 	mergeExperience,
 	normalizeCoursePlanText,
 	normalizeResumeText,
-	normalizeSkillIds,
 	sourceLabel,
 	updateCourseStatus,
 } from "@/lib/career-navigator/engine";
@@ -24,7 +24,10 @@ import {
 	sampleJobPostings,
 	skills,
 } from "@/lib/career-navigator/fixtures";
-import { filterRelevantJobs } from "@/lib/career-navigator/phase2";
+import {
+	extractRequirements,
+	filterRelevantJobs,
+} from "@/lib/career-navigator/phase2";
 import { PRIVACY_DEFAULTS } from "@/lib/career-navigator/privacy";
 import {
 	type CareerNavigatorDraft,
@@ -77,11 +80,24 @@ let careerMatches: CareerMatch[] = [];
 let matchedSkills: string[] = [];
 let missingSkills: string[] = [];
 let restoredRoadmapActions: RoadmapAction[] | null = null;
+let roadmapIsCustomized = false;
 let liveQuery = "";
 let liveLocationFilter = "";
 let liveEmployerFilter = "";
 let liveInternshipOnly = true;
 let liveJobs: JobPosting[] = [];
+const aiApiBaseUrl = import.meta.env.PUBLIC_CAREER_NAVIGATOR_API_BASE_URL ?? "";
+let aiConsent = false;
+let aiStatus = aiApiBaseUrl
+	? "AI provider configured; consent is still required."
+	: "AI unavailable: configure the separate Worker to enable it.";
+let aiLoading = false;
+let aiError = "";
+let aiResult: {
+	mode: "ai";
+	roadmap: Array<{ title: string; why: string }>;
+	notes: string[];
+} | null = null;
 let campusItems = [
 	...uciCampusOpportunities,
 	...careerNavigatorData.campusOpportunities,
@@ -121,7 +137,10 @@ onMount(() => {
 	restoreDraft();
 	lastCalculated = new Date().toLocaleString();
 	recalculate();
-	if (restoredRoadmapActions) roadmapActions = restoredRoadmapActions;
+	if (restoredRoadmapActions) {
+		roadmapActions = restoredRoadmapActions;
+		roadmapIsCustomized = true;
+	}
 });
 
 function restoreDraft() {
@@ -147,17 +166,53 @@ function applyDraft(draft: CareerNavigatorDraft) {
 	jobLocation = draft.jobLocation;
 	workload = draft.workload;
 	activePosting = draft.activePosting;
-	if (draft.roadmapActions.length > 0)
+	if (draft.roadmapActions.length > 0) {
 		restoredRoadmapActions = draft.roadmapActions;
+		roadmapIsCustomized = true;
+	}
 	applications = draft.applications;
 }
 
-function recalculate() {
-	roadmapActions = generateRoadmap(profile, selectedCareer, skills, {
-		workload,
-	});
+function recalculate(forceRoadmap = false) {
+	const generated = generateRoadmap(
+		profile,
+		selectedCareer,
+		skills,
+		{ workload },
+		activePosting,
+	);
+	if (!roadmapIsCustomized || forceRoadmap) {
+		roadmapActions = generated;
+	} else {
+		const generatedById = new Map(
+			generated.map((action) => [action.id, action]),
+		);
+		const preserved = roadmapActions.map((action) => {
+			const refreshed = generatedById.get(action.id);
+			return refreshed
+				? {
+						...refreshed,
+						title: action.title,
+						why: action.why,
+						status: action.status,
+					}
+				: action;
+		});
+		const existingIds = new Set(roadmapActions.map((action) => action.id));
+		roadmapActions = [
+			...preserved,
+			...generated.filter((action) => !existingIds.has(action.id)),
+		].map((action, index) => ({ ...action, priority: index + 1 }));
+	}
 	matchAnalysis = analyzePosting(profile, activePosting, skills);
 	lastCalculated = new Date().toLocaleString();
+}
+
+function regenerateRoadmap() {
+	roadmapIsCustomized = false;
+	recalculate(true);
+	savedNotice =
+		"Roadmap regenerated from the current profile and job requirements.";
 }
 
 function chooseCareer(id: string) {
@@ -165,7 +220,8 @@ function chooseCareer(id: string) {
 	if (!nextCareer) return;
 	selectedCareerId = id;
 	selectedCareer = nextCareer;
-	recalculate();
+	roadmapIsCustomized = false;
+	recalculate(true);
 }
 
 function updateProfile(patch: Partial<StudentProfile>) {
@@ -247,6 +303,7 @@ function setActionStatus(id: string, status: RoadmapStatus) {
 	roadmapActions = roadmapActions.map((action) =>
 		action.id === id ? { ...action, status } : action,
 	);
+	roadmapIsCustomized = true;
 }
 
 function moveAction(id: string, direction: -1 | 1) {
@@ -259,39 +316,53 @@ function moveAction(id: string, direction: -1 | 1) {
 		...action,
 		priority: position + 1,
 	}));
+	roadmapIsCustomized = true;
 }
 
+async function requestProviderAnalysis() {
+	aiLoading = true;
+	aiError = "";
+	aiResult = null;
+	const result = await analyzeWithWorker(
+		{
+			profile,
+			career: selectedCareer,
+			posting: activePosting,
+			workload: { workload },
+			consentToSendPrivateData: aiConsent,
+		},
+		{ baseUrl: aiApiBaseUrl, consentToSendPrivateData: aiConsent },
+	);
+	if ("code" in result) {
+		aiError = result.message;
+		aiStatus = result.message;
+	} else {
+		aiResult = {
+			mode: "ai",
+			roadmap: result.roadmap.map((item) => ({
+				title: item.title,
+				why: item.why,
+			})),
+			notes: result.notes,
+		};
+		aiStatus = "AI response received from the optional Worker.";
+	}
+	aiLoading = false;
+}
 function postingFromText(text: string): JobPosting {
 	const lines = text
 		.split(/\r?\n/)
 		.map((line) => line.trim())
 		.filter(Boolean);
-	const requirements = skills.flatMap((skill) => {
-		const present = normalizeSkillIds(text, [skill]).includes(skill.id);
-		if (!present) return [];
-		const sourceLine =
-			lines.find((line) =>
-				normalizeSkillIds(line, [skill]).includes(skill.id),
-			) ?? skill.name;
-		return [
-			{
-				id: `user-${skill.id}`,
-				label: sourceLine,
-				skillId: skill.id,
-				category: "technical" as const,
-				importance: /required|must|minimum|need to/i.test(sourceLine)
-					? ("mandatory" as const)
-					: ("unknown" as const),
-				evidenceId: "user-job-description",
-			},
-		];
-	});
+	const requirements = extractRequirements(text, "user-job-description", true);
 	return {
 		id: "user-pasted-posting",
 		title: lines[0]?.slice(0, 80) || "User-pasted job description",
 		company: "User-provided",
 		location: jobLocation,
 		retrievedAt: new Date().toISOString(),
+		provider: "user-provided",
+		description: text,
 		requirements:
 			requirements.length > 0
 				? requirements
@@ -302,6 +373,8 @@ function postingFromText(text: string): JobPosting {
 							category: "other",
 							importance: "unknown",
 							evidenceId: "user-job-description",
+							evidenceText: text,
+							extractionMethod: "user-provided",
 						},
 					],
 		sourceEvidenceId: "user-job-description",
@@ -312,7 +385,8 @@ function analyzeUserJob() {
 	activePosting = jobText.trim()
 		? postingFromText(jobText)
 		: sampleJobPostings[0]!;
-	matchAnalysis = analyzePosting(profile, activePosting, skills);
+	roadmapIsCustomized = false;
+	recalculate(true);
 }
 
 function selectPosting(posting: JobPosting) {
@@ -323,7 +397,8 @@ function selectPosting(posting: JobPosting) {
 			(requirement) => `${requirement.importance}: ${requirement.label}`,
 		),
 	].join("\n");
-	matchAnalysis = analyzePosting(profile, activePosting, skills);
+	roadmapIsCustomized = false;
+	recalculate(true);
 }
 
 function loadSampleJob() {
@@ -348,7 +423,8 @@ function toggleSelectedCareerSaved() {
 function selectLiveJob(posting: JobPosting) {
 	activePosting = posting;
 	jobText = posting.description ?? posting.title;
-	matchAnalysis = analyzePosting(profile, posting, skills);
+	roadmapIsCustomized = false;
+	recalculate(true);
 }
 
 function saveLiveJob(posting: JobPosting) {
@@ -502,6 +578,7 @@ function setActionField(id: string, field: "title" | "why", value: string) {
 				: { ...action, why: value }
 			: action,
 	);
+	roadmapIsCustomized = true;
 }
 
 function removeAction(id: string) {
@@ -514,6 +591,7 @@ function removeAction(id: string) {
 				(prerequisite) => prerequisite !== id,
 			),
 		}));
+	roadmapIsCustomized = true;
 }
 
 function roadmapHours() {
@@ -684,6 +762,7 @@ function statusClass(status: string) {
 			<label>Geography<input value={jobLocation} on:input={(event) => jobLocation = (event.currentTarget as HTMLInputElement).value} /></label>
 			<textarea rows="11" bind:value={jobText} placeholder="Paste the full description here. Text stays local in this MVP."></textarea>
 			<div class="button-row"><button class="primary-button" on:click={analyzeUserJob}>Analyze locally</button><button class="secondary-button" on:click={loadSampleJob}>Use Embedded SAMPLE</button><button class="secondary-button" on:click={loadSampleSoftwareJob}>Use Software SAMPLE</button></div>
+			<div class="card-base panel-pad"><div class="section-heading"><div><span class="section-kicker">OPTIONAL PROVIDER</span><h3>AI analysis boundary</h3></div><span class="source-chip">{aiApiBaseUrl ? "CONFIGURED" : "UNAVAILABLE"}</span></div><p class="muted-text">{aiStatus} Deterministic local analysis remains the default.</p><label class="checkbox-label"><input type="checkbox" bind:checked={aiConsent} disabled={!aiApiBaseUrl} /> I consent to send this profile and posting to the configured Worker.</label><div class="button-row"><button class="secondary-button" disabled={!aiApiBaseUrl || !aiConsent || aiLoading} on:click={requestProviderAnalysis}>{aiLoading ? "Requesting..." : "Request provider analysis"}</button></div>{#if aiError}<div class="warning-note"><strong>Provider unavailable</strong><span>{aiError}</span></div>{/if}{#if aiResult}<div class="notice-line"><strong>Provider result received.</strong> {aiResult.roadmap.length} roadmap items returned. {aiResult.notes.join(" ")}</div>{/if}</div>
 			<div class="job-list"><strong>Available SAMPLE fixtures</strong>{#each careerNavigatorData.jobPostings as posting}<button class:selected={activePosting.id === posting.id} class="job-row" on:click={() => selectPosting(posting)}><span><b>{posting.title}</b><small>{posting.company} · {posting.location}</small></span><em>{posting.requirements.length} requirements</em></button>{/each}</div>
 			<p class="privacy-note">Prompt-like instructions inside a pasted description are treated as untrusted text, not commands.</p>
 			</div>

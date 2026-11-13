@@ -10,9 +10,9 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		LinkPresets.Home,
 		LinkPresets.Posts,
 		LinkPresets.Projects,
+		LinkPresets.CareerNavigator,
 		LinkPresets.Shop,
 		LinkPresets.About,
-		LinkPresets.Search,
 	];
 
 	return { links } as NavBarConfig;
@@ -33,6 +33,7 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		url: "/shop/",
 		icon: "material-symbols:shopping-bag",
 		highlight: true,
+		highlightVariant: "shop",
 	},
 	Posts: {
 		name: "Posts",
@@ -58,6 +59,13 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		name: "Projects",
 		url: "/projects/",
 		icon: "material-symbols:rocket",
+	},
+	CareerNavigator: {
+		name: "Career Navigator",
+		url: "/tools/career-navigator/",
+		icon: "material-symbols:route",
+		highlight: true,
+		highlightVariant: "career",
 	},
 	About: {
 		name: "About",

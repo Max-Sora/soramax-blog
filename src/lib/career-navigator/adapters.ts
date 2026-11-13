@@ -1,7 +1,6 @@
 import {
 	type CuratedJobBoard,
 	deduplicateNormalizedJobs,
-	normalizeJobPosting,
 	parseAshbyJob,
 	parseGreenhouseJob,
 	parseLeverJob,
@@ -51,7 +50,15 @@ export interface CampusSourceAdapter {
 }
 
 /** Explicit allowlist: an empty list means no live external fetch occurs until verified boards are configured. */
-export const allowedJobBoards: AllowedJobBoard[] = [];
+export const allowedJobBoards: AllowedJobBoard[] = [
+	{
+		provider: "lever",
+		company: "Simbe Robotics",
+		boardId: "SimbeRobotics",
+		publicUrl: "https://jobs.lever.co/SimbeRobotics",
+		enabled: true,
+	},
+];
 export const campusSourceAdapters: CampusSourceAdapter[] = [];
 
 function sourceFor(board: AllowedJobBoard, observedAt: string): SourceEvidence {

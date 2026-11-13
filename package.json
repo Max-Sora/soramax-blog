@@ -9,6 +9,7 @@
     "build": "node scripts/generate-icons.js && npx tsx scripts/generate-lqips.ts && astro build && npx tsx scripts/subset-fonts.ts && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "tsx --test src/lib/ee-intelligence/engine.test.ts",
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",

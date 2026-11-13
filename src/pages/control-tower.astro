@@ -1,0 +1,17 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+
+const controlTowerUrl = import.meta.env.PUBLIC_CONTROL_TOWER_URL || "https://control.soramax.xyz";
+---
+
+<MainGridLayout title="Private Control Tower" description="Private project operations entry point.">
+	<Fragment slot="head">
+		<meta name="robots" content="noindex, nofollow" />
+	</Fragment>
+	<div class="card-base p-8" data-pagefind-ignore>
+		<p class="text-sm uppercase tracking-[0.18em] text-(--primary-color)">Private operations</p>
+		<h2 class="mt-3 text-2xl font-semibold">SoraMax Control Tower</h2>
+		<p class="mt-3 text-(--content-meta)">The project dashboard is protected separately through Cloudflare Access.</p>
+		<a class="btn-regular mt-6 inline-flex" href={controlTowerUrl} rel="noreferrer">Open private dashboard</a>
+	</div>
+</MainGridLayout>

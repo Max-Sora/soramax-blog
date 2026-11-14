@@ -1,0 +1,11 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import BoardLab from "@/components/pages/BoardLab.svelte";
+---
+
+<MainGridLayout
+	title="Board Intelligence & AI Repair Lab"
+	description="Private-by-default PCB parsing, board viewing, photo alignment, circuit topology and repair measurements."
+>
+	<BoardLab client:load />
+</MainGridLayout>

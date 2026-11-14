@@ -1,5 +1,5 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
+import { test } from "node:test";
 import { detectFormat, parseKiCadPcb } from "./parser";
 
 const pcb = `(kicad_pcb (version 20240108) (generator pcbnew)
@@ -11,12 +11,18 @@ const pcb = `(kicad_pcb (version 20240108) (generator pcbnew)
 
 test("detects content before trusting extension", () => {
 	assert.equal(detectFormat("fixture.kicad_pcb", pcb).status, "SUPPORTED");
-	assert.equal(detectFormat("fixture.brd", "not a board").status, "UNSUPPORTED");
+	assert.equal(
+		detectFormat("fixture.brd", "not a board").status,
+		"UNSUPPORTED",
+	);
 });
 
 test("parses component, pad and net membership", () => {
 	const board = parseKiCadPcb("fixture.kicad_pcb", pcb);
 	assert.equal(board.components[0]?.ref, "U17");
 	assert.equal(board.components[0]?.pads[0]?.netId, "2");
-	assert.equal(board.nets.find((net) => net.id === "2")?.members[0]?.pinOrPad, "1");
+	assert.equal(
+		board.nets.find((net) => net.id === "2")?.members[0]?.pinOrPad,
+		"1",
+	);
 });

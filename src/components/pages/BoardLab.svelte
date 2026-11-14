@@ -1,50 +1,171 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { createDiagnosticSession, updateDiagnosticSession } from "@/lib/board-intelligence/diagnosis";
-	import { parseBoardFile, parseKiCadPcb } from "@/lib/board-intelligence/parser";
-	import type { BoardModel, Component, DiagnosticSession, DocumentSource, Measurement } from "@/lib/board-intelligence/types";
+import { onMount } from "svelte";
+import {
+	createDiagnosticSession,
+	updateDiagnosticSession,
+} from "@/lib/board-intelligence/diagnosis";
+import { parseBoardFile, parseKiCadPcb } from "@/lib/board-intelligence/parser";
+import type {
+	BoardModel,
+	Component,
+	DiagnosticSession,
+	DocumentSource,
+	Measurement,
+} from "@/lib/board-intelligence/types";
 
-	const sample = "(kicad_pcb (version 20240108) (generator pcbnew)\n(general (thickness 1.6))\n(layers (0 \"F.Cu\" signal) (31 \"B.Cu\" signal))\n(net 0 \"\") (net 1 \"GND\") (net 2 \"VIN_19V\") (net 3 \"+3V3\")\n(footprint \"Package_SO:SOIC-8\" (layer \"F.Cu\") (at 65 45)\n(property \"Reference\" \"U17\") (property \"Value\" \"TPS62160\")\n(pad \"1\" smd rect (at -1.9 -1.9) (size 1 1) (layers \"F.Cu\") (net 2 \"VIN_19V\"))\n(pad \"2\" smd rect (at -1.9 1.9) (size 1 1) (layers \"F.Cu\") (net 1 \"GND\"))\n(pad \"3\" smd rect (at 1.9 1.9) (size 1 1) (layers \"F.Cu\") (net 3 \"+3V3\")))\n(footprint \"Capacitor_SMD:C_0603\" (layer \"F.Cu\") (at 48 38)\n(property \"Reference\" \"C43\") (property \"Value\" \"10uF\")\n(pad \"1\" smd rect (at -0.8 0) (size 1 1) (layers \"F.Cu\") (net 3 \"+3V3\"))\n(pad \"2\" smd rect (at 0.8 0) (size 1 1) (layers \"F.Cu\") (net 1 \"GND\")))\n(footprint \"TestPoint:TestPoint\" (layer \"B.Cu\") (at 82 58)\n(property \"Reference\" \"TP3\") (property \"Value\" \"3V3_TEST\")\n(pad \"1\" thru_hole circle (at 0 0) (size 2 2) (layers \"*.Cu\") (net 3 \"+3V3\")))";
-	let board: BoardModel = parseKiCadPcb("framework-input-module.kicad_pcb", sample);
-	let selectedRef = "U17";
-	let query = "";
-	let side: "top" | "bottom" = "top";
-	let panel: "board" | "net" | "diagnosis" | "measurements" = "board";
-	let photoUrl = "";
-	let photoName = "";
-	let aligning = false;
-	let anchors = 0;
-	let status = "Example board loaded · local-only";
-	let session: DiagnosticSession = createDiagnosticSession(board, "插电不开机，充电灯不亮");
-	let schematic: DocumentSource | undefined;
-	let measurementKind: Measurement["kind"] = "voltage";
-	let measurementValue = "";
-	let measurementCondition: Measurement["condition"] = "unpowered";
-	$: selected = board.components.find((item) => item.ref === selectedRef) ?? board.components[0];
-	$: visible = board.components.filter((item) => item.side === side || item.side === "unknown").filter((item) => !query || (item.ref + " " + (item.value ?? "")).toLowerCase().includes(query.toLowerCase()));
-	$: selectedNetIds = new Set(selected?.pins.map((pin) => pin.netId).filter((id): id is string => Boolean(id)) ?? []);
-	$: selectedNets = board.nets.filter((net) => selectedNetIds.has(net.id));
-	$: stats = { components: board.components.length, pads: board.components.reduce((sum, item) => sum + item.pads.length, 0), nets: board.nets.length };
-	onMount(() => { const saved = localStorage.getItem("ee-board-lab-session"); if (saved) try { session = JSON.parse(saved) as DiagnosticSession; status = "Restored local diagnostic session"; } catch { /* ignored */ } });
-	function select(item: Component) { selectedRef = item.ref; }
-	function bx(x: number) { return 8 + (x / board.width) * 84; }
-	function by(y: number) { return 8 + (y / board.height) * 84; }
-	function netName(id?: string) { return board.nets.find((net) => net.id === id)?.name ?? "net unknown"; }
-	async function importFiles(event: Event) {
-		const input = event.currentTarget as HTMLInputElement;
-		for (const file of Array.from(input.files ?? [])) {
-			if (file.size > 20 * 1024 * 1024) { status = file.name + ": rejected over 20 MB"; continue; }
-			const parsed = parseBoardFile(file.name, await file.text());
-			if ("components" in parsed) { board = parsed; selectedRef = parsed.components[0]?.ref ?? ""; session = createDiagnosticSession(parsed, session.symptom); status = "Parsed " + file.name + ": " + parsed.components.length + " components, " + parsed.nets.length + " nets"; }
-			else { schematic = parsed; board = { ...board, sources: [...board.sources, parsed] }; status = file.name + ": " + parsed.status + " · connectivity not asserted"; }
+const sample =
+	'(kicad_pcb (version 20240108) (generator pcbnew)\n(general (thickness 1.6))\n(layers (0 "F.Cu" signal) (31 "B.Cu" signal))\n(net 0 "") (net 1 "GND") (net 2 "VIN_19V") (net 3 "+3V3")\n(footprint "Package_SO:SOIC-8" (layer "F.Cu") (at 65 45)\n(property "Reference" "U17") (property "Value" "TPS62160")\n(pad "1" smd rect (at -1.9 -1.9) (size 1 1) (layers "F.Cu") (net 2 "VIN_19V"))\n(pad "2" smd rect (at -1.9 1.9) (size 1 1) (layers "F.Cu") (net 1 "GND"))\n(pad "3" smd rect (at 1.9 1.9) (size 1 1) (layers "F.Cu") (net 3 "+3V3")))\n(footprint "Capacitor_SMD:C_0603" (layer "F.Cu") (at 48 38)\n(property "Reference" "C43") (property "Value" "10uF")\n(pad "1" smd rect (at -0.8 0) (size 1 1) (layers "F.Cu") (net 3 "+3V3"))\n(pad "2" smd rect (at 0.8 0) (size 1 1) (layers "F.Cu") (net 1 "GND")))\n(footprint "TestPoint:TestPoint" (layer "B.Cu") (at 82 58)\n(property "Reference" "TP3") (property "Value" "3V3_TEST")\n(pad "1" thru_hole circle (at 0 0) (size 2 2) (layers "*.Cu") (net 3 "+3V3")))';
+let board: BoardModel = parseKiCadPcb(
+	"framework-input-module.kicad_pcb",
+	sample,
+);
+let selectedRef = "U17";
+let query = "";
+let side: "top" | "bottom" = "top";
+let panel: "board" | "net" | "diagnosis" | "measurements" = "board";
+let photoUrl = "";
+let photoName = "";
+let aligning = false;
+let anchors = 0;
+let status = "Example board loaded · local-only";
+let session: DiagnosticSession = createDiagnosticSession(
+	board,
+	"插电不开机，充电灯不亮",
+);
+let schematic: DocumentSource | undefined;
+let measurementKind: Measurement["kind"] = "voltage";
+let measurementValue = "";
+let measurementCondition: Measurement["condition"] = "unpowered";
+$: selected =
+	board.components.find((item) => item.ref === selectedRef) ??
+	board.components[0];
+$: visible = board.components
+	.filter((item) => item.side === side || item.side === "unknown")
+	.filter(
+		(item) =>
+			!query ||
+			`${item.ref} ${item.value ?? ""}`
+				.toLowerCase()
+				.includes(query.toLowerCase()),
+	);
+$: selectedNetIds = new Set(
+	selected?.pins
+		.map((pin) => pin.netId)
+		.filter((id): id is string => Boolean(id)) ?? [],
+);
+$: selectedNets = board.nets.filter((net) => selectedNetIds.has(net.id));
+$: stats = {
+	components: board.components.length,
+	pads: board.components.reduce((sum, item) => sum + item.pads.length, 0),
+	nets: board.nets.length,
+};
+onMount(() => {
+	const saved = localStorage.getItem("ee-board-lab-session");
+	if (saved)
+		try {
+			session = JSON.parse(saved) as DiagnosticSession;
+			status = "Restored local diagnostic session";
+		} catch {
+			/* ignored */
 		}
-		input.value = "";
+});
+function select(item: Component) {
+	selectedRef = item.ref;
+}
+function bx(x: number) {
+	return 8 + (x / board.width) * 84;
+}
+function by(y: number) {
+	return 8 + (y / board.height) * 84;
+}
+function netName(id?: string) {
+	return board.nets.find((net) => net.id === id)?.name ?? "net unknown";
+}
+async function importFiles(event: Event) {
+	const input = event.currentTarget as HTMLInputElement;
+	for (const file of Array.from(input.files ?? [])) {
+		if (file.size > 20 * 1024 * 1024) {
+			status = `${file.name}: rejected over 20 MB`;
+			continue;
+		}
+		const parsed = parseBoardFile(file.name, await file.text());
+		if ("components" in parsed) {
+			board = parsed;
+			selectedRef = parsed.components[0]?.ref ?? "";
+			session = createDiagnosticSession(parsed, session.symptom);
+			status = `Parsed ${file.name}: ${parsed.components.length} components, ${parsed.nets.length} nets`;
+		} else {
+			schematic = parsed;
+			board = { ...board, sources: [...board.sources, parsed] };
+			status = `${file.name}: ${parsed.status} · connectivity not asserted`;
+		}
 	}
-	function addPhoto(event: Event) { const file = (event.currentTarget as HTMLInputElement).files?.[0]; if (!file) return; if (file.size > 15 * 1024 * 1024) { status = "Photo rejected over 15 MB"; return; } photoName = file.name; photoUrl = URL.createObjectURL(file); aligning = true; anchors = 0; status = "Photo loaded · add three matching anchors"; }
-	function addAnchor() { anchors += 1; if (anchors >= 3) { aligning = false; status = "Manual alignment saved · review overlay before trusting it"; } }
-	function saveMeasurement() { if (!measurementValue.trim()) return; const item: Measurement = { id: "m-" + Date.now(), ref: selected?.ref, netId: selected?.pads[0]?.netId, kind: measurementKind, value: measurementValue.trim(), condition: measurementCondition, takenAt: new Date().toISOString(), verified: false }; session = updateDiagnosticSession(session, item); localStorage.setItem("ee-board-lab-session", JSON.stringify(session)); measurementValue = ""; status = "Measurement saved locally · unverified"; }
-	function saveCaseDraft() { const key = "ee-board-lab-case-drafts"; const drafts = JSON.parse(localStorage.getItem(key) ?? "[]") as unknown[]; drafts.push({ id: "draft-" + Date.now(), boardId: board.boardId, symptom: session.symptom, measurements: session.measurements, hypotheses: session.hypotheses, status: "draft", evidenceQuality: "unverified", createdAt: new Date().toISOString() }); localStorage.setItem(key, JSON.stringify(drafts)); status = "Repair case draft saved locally · requires human confirmation"; }
-	function exportSession() { const blob = new Blob([JSON.stringify({ board, session }, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = board.boardId + "-repair-session.json"; link.click(); URL.revokeObjectURL(url); }
+	input.value = "";
+}
+function addPhoto(event: Event) {
+	const file = (event.currentTarget as HTMLInputElement).files?.[0];
+	if (!file) return;
+	if (file.size > 15 * 1024 * 1024) {
+		status = "Photo rejected over 15 MB";
+		return;
+	}
+	photoName = file.name;
+	photoUrl = URL.createObjectURL(file);
+	aligning = true;
+	anchors = 0;
+	status = "Photo loaded · add three matching anchors";
+}
+function addAnchor() {
+	anchors += 1;
+	if (anchors >= 3) {
+		aligning = false;
+		status = "Manual alignment saved · review overlay before trusting it";
+	}
+}
+function saveMeasurement() {
+	if (!measurementValue.trim()) return;
+	const item: Measurement = {
+		id: `m-${Date.now()}`,
+		ref: selected?.ref,
+		netId: selected?.pads[0]?.netId,
+		kind: measurementKind,
+		value: measurementValue.trim(),
+		condition: measurementCondition,
+		takenAt: new Date().toISOString(),
+		verified: false,
+	};
+	session = updateDiagnosticSession(session, item);
+	localStorage.setItem("ee-board-lab-session", JSON.stringify(session));
+	measurementValue = "";
+	status = "Measurement saved locally · unverified";
+}
+function saveCaseDraft() {
+	const key = "ee-board-lab-case-drafts";
+	const drafts = JSON.parse(localStorage.getItem(key) ?? "[]") as unknown[];
+	drafts.push({
+		id: `draft-${Date.now()}`,
+		boardId: board.boardId,
+		symptom: session.symptom,
+		measurements: session.measurements,
+		hypotheses: session.hypotheses,
+		status: "draft",
+		evidenceQuality: "unverified",
+		createdAt: new Date().toISOString(),
+	});
+	localStorage.setItem(key, JSON.stringify(drafts));
+	status = "Repair case draft saved locally · requires human confirmation";
+}
+function exportSession() {
+	const blob = new Blob([JSON.stringify({ board, session }, null, 2)], {
+		type: "application/json",
+	});
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement("a");
+	link.href = url;
+	link.download = `${board.boardId}-repair-session.json`;
+	link.click();
+	URL.revokeObjectURL(url);
+}
 </script>
 
 <svelte:head><title>Board Intelligence &amp; AI Repair Lab</title><meta name="description" content="Private-by-default PCB parsing, board viewing, photo alignment and repair measurements." /></svelte:head>

@@ -1,143 +1,165 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import {
-		failureModes,
-		getFailureMode,
-		getHardwareCase,
-		getHardwareModule,
-		getSymptom,
-		hardwareCases,
-		hardwareModules,
-		symptoms,
-		type FailureMode,
-		type FailureModeId,
-		type HardwareCase,
-		type HardwareModuleId,
-		type SymptomId,
-	} from "@/lib/ee-intelligence/hardware";
+import { onMount } from "svelte";
+import {
+	type FailureMode,
+	type FailureModeId,
+	failureModes,
+	getFailureMode,
+	getHardwareCase,
+	getHardwareModule,
+	getSymptom,
+	type HardwareCase,
+	type HardwareModuleId,
+	hardwareCases,
+	hardwareModules,
+	type SymptomId,
+	symptoms,
+} from "@/lib/ee-intelligence/hardware";
 
-	type AtlasMode = "component" | "fault";
+type AtlasMode = "component" | "fault";
 
-	let mode: AtlasMode = "component";
-	let selectedModuleId: HardwareModuleId = "gpu";
-	let selectedSymptomId: SymptomId | "" = "";
-	let selectedFailureModeId: FailureModeId | "" = "";
-	let selectedCaseId = "";
-	let graphFocus = "gpu";
-	let focusedCase: HardwareCase | undefined;
+let mode: AtlasMode = "component";
+let selectedModuleId: HardwareModuleId = "gpu";
+let selectedSymptomId: SymptomId | "" = "";
+let selectedFailureModeId: FailureModeId | "" = "";
+let selectedCaseId = "";
+let graphFocus = "gpu";
+let focusedCase: HardwareCase | undefined;
 
-	$: selectedModule = getHardwareModule(selectedModuleId) ?? hardwareModules[0]!;
-	$: selectedSymptom = getSymptom(selectedSymptomId);
-	$: selectedFailure = getFailureMode(selectedFailureModeId);
-	$: focusedCase = getHardwareCase(selectedCaseId);
-	$: relatedModules = selectedSymptom
-		? selectedSymptom.relatedModuleIds.map((id) => getHardwareModule(id)).filter(Boolean)
-		: selectedModule.connectedModuleIds.map((id) => getHardwareModule(id)).filter(Boolean);
-	$: visibleCases = selectedSymptom
-		? hardwareCases.filter((item) => item.symptomIds.includes(selectedSymptom.id))
-		: selectedFailure
-			? hardwareCases.filter((item) => item.failureModeIds.includes(selectedFailure.id))
-			: hardwareCases.filter((item) => item.moduleIds.includes(selectedModule.id));
-	$: selectedFailureModes = selectedModule.failureModeIds.map((id) => getFailureMode(id)).filter(Boolean) as FailureMode[];
-	$: activeVisualIds = new Set(
-		selectedFailure
-			? selectedFailure.affectedModuleIds
-			: selectedSymptom
-				? selectedSymptom.relatedModuleIds
-				: [selectedModule.id, ...selectedModule.connectedModuleIds],
-	);
+$: selectedModule = getHardwareModule(selectedModuleId) ?? hardwareModules[0]!;
+$: selectedSymptom = getSymptom(selectedSymptomId);
+$: selectedFailure = getFailureMode(selectedFailureModeId);
+$: focusedCase = getHardwareCase(selectedCaseId);
+$: relatedModules = selectedSymptom
+	? selectedSymptom.relatedModuleIds
+			.map((id) => getHardwareModule(id))
+			.filter(Boolean)
+	: selectedModule.connectedModuleIds
+			.map((id) => getHardwareModule(id))
+			.filter(Boolean);
+$: visibleCases = selectedSymptom
+	? hardwareCases.filter((item) => item.symptomIds.includes(selectedSymptom.id))
+	: selectedFailure
+		? hardwareCases.filter((item) =>
+				item.failureModeIds.includes(selectedFailure.id),
+			)
+		: hardwareCases.filter((item) =>
+				item.moduleIds.includes(selectedModule.id),
+			);
+$: selectedFailureModes = selectedModule.failureModeIds
+	.map((id) => getFailureMode(id))
+	.filter(Boolean) as FailureMode[];
+$: activeVisualIds = new Set(
+	selectedFailure
+		? selectedFailure.affectedModuleIds
+		: selectedSymptom
+			? selectedSymptom.relatedModuleIds
+			: [selectedModule.id, ...selectedModule.connectedModuleIds],
+);
 
-	onMount(() => {
-		const params = new URLSearchParams(window.location.search);
-		const module = getHardwareModule(params.get("module"));
-		const symptom = getSymptom(params.get("symptom"));
-		const failure = getFailureMode(params.get("fault"));
-		const caseItem = getHardwareCase(params.get("case"));
-		if (module) selectedModuleId = module.id;
-		if (symptom) selectedSymptomId = symptom.id;
-		if (failure) {
-			selectedFailureModeId = failure.id;
-			mode = "fault";
-		}
-		if (caseItem) selectedCaseId = caseItem.id;
-	});
-
-	function syncUrl() {
-		const params = new URLSearchParams();
-		if (selectedModuleId) params.set("module", selectedModuleId);
-		if (selectedSymptomId) params.set("symptom", selectedSymptomId);
-		if (selectedFailureModeId) params.set("fault", selectedFailureModeId);
-		if (selectedCaseId) params.set("case", selectedCaseId);
-		window.history.replaceState({}, "", `${window.location.pathname}?${params.toString()}`);
-	}
-
-	function selectModule(id: HardwareModuleId) {
-		selectedModuleId = id;
-		selectedCaseId = "";
-		graphFocus = id;
-		if (!selectedFailureModeId || !getHardwareModule(id)?.failureModeIds.includes(selectedFailureModeId)) selectedFailureModeId = "";
-		syncUrl();
-	}
-
-	function selectSymptom(id: SymptomId) {
-		selectedSymptomId = selectedSymptomId === id ? "" : id;
-		selectedFailureModeId = "";
-		mode = "component";
-		selectedCaseId = "";
-		graphFocus = id;
-		syncUrl();
-	}
-
-	function selectFailure(id: FailureModeId) {
-		selectedFailureModeId = id;
+onMount(() => {
+	const params = new URLSearchParams(window.location.search);
+	const module = getHardwareModule(params.get("module"));
+	const symptom = getSymptom(params.get("symptom"));
+	const failure = getFailureMode(params.get("fault"));
+	const caseItem = getHardwareCase(params.get("case"));
+	if (module) selectedModuleId = module.id;
+	if (symptom) selectedSymptomId = symptom.id;
+	if (failure) {
+		selectedFailureModeId = failure.id;
 		mode = "fault";
-		selectedSymptomId = "";
-		selectedCaseId = "";
-		graphFocus = id;
-		syncUrl();
 	}
+	if (caseItem) selectedCaseId = caseItem.id;
+});
 
-	function inspectCase(id: string) {
-		selectedCaseId = id;
-		graphFocus = id;
-		syncUrl();
-	}
+function syncUrl() {
+	const params = new URLSearchParams();
+	if (selectedModuleId) params.set("module", selectedModuleId);
+	if (selectedSymptomId) params.set("symptom", selectedSymptomId);
+	if (selectedFailureModeId) params.set("fault", selectedFailureModeId);
+	if (selectedCaseId) params.set("case", selectedCaseId);
+	window.history.replaceState(
+		{},
+		"",
+		`${window.location.pathname}?${params.toString()}`,
+	);
+}
 
-	function resetView() {
-		mode = "component";
-		selectedModuleId = "gpu";
-		selectedSymptomId = "";
+function selectModule(id: HardwareModuleId) {
+	selectedModuleId = id;
+	selectedCaseId = "";
+	graphFocus = id;
+	if (
+		!selectedFailureModeId ||
+		!getHardwareModule(id)?.failureModeIds.includes(selectedFailureModeId)
+	)
 		selectedFailureModeId = "";
-		selectedCaseId = "";
-		graphFocus = "gpu";
-		syncUrl();
-	}
+	syncUrl();
+}
 
-	function handleHotspotKey(event: KeyboardEvent, id: HardwareModuleId) {
-		if (event.key === "Enter" || event.key === " ") {
-			event.preventDefault();
-			selectModule(id);
-		}
-	}
+function selectSymptom(id: SymptomId) {
+	selectedSymptomId = selectedSymptomId === id ? "" : id;
+	selectedFailureModeId = "";
+	mode = "component";
+	selectedCaseId = "";
+	graphFocus = id;
+	syncUrl();
+}
 
-	function moduleIsActive(id: HardwareModuleId) {
-		return activeVisualIds.has(id);
-	}
+function selectFailure(id: FailureModeId) {
+	selectedFailureModeId = id;
+	mode = "fault";
+	selectedSymptomId = "";
+	selectedCaseId = "";
+	graphFocus = id;
+	syncUrl();
+}
 
-	function caseHref(id: string) {
-		return `/tools/ee-intelligence/case-explorer/?case=${encodeURIComponent(id)}&module=${encodeURIComponent(selectedModule.id)}${selectedSymptom ? `&symptom=${encodeURIComponent(selectedSymptom.id)}` : ""}`;
-	}
+function inspectCase(id: string) {
+	selectedCaseId = id;
+	graphFocus = id;
+	syncUrl();
+}
 
-	function diagnosisHref() {
-		const params = new URLSearchParams({ module: selectedModule.id });
-		if (selectedSymptom) params.set("symptom", selectedSymptom.id);
-		if (selectedFailure) params.set("fault", selectedFailure.id);
-		return `/tools/ee-intelligence/diagnosis/?${params.toString()}`;
-	}
+function resetView() {
+	mode = "component";
+	selectedModuleId = "gpu";
+	selectedSymptomId = "";
+	selectedFailureModeId = "";
+	selectedCaseId = "";
+	graphFocus = "gpu";
+	syncUrl();
+}
 
-	function severityClass(severity: FailureMode["severity"]) {
-		return severity === "critical" ? "critical" : severity === "warning" ? "warning" : "watch";
+function handleHotspotKey(event: KeyboardEvent, id: HardwareModuleId) {
+	if (event.key === "Enter" || event.key === " ") {
+		event.preventDefault();
+		selectModule(id);
 	}
+}
+
+function moduleIsActive(id: HardwareModuleId) {
+	return activeVisualIds.has(id);
+}
+
+function caseHref(id: string) {
+	return `/tools/ee-intelligence/case-explorer/?case=${encodeURIComponent(id)}&module=${encodeURIComponent(selectedModule.id)}${selectedSymptom ? `&symptom=${encodeURIComponent(selectedSymptom.id)}` : ""}`;
+}
+
+function diagnosisHref() {
+	const params = new URLSearchParams({ module: selectedModule.id });
+	if (selectedSymptom) params.set("symptom", selectedSymptom.id);
+	if (selectedFailure) params.set("fault", selectedFailure.id);
+	return `/tools/ee-intelligence/diagnosis/?${params.toString()}`;
+}
+
+function severityClass(severity: FailureMode["severity"]) {
+	return severity === "critical"
+		? "critical"
+		: severity === "warning"
+			? "warning"
+			: "watch";
+}
 </script>
 
 <svelte:head>

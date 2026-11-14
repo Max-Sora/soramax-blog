@@ -1,44 +1,75 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { failureModes, getFailureMode, getHardwareCase, getHardwareModule, getSymptom, hardwareCases, hardwareModules, symptoms, type FailureModeId, type HardwareModuleId, type SymptomId } from "@/lib/ee-intelligence/hardware";
+import { onMount } from "svelte";
+import {
+	type FailureModeId,
+	failureModes,
+	getFailureMode,
+	getHardwareCase,
+	getHardwareModule,
+	getSymptom,
+	type HardwareModuleId,
+	hardwareCases,
+	hardwareModules,
+	type SymptomId,
+	symptoms,
+} from "@/lib/ee-intelligence/hardware";
 
-	let moduleId: HardwareModuleId = "gpu";
-	let symptomId: SymptomId = "black-screen";
-	let failureId: FailureModeId | "" = "";
-	let description = "";
-	let diagnosisStatus = "idle";
-	let invalidContext = false;
+let moduleId: HardwareModuleId = "gpu";
+let symptomId: SymptomId = "black-screen";
+let failureId: FailureModeId | "" = "";
+let description = "";
+let diagnosisStatus = "idle";
+let invalidContext = false;
 
-	$: module = getHardwareModule(moduleId) ?? hardwareModules[0]!;
-	$: symptom = getSymptom(symptomId) ?? symptoms[0]!;
-	$: failure = getFailureMode(failureId);
-	$: relatedCases = hardwareCases.filter((item) => item.moduleIds.includes(module.id) && item.symptomIds.includes(symptom.id));
-	$: candidateFailures = symptom.relatedFailureModeIds.map((id) => getFailureMode(id)).filter(Boolean);
+$: activeModule = getHardwareModule(moduleId) ?? hardwareModules[0]!;
+$: symptom = getSymptom(symptomId) ?? symptoms[0]!;
+$: failure = getFailureMode(failureId);
+$: relatedCases = hardwareCases.filter(
+	(item) =>
+		item.moduleIds.includes(activeModule.id) &&
+		item.symptomIds.includes(symptom.id),
+);
+$: candidateFailures = symptom.relatedFailureModeIds
+	.map((id) => getFailureMode(id))
+	.filter(Boolean);
 
-	onMount(() => {
-		const params = new URLSearchParams(window.location.search);
-		const incomingModule = getHardwareModule(params.get("module"));
-		const incomingSymptom = getSymptom(params.get("symptom"));
-		const incomingFailure = getFailureMode(params.get("fault"));
-		invalidContext = Boolean(params.get("module") && !incomingModule) || Boolean(params.get("symptom") && !incomingSymptom) || Boolean(params.get("fault") && !incomingFailure);
-		if (incomingModule) moduleId = incomingModule.id;
-		if (incomingSymptom) symptomId = incomingSymptom.id;
-		if (incomingFailure) failureId = incomingFailure.id;
-	});
+onMount(() => {
+	const params = new URLSearchParams(window.location.search);
+	const incomingModule = getHardwareModule(params.get("module"));
+	const incomingSymptom = getSymptom(params.get("symptom"));
+	const incomingFailure = getFailureMode(params.get("fault"));
+	invalidContext =
+		Boolean(params.get("module") && !incomingModule) ||
+		Boolean(params.get("symptom") && !incomingSymptom) ||
+		Boolean(params.get("fault") && !incomingFailure);
+	if (incomingModule) moduleId = incomingModule.id;
+	if (incomingSymptom) symptomId = incomingSymptom.id;
+	if (incomingFailure) failureId = incomingFailure.id;
+});
 
-	function updateContext() {
-		const params = new URLSearchParams({ module: moduleId, symptom: symptomId });
-		if (failureId) params.set("fault", failureId);
-		window.history.replaceState({}, "", `/tools/ee-intelligence/diagnosis/?${params.toString()}`);
-	}
+function updateContext() {
+	const params = new URLSearchParams({ module: moduleId, symptom: symptomId });
+	if (failureId) params.set("fault", failureId);
+	window.history.replaceState(
+		{},
+		"",
+		`/tools/ee-intelligence/diagnosis/?${params.toString()}`,
+	);
+}
 
-	function runLocalTriage() {
-		diagnosisStatus = "running";
-		window.setTimeout(() => { diagnosisStatus = "ready"; }, 260);
-	}
+function runLocalTriage() {
+	diagnosisStatus = "running";
+	window.setTimeout(() => {
+		diagnosisStatus = "ready";
+	}, 260);
+}
 
-	function moduleName(id: string) { return getHardwareModule(id)?.name ?? id; }
-	function failureName(id: string) { return getFailureMode(id)?.title ?? id; }
+function moduleName(id: string) {
+	return getHardwareModule(id)?.name ?? id;
+}
+function failureName(id: string) {
+	return getFailureMode(id)?.title ?? id;
+}
 </script>
 
 <svelte:head>
@@ -51,10 +82,10 @@
 	{#if invalidContext}<div class="invalid-notice"><strong>Some incoming IDs were not recognized.</strong><span>Safe defaults are shown. The URL remains readable and can be corrected from Atlas.</span></div>{/if}
 	<div class="diagnosis-banner"><span>◎</span><div><strong>Educational triage workflow</strong><p>Use this as a structured checklist. It is not a diagnosis of the visitor's machine, and no private telemetry is read.</p></div></div>
 	<section class="diagnosis-grid">
-		<div class="context-panel panel"><div class="panel-heading"><div><span class="eyebrow">01 · PREFILLED CONTEXT</span><h2>What brought you here</h2></div><span class="context-state">{diagnosisStatus === "ready" ? "TRIAGE READY" : "CONTEXT ACTIVE"}</span></div><div class="context-form"><label>Module<select bind:value={moduleId} on:change={() => { failureId = ""; updateContext(); }}><option value="">Choose module</option>{#each hardwareModules as item}<option value={item.id}>{item.name} · {item.nameZh}</option>{/each}</select></label><label>Observed symptom<select bind:value={symptomId} on:change={() => { failureId = ""; updateContext(); }}>{#each symptoms as item}<option value={item.id}>{item.title}</option>{/each}</select></label><label>Working hypothesis<select bind:value={failureId} on:change={updateContext}><option value="">Keep multiple hypotheses open</option>{#each candidateFailures as item}<option value={item?.id}>{item?.title}</option>{/each}</select></label><label class="description-field">What changed or when did it start?<textarea bind:value={description} placeholder="Optional: e.g. after a GPU swap, under load, after a driver update…"></textarea></label></div><div class="context-chips"><span>{module.name}</span><span>{symptom.title}</span>{#if failure}<span>{failure.title}</span>{/if}</div><button class="run-button" on:click={runLocalTriage} disabled={diagnosisStatus === "running"}>{diagnosisStatus === "running" ? "Building evidence path…" : diagnosisStatus === "ready" ? "Re-run local triage" : "Run local triage"}<span>→</span></button></div>
+		<div class="context-panel panel"><div class="panel-heading"><div><span class="eyebrow">01 · PREFILLED CONTEXT</span><h2>What brought you here</h2></div><span class="context-state">{diagnosisStatus === "ready" ? "TRIAGE READY" : "CONTEXT ACTIVE"}</span></div><div class="context-form"><label>Module<select bind:value={moduleId} on:change={() => { failureId = ""; updateContext(); }}><option value="">Choose module</option>{#each hardwareModules as item}<option value={item.id}>{item.name} · {item.nameZh}</option>{/each}</select></label><label>Observed symptom<select bind:value={symptomId} on:change={() => { failureId = ""; updateContext(); }}>{#each symptoms as item}<option value={item.id}>{item.title}</option>{/each}</select></label><label>Working hypothesis<select bind:value={failureId} on:change={updateContext}><option value="">Keep multiple hypotheses open</option>{#each candidateFailures as item}<option value={item?.id}>{item?.title}</option>{/each}</select></label><label class="description-field">What changed or when did it start?<textarea bind:value={description} placeholder="Optional: e.g. after a GPU swap, under load, after a driver update…"></textarea></label></div><div class="context-chips"><span>{activeModule.name}</span><span>{symptom.title}</span>{#if failure}<span>{failure.title}</span>{/if}</div><button class="run-button" on:click={runLocalTriage} disabled={diagnosisStatus === "running"}>{diagnosisStatus === "running" ? "Building evidence path…" : diagnosisStatus === "ready" ? "Re-run local triage" : "Run local triage"}<span>→</span></button></div>
 		<aside class="result-panel panel"><div class="panel-heading"><div><span class="eyebrow">02 · REVIEWABLE RESULT</span><h2>{failure ? failure.title : "Multiple causes remain possible"}</h2></div><span class="result-state">{failure ? failure.severity.toUpperCase() : "OPEN SET"}</span></div><p class="result-lede">{failure ? failure.description : symptom.description}</p><div class="result-block"><div class="block-heading"><h3>Related modules</h3><span>{symptom.relatedModuleIds.length} possible</span></div><div class="result-tags">{#each symptom.relatedModuleIds as id}<a href={`/tools/ee-intelligence/hardware-atlas/?module=${id}&symptom=${symptom.id}`}>{moduleName(id)}</a>{/each}</div></div><div class="result-block"><div class="block-heading"><h3>Validation signals</h3><span>observe before replacing</span></div><ul>{#each (failure?.diagnosticIndicators ?? ["Repeat the symptom under a controlled condition", "Compare a known-good cable, slot or profile where safe", "Check logs and documented vendor diagnostics"]) as indicator}<li>{indicator}</li>{/each}</ul></div><div class="result-block"><div class="block-heading"><h3>Safety boundary</h3><span>stop conditions</span></div><p class="safety-copy">Power down before touching internal hardware. Do not open a PSU, probe live rails, or work around moving fans. If there is smoke, a burnt smell or visible damage, disconnect power and seek qualified service.</p></div>{#if diagnosisStatus === "ready"}<div class="ready-callout"><strong>Context path assembled</strong><span>{relatedCases.length} related case{relatedCases.length === 1 ? "" : "s"} available for review.</span></div>{/if}</aside>
 	</section>
-	<section class="next-section"><div class="section-heading"><div><span class="eyebrow">03 · NEXT EVIDENCE</span><h2>Open related cases</h2><p>Cases remain linked to the same IDs, so the context can move back and forth without a generic jump.</p></div><a href={`/tools/ee-intelligence/case-explorer/?module=${module.id}&symptom=${symptom.id}`} class="secondary">Open Case Explorer <span>↗</span></a></div><div class="mini-case-grid">{#each relatedCases.slice(0, 4) as item}<a class="mini-case" href={`/tools/ee-intelligence/case-explorer/?case=${item.id}&module=${module.id}&symptom=${symptom.id}`}><span>{item.id.toUpperCase()} · {item.sourceType}</span><strong>{item.title}</strong><small>{item.evidence.length} evidence items →</small></a>{:else}<div class="empty">No direct case intersection for this combination. Keep multiple hypotheses open and change the symptom or module.</div>{/each}</div></section>
+	<section class="next-section"><div class="section-heading"><div><span class="eyebrow">03 · NEXT EVIDENCE</span><h2>Open related cases</h2><p>Cases remain linked to the same IDs, so the context can move back and forth without a generic jump.</p></div><a href={`/tools/ee-intelligence/case-explorer/?module=${activeModule.id}&symptom=${symptom.id}`} class="secondary">Open Case Explorer <span>↗</span></a></div><div class="mini-case-grid">{#each relatedCases.slice(0, 4) as item}<a class="mini-case" href={`/tools/ee-intelligence/case-explorer/?case=${item.id}&module=${activeModule.id}&symptom=${symptom.id}`}><span>{item.id.toUpperCase()} · {item.sourceType}</span><strong>{item.title}</strong><small>{item.evidence.length} evidence items →</small></a>{:else}<div class="empty">No direct case intersection for this combination. Keep multiple hypotheses open and change the symptom or module.</div>{/each}</div></section>
 	<footer class="diagnosis-footer">AI DIAGNOSIS · TRANSPARENT LOCAL TRIAGE · <a href="/tools/ee-intelligence/">EE Intelligence dashboard</a></footer>
 </div>
 

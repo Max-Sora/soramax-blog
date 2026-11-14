@@ -1,39 +1,60 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { getFailureMode, getHardwareCase, getHardwareModule, getSymptom, hardwareCases, type HardwareCase } from "@/lib/ee-intelligence/hardware";
+import { onMount } from "svelte";
+import {
+	getFailureMode,
+	getHardwareCase,
+	getHardwareModule,
+	getSymptom,
+	type HardwareCase,
+	hardwareCases,
+} from "@/lib/ee-intelligence/hardware";
 
-	let query = "";
-	let selectedCaseId = "case-01";
-	let selectedCase: HardwareCase = hardwareCases[0]!;
-	let moduleFilter = "";
-	let symptomFilter = "";
+let query = "";
+let selectedCaseId = "case-01";
+let selectedCase: HardwareCase = hardwareCases[0]!;
+let moduleFilter = "";
+let symptomFilter = "";
 
-	$: visibleCases = hardwareCases.filter((item) => {
-		const search = `${item.id} ${item.title} ${item.summary}`.toLowerCase();
-		return (!query || search.includes(query.toLowerCase())) && (!moduleFilter || item.moduleIds.includes(moduleFilter as never)) && (!symptomFilter || item.symptomIds.includes(symptomFilter as never));
-	});
-	$: currentDiagnosisHref = `/tools/ee-intelligence/diagnosis/?module=${selectedCase.moduleIds[0]}&symptom=${selectedCase.symptomIds[0]}&fault=${selectedCase.failureModeIds[0]}`;
+$: visibleCases = hardwareCases.filter((item) => {
+	const search = `${item.id} ${item.title} ${item.summary}`.toLowerCase();
+	return (
+		(!query || search.includes(query.toLowerCase())) &&
+		(!moduleFilter || item.moduleIds.includes(moduleFilter as never)) &&
+		(!symptomFilter || item.symptomIds.includes(symptomFilter as never))
+	);
+});
+$: currentDiagnosisHref = `/tools/ee-intelligence/diagnosis/?module=${selectedCase.moduleIds[0]}&symptom=${selectedCase.symptomIds[0]}&fault=${selectedCase.failureModeIds[0]}`;
 
-	onMount(() => {
-		const params = new URLSearchParams(window.location.search);
-		const item = getHardwareCase(params.get("case"));
-		if (item) {
-			selectedCaseId = item.id;
-			selectedCase = item;
-		}
-		moduleFilter = params.get("module") ?? "";
-		symptomFilter = params.get("symptom") ?? "";
-	});
-
-	function inspect(item: HardwareCase) {
+onMount(() => {
+	const params = new URLSearchParams(window.location.search);
+	const item = getHardwareCase(params.get("case"));
+	if (item) {
 		selectedCaseId = item.id;
 		selectedCase = item;
-		window.history.replaceState({}, "", `/tools/ee-intelligence/case-explorer/?case=${encodeURIComponent(item.id)}${moduleFilter ? `&module=${encodeURIComponent(moduleFilter)}` : ""}${symptomFilter ? `&symptom=${encodeURIComponent(symptomFilter)}` : ""}`);
 	}
+	moduleFilter = params.get("module") ?? "";
+	symptomFilter = params.get("symptom") ?? "";
+});
 
-	function moduleName(id: string) { return getHardwareModule(id)?.name ?? id; }
-	function symptomName(id: string) { return getSymptom(id)?.title ?? id; }
-	function failureName(id: string) { return getFailureMode(id)?.title ?? id; }
+function inspect(item: HardwareCase) {
+	selectedCaseId = item.id;
+	selectedCase = item;
+	window.history.replaceState(
+		{},
+		"",
+		`/tools/ee-intelligence/case-explorer/?case=${encodeURIComponent(item.id)}${moduleFilter ? `&module=${encodeURIComponent(moduleFilter)}` : ""}${symptomFilter ? `&symptom=${encodeURIComponent(symptomFilter)}` : ""}`,
+	);
+}
+
+function moduleName(id: string) {
+	return getHardwareModule(id)?.name ?? id;
+}
+function symptomName(id: string) {
+	return getSymptom(id)?.title ?? id;
+}
+function failureName(id: string) {
+	return getFailureMode(id)?.title ?? id;
+}
 </script>
 
 <svelte:head>

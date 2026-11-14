@@ -1,6 +1,13 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
-import { failureModes, getHardwareCase, hardwareCases, hardwareModules, symptoms, validateHardwareAtlasData } from "./hardware";
+import { test } from "node:test";
+import {
+	failureModes,
+	getHardwareCase,
+	hardwareCases,
+	hardwareModules,
+	symptoms,
+	validateHardwareAtlasData,
+} from "./hardware";
 
 test("Hardware Atlas relation ids are internally consistent", () => {
 	assert.deepEqual(validateHardwareAtlasData(), []);
@@ -18,7 +25,9 @@ test("black screen keeps multiple hardware causes open", () => {
 	assert.ok(blackScreen);
 	assert.ok(blackScreen.relatedModuleIds.length >= 4);
 	assert.ok(blackScreen.relatedFailureModeIds.includes("gpu-power-delivery"));
-	assert.ok(blackScreen.relatedFailureModeIds.includes("ram-memory-instability"));
+	assert.ok(
+		blackScreen.relatedFailureModeIds.includes("ram-memory-instability"),
+	);
 });
 
 test("case lookups reject unknown ids without throwing", () => {

@@ -3,7 +3,6 @@ import test from "node:test";
 import {
 	academicRequirementStatus,
 	analyzePosting,
-	compareCareers,
 	dedupeJobs,
 	filterHardEligibility,
 	generateRoadmap,
@@ -244,20 +243,22 @@ test("generates a bounded roadmap and recalculates when career goal changes", ()
 });
 
 test("links job requirements to generated roadmap gaps", () => {
-	const gapProfile = {
-		...profile,
-		interests: [],
-		strengths: "",
-		experiences: [],
-	};
 	const actions = generateRoadmap(
-		gapProfile,
+		profile,
 		careers[0]!,
 		skills,
 		{ workload: "balanced" },
 		sampleJobPostings[0],
 	);
-	assert.ok(actions.some((action) => action.linkedRequirementIds.length > 0));
+	const linked = actions.find(
+		(action) => action.id === "job-embedded-systems-evidence-review",
+	);
+	assert.ok(linked);
+	assert.deepEqual(
+		linked?.linkedRequirementIds,
+		sampleJobPostings[0].requirements.map((requirement) => requirement.id),
+	);
+	assert.equal(linked?.kind, "application");
 });
 
 test("distinguishes partial evidence from demonstrated evidence", () => {

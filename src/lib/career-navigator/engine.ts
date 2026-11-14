@@ -368,6 +368,34 @@ export function generateRoadmap(
 		});
 	}
 
+	const evidenceRequirementMatches =
+		matches?.matches.filter(
+			(match) => match.status === "matched" || match.status === "partial",
+		) ?? [];
+	if (evidenceRequirementMatches.length > 0) {
+		actions.push({
+			id: `job-${career.id}-evidence-review`,
+			title: "Package evidence for the selected job requirements",
+			horizon: "now",
+			kind: "application",
+			why: "The profile has a mapped signal for these requirements. Turn each signal into a reviewable project, course, or experience reference before treating it as application-ready evidence.",
+			linkedSkillIds: evidenceRequirementMatches
+				.map((match) => match.requirement.skillId)
+				.filter((skillId): skillId is string => Boolean(skillId)),
+			linkedRequirementIds: evidenceRequirementMatches.map(
+				(match) => match.requirement.id,
+			),
+			effort: "light",
+			estimatedHours: 2,
+			priority: 2,
+			status: "suggested",
+			deliverable:
+				"A short evidence map connecting each selected requirement to one concrete artifact or experience.",
+			completionEvidence:
+				"Add links, dates, measurements, or mentor review for each mapped requirement.",
+		});
+	}
+
 	if (profile.courses.length === 0) {
 		actions.push({
 			id: `career-${career.id}-course-plan`,

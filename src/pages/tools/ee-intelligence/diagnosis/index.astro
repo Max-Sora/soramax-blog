@@ -1,0 +1,11 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import HardwareDiagnosis from "@/components/pages/HardwareDiagnosis.svelte";
+---
+
+<MainGridLayout
+	title="AI Diagnosis"
+	description="A transparent local-first diagnosis context connected to Hardware Atlas modules, symptoms and evidence."
+>
+	<HardwareDiagnosis client:load />
+</MainGridLayout>

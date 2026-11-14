@@ -1,0 +1,11 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import HardwareCaseExplorer from "@/components/pages/HardwareCaseExplorer.svelte";
+---
+
+<MainGridLayout
+	title="Case Explorer"
+	description="Evidence-linked Hardware Atlas cases with explicit synthetic source status."
+>
+	<HardwareCaseExplorer client:load />
+</MainGridLayout>
